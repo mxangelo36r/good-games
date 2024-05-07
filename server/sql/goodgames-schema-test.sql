@@ -14,8 +14,7 @@ create table `user` (
 create table game (
 	game_id int primary key auto_increment,
     bgg_id int not null,
-    `name` varchar(250) not null,
-    avg_rating float not null
+    `name` varchar(250) not null
 );
 
 create table review (
@@ -92,11 +91,12 @@ insert into `user` (`name`, email, `password`, `role`)
 		("Brissett", "brissett@brissett.com", "brisset", "USER"),
         ("Dias", "dias@dias.com", "dias", "USER");
         
-insert into game (bgg_id, `name`, avg_rating)
+insert into game (bgg_id, `name`)
 	values
-		(2536, "Vabanque", 0),
-        (1988, "Outlaw Trail: The Western Game", 0),
-        (13, "CATAN", 0);
+		(2536, "Vabanque"),
+        (1988, "Outlaw Trail: The Western Game"),
+        (13, "CATAN"),
+        (110308, "7 Wonders: Catan");
         
 insert into review (`text`, rating, user_id, game_id)
 	values
@@ -105,7 +105,8 @@ insert into review (`text`, rating, user_id, game_id)
         ("I tried it and I liked it, I guess", 7, 2, 2),
         ("Fun, but not for me.", 6, 5, 2),
 		("I tried it and I liked it, I guess", 5, 3, 3),
-        ("Fun, but not for me.", 5, 5, 3);
+        ("Fun, but not for me.", 5, 5, 3),
+        ("Love love love this game", 9, 1, 4);
         
 insert into location (`name`, address, city, state, postal_code)
 	values 
@@ -133,14 +134,14 @@ insert into reservation_attendee (reservation_id, user_id)
 
 
 
-update game g
-	inner join 
-		(select game_id, avg(rating) as avgrating
-			from review r
-            group by game_id
-		) r
-        on r.game_id = g.game_id
-	set g.avg_rating = r.avgrating;
+-- update game g
+-- 	inner join 
+-- 		(select game_id, avg(rating) as avgrating
+-- 			from review r
+--             group by game_id
+-- 		) r
+--         on r.game_id = g.game_id
+-- 	set g.avg_rating = r.avgrating;
 
 	SET SQL_SAFE_UPDATES = 1;
     
@@ -151,28 +152,28 @@ delimiter ;
 call set_known_good_state;
 
 -- testing for aggregate join of average ratings on a specific game.
--- select * from game;
+select * from game;
 
 -- testing some joins of tables across the DB
--- select u.`name`, g.`name`, r.`text`
--- 	from user u
---     inner join review r on r.user_id = u.user_id
---     inner join game g on g.game_id = r.game_id
---     where u.user_id = 1;
+select u.`name`, g.`name`, r.`text`
+	from user u
+    inner join review r on r.user_id = u.user_id
+    inner join game g on g.game_id = r.game_id
+    where u.user_id = 1;
     
 -- testing delete of location, needs multiple steps
-select l.`name`, l.location_id from reservation_attendee
-	inner join reservation r on r.reservation_id = reservation_attendee.reservation_id
-	inner join location l on l.location_id = r.reservation_id
-    where l.location_id = 1;
-delete reservation_attendee from reservation_attendee 
-	inner join reservation r on r.reservation_id = reservation_attendee.reservation_id
-    inner join location l on l.location_id = r.reservation_id
-    where l.location_id = 1;
-delete from reservation where location_id = 1;
-delete from location where location_id = 1;
-select l.`name`, l.location_id from reservation_attendee
-	inner join reservation r on r.reservation_id = reservation_attendee.reservation_id
-	inner join location l on l.location_id = r.reservation_id
-    where l.location_id = 1;
+-- select l.`name`, l.location_id from reservation_attendee
+-- 	inner join reservation r on r.reservation_id = reservation_attendee.reservation_id
+-- 	inner join location l on l.location_id = r.reservation_id
+--     where l.location_id = 1;
+-- delete reservation_attendee from reservation_attendee 
+-- 	inner join reservation r on r.reservation_id = reservation_attendee.reservation_id
+--     inner join location l on l.location_id = r.reservation_id
+--     where l.location_id = 1;
+-- delete from reservation where location_id = 1;
+-- delete from location where location_id = 1;
+-- select l.`name`, l.location_id from reservation_attendee
+-- 	inner join reservation r on r.reservation_id = reservation_attendee.reservation_id
+-- 	inner join location l on l.location_id = r.reservation_id
+--     where l.location_id = 1;
 -- select * from location;

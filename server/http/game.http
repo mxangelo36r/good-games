@@ -1,0 +1,67 @@
+@url = http://localhost:8080/api/game
+
+### GET - successful get all games - 200 
+GET {{url}} HTTP/1.1
+
+### GET - successful findGameById - 200
+GET {{url}}/id/1 HTTP/1.1
+
+### GET - failed findGameById - bad ID - 404
+GET {{url}}/id/1000 HTTP/1.1 
+
+### GET - failed findGameById - no ID - 404
+GET {{url}}/id/ HTTP/1.1 
+
+### GET - successful findGamesByname - 200
+GET {{url}}/name/catan HTTP/1.1 
+
+### GET - successful findGamesByName - no games found - 200
+GET {{url}}/name/qwerty HTTP/1.1 
+
+### GET - failed findGamesByname - no name - 404
+GET {{url}}/name/ HTTP/1.1 
+
+### POST - successful add - 201
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+  {
+    "bggId": 1111111,
+    "name": "Test Game",
+    "avgRating": 0
+  }
+
+### POST - failed add - duplicate names - 400 (run after above code)
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+  {
+    "bggId": 1111111,
+    "name": "Test Game",
+    "avgRating": 0
+  }
+
+### POST - failed add - name is required - 400
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+  {
+    "bggId": 123123,
+    "name": "",
+    "avgRating": 0
+  }
+
+### POST - failed add - no body - 500
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+### POST - failed add - add with ID - 400
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+  {
+    "gameId": 15,
+    "bggId": 123123,
+    "name": "Testing",
+    "avgRating": 0
+  }
