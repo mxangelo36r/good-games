@@ -61,6 +61,13 @@ class UserJdbcTemplateRepositoryTest {
         assertEquals(7, actual.getUserId());
     }
 
+    @Test
+    void shouldUpdateExistingUser() {
+        User user = makeUser();
+        user.setUserId(1);
+        assertTrue(repository.update(user));
+    }
+
     // Helper Methods
 
     User makeUser() {
