@@ -6,6 +6,8 @@ import learn.goodgames.models.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -72,6 +74,7 @@ public class UserService {
 
     private Result<User> validate(User user) {
         Result<User> result = new Result<>();
+        List<User> all = findAll();
 
         if (user == null) {
             result.addMessage("User cannot be null", ResultType.INVALID);
@@ -98,13 +101,13 @@ public class UserService {
             return result;
         }
 
-        if (!distinctUsername(userRepository.findAll())) {
-            result.addMessage("Email taken. Please choose another email.", ResultType.INVALID);
+        if (!distinctUsername(all, user)) {
+            result.addMessage("Email taken. Please choose another email", ResultType.INVALID);
             return result;
         }
 
-        if (!distinctEmail(userRepository.findAll())) {
-            result.addMessage("Username take. Please choose another email", ResultType.INVALID);
+        if (!distinctEmail(all, user)) {
+            result.addMessage("Username taken. Please choose another username", ResultType.INVALID);
             return result;
         }
 
@@ -118,35 +121,46 @@ public class UserService {
             return result;
         }
 
+        if (!hasNoSpaces(user.getEmail())) {
+            result.addMessage("Email cannot contain spaces", ResultType.INVALID);
+            return result;
+        }
+
+        if (!hasNoSpaces(user.getUsername())) {
+            result.addMessage("Username cannot contain spaces", ResultType.INVALID);
+            return result;
+        }
+
         return result;
     }
 
     // Helper Methods
 
-    public boolean containsEmail(User user) {
+    private boolean containsEmail(User user) {
         return user.getEmail().contains("@") && user.getEmail().contains(".com") ||
                 user.getEmail().contains("@") && user.getEmail().contains(".co.") ||
                 user.getEmail().contains("@") && user.getEmail().contains(".net") ||
                 user.getEmail().contains("@") && user.getEmail().contains(".org");
     }
 
-    public static boolean distinctUsername(List<User> users) {
+    private static boolean distinctUsername(List<User> users, User user) {
         return users.stream()
-                .allMatch(user -> users.stream()
-                        .filter(u -> u.getUsername().equals(user.getUsername())).count() == 1);
+                .noneMatch(u -> u.getUsername().equals(user.getUsername()));
     }
 
-    public static boolean distinctEmail(List<User> users) {
+    private static boolean distinctEmail(List<User> users, User user) {
         return users.stream()
-                .allMatch(user -> users.stream()
-                        .filter(u -> u.getEmail().equals(user.getEmail())).count() == 1);
+                .noneMatch(u -> u.getEmail().equals(user.getEmail()));
     }
 
-    public static boolean isRoleValid(Role role) {
+    private static boolean isRoleValid(Role role) {
         return role == Role.USER || role == Role.ADMIN;
     }
 
-
-
+    private static boolean hasNoSpaces(String string) {
+        Pattern pattern = Pattern.compile("\\s");
+        Matcher matcher = pattern.matcher(string);
+        return !matcher.find();
+    }
 
 }
