@@ -41,7 +41,7 @@ function Navbar() {
                             </div>
 
                         </form>
-                        <ul className="navbar-nav mb-2 mb-lg-0 ms-5">
+                        <ul className="navbar-nav mb-2 mb-lg-0">
                             {renderUserAuthentication()}
                         </ul>
                     </div>

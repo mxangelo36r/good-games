@@ -2,16 +2,15 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const USER_DEFAULT = {
-    name: "",
     password: "",
     email: ""
 }
 
-function SignUp() {
+function Login() {
     const [user, setUser] = useState(USER_DEFAULT);
     const [errors, setErrors] = useState([]);
 
-    const url = 'http://localhost:8080/api/user/signup';
+    const url = 'http://localhost:8080/api/user/login';
     const navigate = useNavigate();
 
     const handleChange = (event) => {
@@ -73,26 +72,15 @@ function SignUp() {
         <main className="container">
             <header>
                 <div className="p-3 pd-md-4 mx-auto text-center">
-                    <h1>Sign Up for Good Games</h1>
+                    <h1>Login to Good Games</h1>
                     <p className="fs-5 text-body-secondary">
-                    Create a free account or <Link to={"/login"}>Log In</Link>
+                        Login to your account or If you’re new <Link to={"/signUp"}>Sign Up</Link>
                     </p>
                 </div>
                 {renderErrors()}
             </header>
             <section>
                 <form onSubmit={handleSubmit}>
-                    <fieldset className="form-group">
-                        <label htmlFor="name">Name</label>
-                        <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        className="form form-control"
-                        value={user.name}
-                        onChange={handleChange}
-                        />
-                    </fieldset>
                     <fieldset className="form-group">
                         <label htmlFor="email">Email</label>
                         <input
@@ -125,4 +113,4 @@ function SignUp() {
     )
 }
 
-export default SignUp;
+export default Login;

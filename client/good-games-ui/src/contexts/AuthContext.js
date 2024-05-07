@@ -1,7 +1,7 @@
 import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const authContext = createContext();
+const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const auth = useProvideAuth();
@@ -92,4 +92,4 @@ function useProvideAuth() {
         signOut
     }
 }
-export default authContext;
+export default AuthContext;
