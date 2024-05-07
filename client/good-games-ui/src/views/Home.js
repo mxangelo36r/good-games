@@ -9,7 +9,7 @@ function Home() {
         if (bestReservation.length === 0) {
             return (
                 <div className="mb-3 text-center">
-                    <h4>Sorry, Cannot find any reviewed games.</h4>
+                    <h4>Sorry, cannot find any reviewed games.</h4>
                 </div>
             )
         }
@@ -30,7 +30,7 @@ function Home() {
         if (bestReservation.length === 0) {
             return (
                 <div className="mb-3 text-center">
-                    <h4>Sorry, No upcoming reservations.</h4>
+                    <h4>Sorry, no upcoming reservations.</h4>
                 </div>
             )
         }

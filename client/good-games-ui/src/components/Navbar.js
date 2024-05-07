@@ -6,7 +6,12 @@ function Navbar() {
         if (true) {
             return (
                 <>
-                    <Link to={'/'} className="nav-link text-nowrap">Sign Up</Link>
+                    <li className="nav-item">
+                        <Link to={'/signup'} className="nav-link text-nowrap">Sign Up</Link>
+                    </li>
+                    <li>
+                        <Link to={'/login'} className="nav-link text-nowrap">Log In</Link>
+                    </li>
                 </>
             )
         } else {
@@ -37,9 +42,7 @@ function Navbar() {
 
                         </form>
                         <ul className="navbar-nav mb-2 mb-lg-0 ms-5">
-                            <li className="nav-item">
-                                {renderUserAuthentication()}
-                            </li>
+                            {renderUserAuthentication()}
                         </ul>
                     </div>
                 </div>
