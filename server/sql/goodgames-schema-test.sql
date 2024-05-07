@@ -63,7 +63,7 @@ create table reservation_attendee (
         references reservation(reservation_id),
 	constraint fk_reservation_attendee_user_id
         foreign key (user_id)
-        references `user`(user_id)        
+        references `user`(user_id)
 );
 
 delimiter //
@@ -151,12 +151,28 @@ delimiter ;
 call set_known_good_state;
 
 -- testing for aggregate join of average ratings on a specific game.
-select * from game;
+-- select * from game;
 
 -- testing some joins of tables across the DB
-select u.`name`, g.`name`, r.`text`
-	from user u
-    inner join review r on r.user_id = u.user_id
-    inner join game g on g.game_id = r.game_id
-    where u.user_id = 1;
+-- select u.`name`, g.`name`, r.`text`
+-- 	from user u
+--     inner join review r on r.user_id = u.user_id
+--     inner join game g on g.game_id = r.game_id
+--     where u.user_id = 1;
     
+-- testing delete of location, needs multiple steps
+select l.`name`, l.location_id from reservation_attendee
+	inner join reservation r on r.reservation_id = reservation_attendee.reservation_id
+	inner join location l on l.location_id = r.reservation_id
+    where l.location_id = 1;
+delete reservation_attendee from reservation_attendee 
+	inner join reservation r on r.reservation_id = reservation_attendee.reservation_id
+    inner join location l on l.location_id = r.reservation_id
+    where l.location_id = 1;
+delete from reservation where location_id = 1;
+delete from location where location_id = 1;
+select l.`name`, l.location_id from reservation_attendee
+	inner join reservation r on r.reservation_id = reservation_attendee.reservation_id
+	inner join location l on l.location_id = r.reservation_id
+    where l.location_id = 1;
+-- select * from location;

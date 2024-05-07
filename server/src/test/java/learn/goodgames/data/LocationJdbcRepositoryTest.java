@@ -76,11 +76,17 @@ class LocationJdbcRepositoryTest {
         assertFalse(repository.update(location));
     }
 
-
     @Test
     void shouldDeleteById() {
         assertTrue(repository.deleteById(1));
         assertFalse(repository.deleteById(1));
+    }
+
+    @Test
+    void shouldGetUsageCount() {
+        // Can't use locationId1 because it gets deleted and changed around
+        assertEquals(1, repository.getUsageCount(3));
+        assertEquals(1, repository.getUsageCount(2));
     }
 
 

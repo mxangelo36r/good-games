@@ -85,4 +85,11 @@ public class LocationJdbcTemplateRepository implements LocationRepository {
         jdbcTemplate.update("delete from reservation where location_id = ?;", locationId);
         return jdbcTemplate.update("delete from location where location_id = ?;", locationId) > 0;
     }
+
+    @Override
+    public int getUsageCount(int locationId) {
+        return jdbcTemplate.queryForObject(
+                "select count(*) from reservation where location_id =?;", Integer.class, locationId
+        );
+    }
 }
