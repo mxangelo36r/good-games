@@ -4,6 +4,8 @@ import learn.goodgames.data.mappers.UserMapper;
 import learn.goodgames.models.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,5 +38,50 @@ public class UserJdbcTemplateRepository implements UserRepository {
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public User add(User user) {
+        final String sql = "INSERT into user (`name`, `password`, email, `role`) " +
+                "values (?,?,?,?);";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int rowsAffected = jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getRole().toString());
+            return ps;
+        }, keyHolder);
+
+        if (rowsAffected <= 0) {
+            return null;
+        }
+
+        user.setUserId(keyHolder.getKey().intValue());
+        return user;
+    }
+
+    @Override
+    public boolean update(User user) {
+
+        final String sql = "UPDATE user SET " +
+                "`name` = ?, " +
+                "`password` = ?, " +
+                "email = ?, " +
+                "`role` = ? " +
+                "WHERE user_id = ?;";
+
+        return jdbcTemplate.update(sql,
+                user.getUsername(),
+                user.getPassword(),
+                user.getEmail(),
+                user.getRole().toString(),
+                user.getUserId()) > 0;
+    }
+
+
+    // Helper Methods
+
 
 }
