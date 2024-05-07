@@ -3,8 +3,7 @@ package learn.goodgames.data;
 import learn.goodgames.data.mappers.UserMapper;
 import learn.goodgames.models.User;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,14 +22,14 @@ public class UserJdbcTemplateRepository implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        final String sql = "SELECT user_id, username, password, email FROM user;";
+        final String sql = "SELECT user_id, `name`, `password`, email, `role` FROM user;";
         return jdbcTemplate.query(sql, new UserMapper());
     }
 
     @Override
     @Transactional
     public User findById(int userId) {
-        final String sql = "SELECT user_id, username, password, email FROM user " +
+        final String sql = "SELECT user_id, `name`, `password`, email, `role` FROM user " +
                 "WHERE user_id = ?;";
 
         return jdbcTemplate.query(sql, new UserMapper(), userId).stream()
