@@ -1,6 +1,6 @@
-drop database if exists good_games;
-create database good_games;
-use good_games;
+drop database if exists good_games_test;
+create database good_games_test;
+use good_games_test;
 
 -- create tables and relationships
 create table `user` (
