@@ -22,4 +22,5 @@ public class UserService {
     public User findById(int userId) {
         return userRepository.findById(userId);
     }
+
 }
