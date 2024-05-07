@@ -14,8 +14,7 @@ create table `user` (
 create table game (
 	game_id int primary key auto_increment,
     bgg_id int not null,
-    `name` varchar(250) not null,
-    avg_rating float not null
+    `name` varchar(250) not null
 );
 
 create table review (
@@ -75,11 +74,12 @@ insert into `user` (`name`, email, `password`, `role`)
 		("Brissett", "brissett@brissett.com", "brisset", "USER"),
         ("Dias", "dias@dias.com", "dias", "USER");
         
-insert into game (bgg_id, `name`, avg_rating)
+insert into game (bgg_id, `name`)
 	values
-		(2536, "Vabanque", 0),
-        (1988, "Outlaw Trail: The Western Game", 0),
-        (13, "CATAN", 0);
+		(2536, "Vabanque"),
+        (1988, "Outlaw Trail: The Western Game"),
+        (13, "CATAN"),
+		(110308, "7 Wonders: Catan");
         
 insert into review (`text`, rating, user_id, game_id)
 	values
@@ -88,7 +88,8 @@ insert into review (`text`, rating, user_id, game_id)
         ("I tried it and I liked it, I guess", 7, 2, 2),
         ("Fun, but not for me.", 6, 5, 2),
 		("I tried it and I liked it, I guess", 5, 3, 3),
-        ("Fun, but not for me.", 5, 5, 3);
+        ("Fun, but not for me.", 5, 5, 3),
+        ("Love love love this game", 9, 1, 4);
         
 insert into location (`name`, address, city, state, postal_code)
 	values 
@@ -116,14 +117,14 @@ insert into reservation_attendee (reservation_id, user_id)
 
 SET SQL_SAFE_UPDATES = 0;
 
-update game g
-	inner join 
-		(select game_id, avg(rating) as avgrating
-			from review r
-            group by game_id
-		) r
-        on r.game_id = g.game_id
-	set g.avg_rating = r.avgrating;
+-- update game g
+-- 	inner join 
+-- 		(select game_id, avg(rating) as avgrating
+-- 			from review r
+--             group by game_id
+-- 		) r
+--         on r.game_id = g.game_id
+-- 	set g.avg_rating = r.avgrating;
 
 SET SQL_SAFE_UPDATES = 1;
 

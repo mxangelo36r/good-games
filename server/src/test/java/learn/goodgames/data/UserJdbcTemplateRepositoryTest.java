@@ -29,7 +29,7 @@ class UserJdbcTemplateRepositoryTest {
     void shouldFindAll() {
         List<User> users = repository.findAll();
         assertNotNull(users);
-        assertEquals(6, users.size());
+        assertTrue(users.size() >= 6);
     }
 
     @Test
@@ -52,4 +52,31 @@ class UserJdbcTemplateRepositoryTest {
         assertEquals("headley@headley.com", headley.getEmail());
         assertEquals(Role.ADMIN, headley.getRole());
     }
+
+    @Test
+    void shouldAddNewUser() {
+        User user = makeUser();
+        User actual = repository.add(user);
+        assertNotNull(actual);
+        assertEquals(7, actual.getUserId());
+    }
+
+    @Test
+    void shouldUpdateExistingUser() {
+        User user = makeUser();
+        user.setUserId(1);
+        assertTrue(repository.update(user));
+    }
+
+    // Helper Methods
+
+    User makeUser() {
+        User user = new User();
+        user.setUsername("userTest");
+        user.setPassword("passwordTest");
+        user.setEmail("test@user.com");
+        user.setRole(Role.USER);
+        return user;
+    }
+
 }

@@ -11,4 +11,8 @@ public interface UserRepository {
 
     User findById(int userId);
 
+    User add (User user);
+
+    boolean update(User user);
+
 }
