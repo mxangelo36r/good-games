@@ -16,7 +16,7 @@ function useProvideAuth() {
     const url = 'http://localhost:8080/api/user';
     const navigate = useNavigate();
 
-    const signIn = (username, password) => {
+    const signIn = (newUser) => {
         setErrors([]);
         setIsLoading(true);
 
