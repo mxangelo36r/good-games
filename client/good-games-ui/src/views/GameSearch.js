@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { json, useParams } from "react-router-dom";
 
+const convert = require('xml-js');
+
 function GameSearch(props) {
     const [games, setGames] = useState([])
     const [searchQuery, setSearchQuery] = useState("");
@@ -12,9 +14,8 @@ function GameSearch(props) {
 
     useEffect(() => {
         if (query) {
-            fetch(`${bgg_url}?query=${query}&exact=${50}`)
+            fetch(`${bgg_url}?query=${query}`)
             .then(response => {
-                console.log(response);
                 if (response.status === 200) {
                     return response.text();
                 } else {
@@ -22,7 +23,9 @@ function GameSearch(props) {
                 }
             })
             .then(data => {
-                console.log(data);
+                const obj = convert.xml2js(data);
+                console.log(obj.elements[0].elements[0].elements[0]);
+                console.log(obj)
             })
             .catch(console.log);
 
