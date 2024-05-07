@@ -1,0 +1,147 @@
+@url = http://localhost:8080/api/location
+
+### GET - successful get all locations - 200 
+
+GET {{url}} HTTP/1.1
+
+### GET - successful get a location by ID - 200
+
+GET {{url}}/1 HTTP/1.1
+
+### GET - failed get - bad ID - 404
+
+GET {{url}}/1000 HTTP/1.1 
+
+### POST - successful add - 201
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Toils & Trials",
+  "address": "100 Checkers Crossing",
+  "city": "Riva",
+  "state": "ON",
+  "postalCode": "12345"
+}
+
+### POST - failed add - duplicate names - 400 (run after above code)
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Toils & Trials",
+  "address": "100 Checkers Crossing",
+  "city": "Riva",
+  "state": "ON",
+  "postalCode": "12345"
+}
+
+### POST - failed add - name is required - 400
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "",
+  "address": "100 Checkers Crossing",
+  "city": "Riva",
+  "state": "ON",
+  "postalCode": "12345"
+}
+
+### POST - failed add - all is required - 400
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+
+}
+
+### POST - failed add - no body - 500
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+### POST - failed add - add with ID - 400
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+  "locationId": 1,
+  "name": "test",
+  "address": "100 Main Place",
+  "city": "Yonkers",
+  "state": "NY",
+  "postalCode": "00000"
+}
+
+### PUT - successful update - 204
+PUT {{url}}/1 HTTP/1.1
+Content-Type: application/json
+
+{
+  "locationId": 1,
+  "name": "test",
+  "address": "100 Main Place",
+  "city": "Yonkers",
+  "state": "NY",
+  "postalCode": "00000"
+}
+
+### PUT - failed update - bad id - 409
+PUT {{url}}/1000 HTTP/1.1
+Content-Type: application/json
+
+{
+  "locationId": 1,
+  "name": "test",
+  "address": "100 Main Place",
+  "city": "Yonkers",
+  "state": "NY",
+  "postalCode": "00000"
+}
+
+### PUT - failed update - no id - 409
+PUT {{url}}/1 HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "test",
+  "address": "100 Main Place",
+  "city": "Yonkers",
+  "state": "NY",
+  "postalCode": "00000"
+}
+
+### PUT - failed update - empty fields - 400
+PUT {{url}}/1 HTTP/1.1
+Content-Type: application/json
+
+{
+  "locationId": 1,
+  "name": "",
+  "address": "",
+  "city": "Yonkers",
+  "state": "NY",
+  "postalCode": "00000"
+}
+
+### PUT - failed update - missing body - 500
+PUT {{url}}/1 HTTP/1.1
+Content-Type: application/json
+
+### DELETE - successful delete - 204
+DELETE {{url}}/4 HTTP/1.1
+
+### DELETE - failed delete - location in use - 400
+DELETE {{url}}/1 HTTP/1.1
+
+### DELETE - failed delete - bad id - 404
+DELETE {{url}}/1000 HTTP/1.1
+
+### DELETE - failed delete - bad route - 404
+DELETE {{url}}/1000/bad HTTP/1.1

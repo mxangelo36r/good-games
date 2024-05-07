@@ -37,7 +37,7 @@ create table location (
     `name` varchar(100) not null,
     address varchar(100) not null,
     city varchar(100) not null,
-    state varchar(2) not null,
+    state varchar(2) not null check(char_length(state)=2),
     postal_code varchar(50) not null
 );
 
@@ -102,7 +102,7 @@ insert into reservation (date_time, location_id, host_id)
 		("2024-06-01 18:00:00", 1, 1),
 		("2024-07-15 19:30:00", 2, 2),
 		("2024-07-01 18:00:00", 3, 3),
-		("2024-06-01 18:00:00", 4, 4),
+		("2024-06-01 18:00:00", 3, 4),
 		("2024-07-01 18:00:00", 1, 1);
         
 insert into reservation_attendee (reservation_id, user_id)
@@ -128,14 +128,14 @@ update game g
 SET SQL_SAFE_UPDATES = 1;
 
 -- testing for aggregate join of average ratings on a specific game.
-select * from game;
+-- select * from game;
 
 -- testing some joins of tables across the DB
-select u.`name`, g.`name`, r.`text`
-	from user u
-    inner join review r on r.user_id = u.user_id
-    inner join game g on g.game_id = r.game_id
-    where u.user_id = 1;
+-- select u.`name`, g.`name`, r.`text`
+-- 	from user u
+--     inner join review r on r.user_id = u.user_id
+--     inner join game g on g.game_id = r.game_id
+--     where u.user_id = 1;
 	
     
     
