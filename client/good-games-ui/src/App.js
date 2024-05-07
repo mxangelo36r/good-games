@@ -4,14 +4,23 @@ import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Navbar from "./components/Navbar";
 import Home from "./views/Home";
+import SignUp from "./views/SignUp";
+import Login from "./views/Login";
+import { AuthProvider } from "./contexts/AuthContext";
+import GameSearch from "./views/GameSearch";
 
 function App() {
   return (
     <Router>
-      <Navbar/>
-      <Routes>
-        <Route path="/" element={<Home/>}/>
-      </Routes>
+      <AuthProvider>
+        <Navbar/>
+        <Routes>
+          <Route path="/" element={<Home/>}/>
+          <Route path="/signup" element={<SignUp/>}/>
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/gameSearch/:query" element={<GameSearch/>}/>
+        </Routes>
+      </AuthProvider>
     </Router>
   );
 }
