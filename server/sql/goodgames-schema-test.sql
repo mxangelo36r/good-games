@@ -37,7 +37,7 @@ create table location (
     `name` varchar(100) not null,
     address varchar(100) not null,
     city varchar(100) not null,
-    state varchar(2) not null,
+    state varchar(2) not null check(char_length(state)=2),
     postal_code varchar(50) not null
 );
 
