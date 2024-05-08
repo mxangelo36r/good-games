@@ -52,6 +52,7 @@ function Game() {
     const [game, setGame] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
+    const url = 'http://localhost:8080/api/game/bggId';
     const bgg_url = 'https://api.geekdo.com/xmlapi2/thing';
     const { id } = useParams();
 
@@ -67,8 +68,31 @@ function Game() {
             })
             .then(data => {
                 const obj = convert.xml2js(data);
+
+                fetch(`${url}/${id}`)
+                .then(response => {
+                    if (response.status === 200) {
+                        return response.json();
+                    } else if (response.status === 404) {
+                        return null;
+                    } else {
+                        return Promise.reject(`Unexpected status code: ${response.status}`);
+                    }
+                })
+                .then(data => {
+                    const gameDetails = convertObj(obj);
+                    if (data) {
+                        gameDetails.game = data;   
+                    }
+                    setGame(gameDetails);
+                })
+                .catch(error => {
+                    console.log(error);
+                    const gameDetails = convertObj(obj);
+                    setGame(gameDetails);
+                })
+
                 setIsLoading(false);
-                setGame(convertObj(obj));
             })
             .catch(console.log);
         }

@@ -1,18 +1,22 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const USER_DEFAULT = {
-    name: "",
+    username: "",
     password: "",
-    email: ""
+    email: "",
+    role: "USER"
 }
 
 function SignUp() {
     const [user, setUser] = useState(USER_DEFAULT);
-    const [errors, setErrors] = useState([]);
+    const { signUp, errors, removeErrors } = useAuth();
 
-    const url = 'http://localhost:8080/api/user/signup';
-    const navigate = useNavigate();
+
+    useEffect(() => {
+        removeErrors();
+    }, [])
 
     const handleChange = (event) => {
         const newUser = {...user};
@@ -26,31 +30,10 @@ function SignUp() {
         setUser(newUser);
     }
 
-    const handleSubmit = () => {
-        const init = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        };
+    const handleSubmit = (event) => {
+        event.preventDefault();
 
-        fetch(url, init)
-        .then(response => {
-            if (response.status === 201 || response.status === 400) {
-                return response.json();
-            } else {
-                return Promise.reject(`Unexpected status code: ${response.status}`);
-            }
-        })
-        .then(data => {
-            if (data.userId) {
-                navigate('/');
-            } else {
-                setErrors(data);
-            }
-        })
-        .catch(console.log);
+        signUp(user);
     }
 
     const renderErrors = () => {
@@ -83,13 +66,13 @@ function SignUp() {
             <section>
                 <form onSubmit={handleSubmit}>
                     <fieldset className="form-group">
-                        <label htmlFor="name">Name</label>
+                        <label htmlFor="name">Username</label>
                         <input
-                        id="name"
-                        name="name"
+                        id="username"
+                        name="username"
                         type="text"
                         className="form form-control"
-                        value={user.name}
+                        value={user.username}
                         onChange={handleChange}
                         />
                     </fieldset>

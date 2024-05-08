@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const USER_DEFAULT = {
     password: "",
@@ -8,10 +9,11 @@ const USER_DEFAULT = {
 
 function Login() {
     const [user, setUser] = useState(USER_DEFAULT);
-    const [errors, setErrors] = useState([]);
+    const { signIn, errors, removeErrors } = useAuth();
 
-    const url = 'http://localhost:8080/api/user/login';
-    const navigate = useNavigate();
+    useEffect(() => {
+        removeErrors();
+    }, [])
 
     const handleChange = (event) => {
         const newUser = {...user};
@@ -25,31 +27,10 @@ function Login() {
         setUser(newUser);
     }
 
-    const handleSubmit = () => {
-        const init = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        };
-
-        fetch(url, init)
-        .then(response => {
-            if (response.status === 201 || response.status === 400) {
-                return response.json();
-            } else {
-                return Promise.reject(`Unexpected status code: ${response.status}`);
-            }
-        })
-        .then(data => {
-            if (data.userId) {
-                navigate('/');
-            } else {
-                setErrors(data);
-            }
-        })
-        .catch(console.log);
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        
+        signIn(user);
     }
 
     const renderErrors = () => {

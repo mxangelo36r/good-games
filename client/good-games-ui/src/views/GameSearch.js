@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 
 const convert = require('xml-js');
 
-const convertObj = (data) => {
+const convertObj = (data, serverList) => {
     const newGames = [];
     data.elements[0].elements.forEach((e) => {
         if (e.attributes.type === "boardgame") {
@@ -12,6 +12,12 @@ const convertObj = (data) => {
                 name: e.elements[0].attributes.value,
                 year_published: e.elements[1] ? e.elements[1].attributes.value : 0
             }
+
+            const game = serverList.find((e) => e.bggId === parseInt(newObj.bgg_id));
+            if (game) {
+                newObj.game = game;
+            }
+
             newGames.push(newObj);
         }
     });
@@ -22,12 +28,14 @@ function GameSearch() {
     const [games, setGames] = useState([])
     const [isLoading, setIsLoading] = useState(false);
 
+    const url = 'http://localhost:8080/api/game'
     const bgg_url = 'https://api.geekdo.com/xmlapi2/search'
     const { query } = useParams();
 
     useEffect(() => {
         if (query) {
             setIsLoading(true);
+
             fetch(`${bgg_url}?query=${query}`)
             .then(response => {
                 if (response.status === 200) {
@@ -38,7 +46,27 @@ function GameSearch() {
             })
             .then(data => {
                 const obj = convert.xml2js(data);
-                setGames(convertObj(obj));
+                let serverGames = [];
+
+                fetch(url)
+                .then(response => {
+                    if (response.status === 200) {
+                        return response.json();
+                    } else {
+                        return Promise.reject(`Unexpected status code: ${response.status}`);
+                    }
+                })
+                .then(data => {
+                    serverGames = data;
+                    const gamesList = convertObj(obj, serverGames);
+                    setGames(gamesList);
+                })
+                .catch( (error) => {
+                    console.log(error);
+                    const gamesList = convertObj(obj, serverGames);
+                    setGames(gamesList);
+                });
+
                 setIsLoading(false);
             })
             .catch(console.log);
@@ -48,7 +76,7 @@ function GameSearch() {
 
     const renderRows = () => {
         return games.map((game, index) => (
-            <tr key={index}>
+            <tr key={index} className={game.game ? "table-success" : ""}>
                 <td></td>
                 <td>{game.bgg_id}</td>
                 <td><Link to={`/game/${game.bgg_id}`} className="text-underline-hover">{game.name}</Link></td>

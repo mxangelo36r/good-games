@@ -5,15 +5,22 @@ import { useState } from "react";
 function Navbar() {
     const [query, setQuery] = useState("");
 
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, signOut } = useAuth();
     const navigate = useNavigate();
 
     const handleChange = (event) => {
         setQuery(event.target.value);
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        
         navigate(`gameSearch/${query}`)
+    }
+
+    const handleSignOut = () => {
+        signOut();
+        navigate(`/`);
     }
 
     const renderUserAuthentication = () => {
@@ -34,6 +41,7 @@ function Navbar() {
                 <>
                     <div className="dropdown text-end">
                         <li className="nav-item">
+                            <a className="nav-link text-nowrap" href="#" onClick={handleSignOut}>Sign Out</a>
                         </li>
                     </div>
                 </>
