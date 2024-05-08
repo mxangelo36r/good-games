@@ -42,7 +42,8 @@ create table location (
 
 create table reservation (
 	reservation_id int primary key auto_increment,
-    date_time datetime,
+    `date` date not null,
+    `time` time not null,
     location_id int not null,
     host_id int not null,
 	constraint fk_reservation_location_id
@@ -98,13 +99,13 @@ insert into location (`name`, address, city, state, postal_code)
         ("The Spot", "123 Avenue Q", "Dallas", "TX", "22222"),
         ("Dungeons and Draggins", "45 East Shire Lane", "Charlotte", "NC", "33333");
         
-insert into reservation (date_time, location_id, host_id)
+insert into reservation (`date`, `time`, location_id, host_id)
 	values
-		("2024-06-01 18:00:00", 1, 1),
-		("2024-07-15 19:30:00", 2, 2),
-		("2024-07-01 18:00:00", 3, 3),
-		("2024-06-01 18:00:00", 3, 4),
-		("2024-07-01 18:00:00", 1, 1);
+		("2024-06-01", "18:00:00", 1, 1),
+		("2024-07-15", "19:30:00", 2, 2),
+		("2024-07-01", "18:00:00", 3, 3),
+		("2024-06-01", "18:00:00", 3, 4),
+		("2024-07-01", "18:00:00", 1, 1);
         
 insert into reservation_attendee (reservation_id, user_id)
 	values
