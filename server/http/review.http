@@ -20,3 +20,9 @@ GET {{url}}/review/1000 HTTP/1.1
 
 ### GET - failed get - no id - 404
 GET {{url}}/review/ HTTP/1.1
+
+### DELETE - successful delete - 204
+DELETE {{url}}/1/1 HTTP/1.1
+
+###
+DELETE {{url}}/2/1 HTTP/1.1

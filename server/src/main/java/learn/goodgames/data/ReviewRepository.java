@@ -18,6 +18,8 @@ public interface ReviewRepository {
 
     boolean updateReview(Review review);
 
+    boolean deleteReviewById(int reviewId);
+
     boolean deleteReviewUser(int reviewId, Review review, User user);
 
     boolean deleteReviewAdmin(int reviewId, Review review, User user);
