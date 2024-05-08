@@ -80,7 +80,7 @@ class UserServiceTest {
 
         Result<User> resultEmail = service.add(duplicateEmail);
         assertEquals(ResultType.INVALID, resultEmail.getType());
-        assertEquals("Username taken. Please choose another username", resultEmail.getMessages().get(0));
+        assertEquals("Email taken. Please choose another email", resultEmail.getMessages().get(0));
     }
 
     @Test
@@ -93,7 +93,7 @@ class UserServiceTest {
 
         Result<User> resultUsername = service.add(duplicateUsername);
         assertEquals(ResultType.INVALID, resultUsername.getType());
-        assertEquals("Email taken. Please choose another email", resultUsername.getMessages().get(0));
+        assertEquals("Username taken. Please choose another username", resultUsername.getMessages().get(0));
     }
 
     @Test
