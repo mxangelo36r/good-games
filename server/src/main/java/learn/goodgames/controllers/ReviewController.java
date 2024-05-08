@@ -1,5 +1,6 @@
 package learn.goodgames.controllers;
 
+import learn.goodgames.domain.Result;
 import learn.goodgames.domain.ReviewService;
 import learn.goodgames.models.Review;
 import org.springframework.http.HttpStatus;
@@ -33,4 +34,16 @@ public class ReviewController {
         }
         return ResponseEntity.ok(review);
     }
+
+    @DeleteMapping("/{reviewId}/{userId}")
+    public ResponseEntity<Object> deleteById(@PathVariable int reviewId, @PathVariable int userId) {
+        Result<Review> result = service.deleteReviewById(reviewId, userId);
+
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return ErrorResponse.build(result);
+    }
+
 }

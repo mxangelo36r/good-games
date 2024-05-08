@@ -113,6 +113,11 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
 
 //     Delete:
     @Override
+    public boolean deleteReviewById(int reviewId) {
+        return jdbcTemplate.update("delete from review where review_id = ?;", reviewId) > 0;
+    }
+
+    @Override
     public boolean deleteReviewUser(int reviewId, Review review, User user) {
         // If they're a user - they can only edit their own review
         if (user.getRole() == Role.USER && reviewId == review.getReviewId() && review.getUserId() == user.getUserId()) {
