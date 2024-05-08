@@ -1,9 +1,9 @@
 package learn.goodgames.data;
 
 import learn.goodgames.data.mappers.ReviewMapper;
-import learn.goodgames.data.mappers.UserMapper;
 import learn.goodgames.models.Game;
 import learn.goodgames.models.Review;
+import learn.goodgames.models.Role;
 import learn.goodgames.models.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -24,16 +24,19 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
     }
 
     @Override
-    public List<Review> findAll() {
+    public List<Review> findAllReviews() {
         final String sql = "SELECT review_id, `text`, rating, user_id, game_id FROM review;";
         return jdbcTemplate.query(sql, new ReviewMapper());
     }
 
     @Override
     @Transactional
-    public Review findById(int reviewId) {
-        final String sql = "SELECT review_id, `text`, rating, user_id, game_id FROM review " +
-                "WHERE review_id = ?;";
+    public Review findReviewById(int reviewId) {
+        final String sql = "SELECT r.review_id, r.`text`, r.rating, r.user_id, r.game_id, u.`name`, g.`name` " +
+                "FROM review r " +
+                "INNER JOIN `user` u ON u.user_id = r.review_id " +
+                "INNER JOIN game g ON g.game_id = g.game_id " +
+                "WHERE r.review_id = ?;";
 
         return jdbcTemplate.query(sql, new ReviewMapper(), reviewId).stream()
                 .findFirst()
@@ -44,7 +47,7 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
     // Maybe in GlobalExceptionHandler?
     // Is adding but new review id is +1 the expected
     @Override
-    public Review add(Review review, User user, Game game) {
+    public Review addReview(Review review, User user, Game game) {
         // Adds review from an existing User and Game
         final String sql = "INSERT INTO review (`text`, rating, user_id, game_id) " +
                 "SELECT ?, ?, ?, ? " +
@@ -74,16 +77,51 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
         // - Primary key constraints
         // - Concurrent inserts happening simultaneously?
         // - Possible Triggers
-        review.setReviewId(keyHolder.getKey().intValue() - 1);
+
+        // Setting User and Game to review
+        review.setUser(user);
+        review.setGame(game);
+        review.setReviewId(keyHolder.getKey().intValue());
         return review;
     }
 
-    // Need edit for User & Admin
-    // User: can only edit their own reviews
-    // Admin: can edit all reviews
+    // Might need to add a statement saying only User can update (if) - need to double check
+    @Override
+    public boolean updateReview(Review review) {
+        // Can only edit their own reviews for a specific game
+        final String sql = "UPDATE review SET " +
+                "`text` = ?, " +
+                "rating = ? " +
+                "WHERE review_id = ?;";
+
+        return jdbcTemplate.update(sql,
+                review.getText(),
+                review.getRating(),
+                review.getReviewId()) > 0;
+    }
+
+    // Delete:
+    @Override
+    public boolean deleteReviewUser(Review review, User user) {
+        // If they're a user - they can only edit their own review
+
+        if (user.getRole() == Role.USER && review.getUserId() == user.getUserId()) {
+            return jdbcTemplate.update("DELETE FROM review WHERE review_id = ?;") > 0;
+        }
+
+        System.out.println("Sorry. Can't delete this review. Deletion can only happen for your own review");
+        return false;
+    }
 
     @Override
-    public boolean update(Review review, User user, Game game) {
+    public boolean deleteReviewAdmin(Review review, User user) {
+        // If they're an admin - they can delete selected review
+
+        if (user.getRole() == Role.ADMIN) {
+            return jdbcTemplate.update("DELETE FROM review WHERE review_id = ?;") > 0;
+        }
+
+        System.out.println("Sorry. Only Admin can delete other reviews");
         return false;
     }
 

@@ -15,7 +15,7 @@ public class LocationService {
         this.repository = repository;
     }
 
-    public List<Location> findAll() { return repository.findAll(); }
+    public List<Location> findAll() { return repository.findAllLocations(); }
 
     public Location findById(int locationId) { return repository.findLocationById(locationId); }
 
@@ -75,7 +75,7 @@ public class LocationService {
 
     private Result<Location> validate(Location location) {
         Result<Location> result = new Result<>();
-        List<Location> all = repository.findAll();
+        List<Location> all = repository.findAllLocations();
 
         for(Location l : all) {
             if (l.equals(location)) {

@@ -3,12 +3,13 @@ package learn.goodgames.models;
 public class Review {
 
     // Fields
-
-    int reviewId;
-    int userId;
-    int gameId;
-    String text;
-    int rating;
+    private int reviewId;
+    private User user;
+    private int userId;
+    private Game game;
+    private int gameId;
+    private String text;
+    private int rating;
 
     // Getters & Setters
 
@@ -52,4 +53,19 @@ public class Review {
         this.rating = rating;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }

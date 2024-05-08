@@ -19,11 +19,11 @@ public class UserService {
     }
 
     public List<User> findAll() {
-        return userRepository.findAll();
+        return userRepository.findAllUsers();
     }
 
     public User findById(int userId) {
-        return userRepository.findById(userId);
+        return userRepository.findUserById(userId);
     }
 
     public Result<User> add(User user) {
@@ -38,7 +38,7 @@ public class UserService {
             return result;
         }
 
-        user = userRepository.add(user);
+        user = userRepository.addUser(user);
         result.setPayload(user);
         return result;
     }
@@ -55,7 +55,7 @@ public class UserService {
             return result;
         }
 
-        if (!userRepository.update(user)) {
+        if (!userRepository.updateUser(user)) {
             String msg = String.format("User ID: %s, not found", user.getUserId());
             result.addMessage(msg, ResultType.NOT_FOUND);
         }

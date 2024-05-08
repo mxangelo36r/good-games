@@ -27,7 +27,7 @@ class LocationJdbcRepositoryTest {
 
     @Test
     void shouldFindAll() {
-        List<Location> all = repository.findAll();
+        List<Location> all = repository.findAllLocations();
         assertNotNull(all);
         assert(all.size() > 3 && all.size() < 6);
 

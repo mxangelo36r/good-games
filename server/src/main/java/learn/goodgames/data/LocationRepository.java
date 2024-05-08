@@ -5,7 +5,7 @@ import learn.goodgames.models.Location;
 import java.util.List;
 
 public interface LocationRepository {
-    List<Location> findAll();
+    List<Location> findAllLocations();
 
     Location findLocationById(int locationId);
 

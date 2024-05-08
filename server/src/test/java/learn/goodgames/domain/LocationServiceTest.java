@@ -24,7 +24,7 @@ class LocationServiceTest {
     @Test
     void shouldFindAll() {
         List<Location> expected = List.of(makeLocation1(), makeLocation2());
-        when(repository.findAll()).thenReturn(expected);
+        when(repository.findAllLocations()).thenReturn(expected);
         List<Location> actual = service.findAll();
         assertEquals(expected, actual);
     }
@@ -135,7 +135,7 @@ class LocationServiceTest {
         // Should not add if duplicate name, address, city, state, postalCode
         List<Location> expected = List.of(makeLocation1(), makeLocation2());
         location = makeLocation0();
-        when(repository.findAll()).thenReturn(expected);
+        when(repository.findAllLocations()).thenReturn(expected);
         result = service.add(location);
         assertEquals(ResultType.INVALID, result.getType());
     }
@@ -237,7 +237,7 @@ class LocationServiceTest {
         // Should not update if duplicate name, address, city, state, postalCode
         List<Location> expected = List.of(makeLocation1(), makeLocation2());
         location = makeLocation1();
-        when(repository.findAll()).thenReturn(expected);
+        when(repository.findAllLocations()).thenReturn(expected);
         result = service.update(location);
         assertEquals(ResultType.INVALID, result.getType());
     }
