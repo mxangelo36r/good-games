@@ -52,6 +52,14 @@ class ReviewJdbcTemplateRepositoryTest {
     }
 
     @Test
+    void shouldFindReviewsByGameId() {
+        List<Review> all = repository.findReviewsByGameId(1);
+        assertNotNull(all);
+
+        assertEquals(2, all.size());
+    }
+
+    @Test
     void shouldAddNewReview() {
         Review review = makeReview();
         User user = makeUser();

@@ -18,7 +18,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> findAll() {
+    public List<User> findAllUsers() {
         return userRepository.findAllUsers();
     }
 
@@ -92,7 +92,7 @@ public class UserService {
 
     private Result<User> validate(User user) {
         Result<User> result = new Result<>();
-        List<User> all = findAll();
+        List<User> all = findAllUsers();
 
         if (user == null) {
             result.addMessage("User cannot be null", ResultType.INVALID);

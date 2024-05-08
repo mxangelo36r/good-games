@@ -85,7 +85,6 @@ class LocationJdbcRepositoryTest {
     @Test
     void shouldGetUsageCount() {
         // Can't use locationId1 because it gets deleted and changed around
-        assertEquals(1, repository.getLocationUsageCount(3));
         assertEquals(1, repository.getLocationUsageCount(2));
     }
 

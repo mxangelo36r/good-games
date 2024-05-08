@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -77,6 +78,7 @@ public class LocationJdbcTemplateRepository implements LocationRepository {
     }
 
     @Override
+    @Transactional
     public boolean deleteLocationById(int locationId) {
         jdbcTemplate.update("delete reservation_attendee from reservation_attendee " +
                 "inner join reservation r on r.reservation_id = reservation_attendee.reservation_id " +
