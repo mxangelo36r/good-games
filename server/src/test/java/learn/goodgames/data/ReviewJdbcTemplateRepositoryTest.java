@@ -72,6 +72,15 @@ class ReviewJdbcTemplateRepositoryTest {
         Review actual = repository.findReviewById(5);
         assertEquals("Testing Text", actual.getText());
         assertEquals(5, actual.getRating());
+    }
+
+    @Test
+    void shouldDeleteForUser() {
+
+    }
+
+    @Test
+    void shouldDeleteForAdmin() {
 
     }
 

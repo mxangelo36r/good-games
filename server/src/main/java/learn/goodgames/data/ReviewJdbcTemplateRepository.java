@@ -3,6 +3,7 @@ package learn.goodgames.data;
 import learn.goodgames.data.mappers.ReviewMapper;
 import learn.goodgames.models.Game;
 import learn.goodgames.models.Review;
+import learn.goodgames.models.Role;
 import learn.goodgames.models.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -31,8 +32,11 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
     @Override
     @Transactional
     public Review findReviewById(int reviewId) {
-        final String sql = "SELECT review_id, `text`, rating, user_id, game_id FROM review " +
-                "WHERE review_id = ?;";
+        final String sql = "SELECT r.review_id, r.`text`, r.rating, r.user_id, r.game_id, u.`name`, g.`name` " +
+                "FROM review r " +
+                "INNER JOIN `user` u ON u.user_id = r.review_id " +
+                "INNER JOIN game g ON g.game_id = g.game_id " +
+                "WHERE r.review_id = ?;";
 
         return jdbcTemplate.query(sql, new ReviewMapper(), reviewId).stream()
                 .findFirst()
@@ -81,7 +85,7 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
         return review;
     }
 
-
+    // Might need to add a statement saying only User can update (if) - need to double check
     @Override
     public boolean updateReview(Review review) {
         // Can only edit their own reviews for a specific game
@@ -100,12 +104,24 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
     @Override
     public boolean deleteReviewUser(Review review, User user) {
         // If they're a user - they can only edit their own review
+
+        if (user.getRole() == Role.USER && review.getUserId() == user.getUserId()) {
+            return jdbcTemplate.update("DELETE FROM review WHERE review_id = ?;") > 0;
+        }
+
+        System.out.println("Sorry. Can't delete this review. Deletion can only happen for your own review");
         return false;
     }
 
     @Override
     public boolean deleteReviewAdmin(Review review, User user) {
         // If they're an admin - they can delete selected review
+
+        if (user.getRole() == Role.ADMIN) {
+            return jdbcTemplate.update("DELETE FROM review WHERE review_id = ?;") > 0;
+        }
+
+        System.out.println("Sorry. Only Admin can delete other reviews");
         return false;
     }
 
