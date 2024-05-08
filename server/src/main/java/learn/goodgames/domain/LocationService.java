@@ -58,7 +58,7 @@ public class LocationService {
         Result<Location> result = new Result<>();
 
         // validate the location is not in use
-        int usageCount = repository.getUsageCount(locationId);
+        int usageCount = repository.getLocationUsageCount(locationId);
         if (usageCount > 0) {
             String msg = String.format("locationId: %s, is in use", locationId);
             result.addMessage(msg, ResultType.INVALID);

@@ -87,7 +87,7 @@ public class LocationJdbcTemplateRepository implements LocationRepository {
     }
 
     @Override
-    public int getUsageCount(int locationId) {
+    public int getLocationUsageCount(int locationId) {
         return jdbcTemplate.queryForObject(
                 "select count(*) from reservation where location_id =?;", Integer.class, locationId
         );

@@ -244,7 +244,7 @@ class LocationServiceTest {
 
     @Test
     void shouldDeleteWhenNotInUse() {
-        when(repository.getUsageCount(3)).thenReturn(0);
+        when(repository.getLocationUsageCount(3)).thenReturn(0);
         when(repository.deleteLocationById(2)).thenReturn(true);
         Result<Location> result = service.deleteById(2);
         assertEquals(ResultType.SUCCESS, result.getType());
@@ -252,7 +252,7 @@ class LocationServiceTest {
 
     @Test
     void shouldNotDeleteWhenInUse() {
-        when(repository.getUsageCount(1)).thenReturn(1);
+        when(repository.getLocationUsageCount(1)).thenReturn(1);
         Result<Location> result = service.deleteById(1);
         assertEquals(ResultType.INVALID, result.getType());
     }
