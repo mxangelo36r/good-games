@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import ReservationHome from "../components/home_components/ReservationList";
 
 function Home() {
     const [bestGames, setBestGames] = useState([]);
     const [bestReservation, setBesReservation] = useState([]);
+
 
     const renderHighestReviewedGames = () => {
         if (bestReservation.length === 0) {
@@ -34,6 +36,7 @@ function Home() {
                 </div>
             )
         }
+        
         return bestReservation.map((reservation) => (
             <div className="card">
                 <div className="card-body">
@@ -45,7 +48,6 @@ function Home() {
             </div>
         ))
     }
-
 
     return (
         <main className="container">
@@ -69,8 +71,8 @@ function Home() {
             <section className="row">
                 {renderHighestReviewedGames()}
             </section>
-            <section>
-                {renderPopularAvailableReservation()}
+            <section className="p-3 pd-md-4 mx-auto text-center">
+                <ReservationHome />
             </section>
         </main>
     )

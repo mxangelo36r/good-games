@@ -122,7 +122,8 @@ insert into reservation (`date`, `time`, location_id, host_id)
 		("2024-07-15", "19:30:00", 2, 2),
 		("2024-07-01", "18:00:00", 3, 3),
 		("2024-06-01", "18:00:00", 3, 4),
-		("2024-07-01", "18:00:00", 1, 1);
+		("2024-07-01", "18:00:00", 1, 1),
+		("2022-04-13", "13:00:00", 1, 1);
         
 insert into reservation_attendee (reservation_id, user_id)
 	values
@@ -181,3 +182,11 @@ select u.`name`, g.`name`, r.`text`
 -- select game_id, avg(rating) as avgrating
 -- 	from review r
 --     where game_id = 1;
+
+-- Test to get location for each reservation
+select r.reservation_id, r.`date`, r.`time`, r.location_id, r.host_id, l.`name`, l.address, l.city, l.state, l.postal_code, u.`name` as host_name
+                from reservation r
+                inner join location l on l.location_id = r.location_id
+                inner join `user` u on u.user_id = r.host_id
+                where r.`date` >= curdate()
+                order by r.`date`;
