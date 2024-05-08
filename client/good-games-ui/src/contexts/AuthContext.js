@@ -40,6 +40,14 @@ function useProvideAuth() {
         }
     }
 
+    const isUser = (id) => {
+        if (user.id === id) {
+            return true;
+        } else {
+
+        }
+    } 
+
     const checkAuth = (nextState, replace) => {
         if (!user) {
             replace({ pathname: "/" })
@@ -125,6 +133,7 @@ function useProvideAuth() {
         isLoading,
         isLoggedIn,
         isAdmin,
+        isUser,
         checkAuth,
         removeErrors,
         signIn,
