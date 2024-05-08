@@ -1,10 +1,25 @@
 import { useEffect, useState } from "react";
-import { json, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-function GameSearch(props) {
+const convert = require('xml-js');
+
+const convertObj = (data) => {
+    const newGames = [];
+    data.elements[0].elements.forEach((e) => {
+        if (e.attributes.type === "boardgame") {
+            const newObj = {
+                bgg_id: e.attributes.id,
+                name: e.elements[0].attributes.value,
+                year_published: e.elements[1] ? e.elements[1].attributes.value : 0
+            }
+            newGames.push(newObj);
+        }
+    });
+    return newGames;
+}
+
+function GameSearch() {
     const [games, setGames] = useState([])
-    const [searchQuery, setSearchQuery] = useState("");
-    const [limit, setLimit] = useState(50);
     const [isLoading, setIsLoading] = useState(false);
 
     const bgg_url = 'https://api.geekdo.com/xmlapi2/search'
@@ -12,9 +27,9 @@ function GameSearch(props) {
 
     useEffect(() => {
         if (query) {
-            fetch(`${bgg_url}?query=${query}&exact=${50}`)
+            setIsLoading(true);
+            fetch(`${bgg_url}?query=${query}`)
             .then(response => {
-                console.log(response);
                 if (response.status === 200) {
                     return response.text();
                 } else {
@@ -22,79 +37,57 @@ function GameSearch(props) {
                 }
             })
             .then(data => {
-                console.log(data);
+                const obj = convert.xml2js(data);
+                setGames(convertObj(obj));
+                setIsLoading(false);
             })
             .catch(console.log);
-
-            setSearchQuery(query);
         }
-    }, [])
-    
-    const handleChange = (event) => {
-        setSearchQuery(event.target.value);
-    }
+    }, [query])
 
-    const handleSubmit = () => {
-        fetch(`${bgg_url}?search=${searchQuery}&exact=${limit}`)
-        .then(response => {
-            if (response.status === 200) {
-                console.log(response)
-                return response.body;
-            } else {
-                return Promise.reject(`Unexpected status code: ${response.status}`);
-            }
-        })
-        .then(data => setGames(data))
-        .catch(console.log);
-    }
 
     const renderRows = () => {
         return games.map((game, index) => (
             <tr key={index}>
                 <td></td>
+                <td>{game.bgg_id}</td>
+                <td><Link to={`/game/${game.bgg_id}`} className="text-underline-hover">{game.name}</Link></td>
                 <td></td>
-                <td></td>
-                <td></td>
+                <td>{game.year_published}</td>
             </tr>
         ))
     }
 
     return (
         <main className="container mt-4">
-            <header>
-                <form onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <input
-                        id="searchQuery"
-                        name="searchQuery"
-                        type="search"
-                        className="form-control"
-                        placeholder=""
-                        aria-label="Search"
-                        aria-describedby="btn-search"
-                        value={searchQuery}
-                        onChange={handleChange}
-                        />
-                        <button className="btn btn-outline-success" type="button" id="btn-search">Search</button>
+            {isLoading ? (
+                <div className="overlay">
+                    <div className="d-flex justify-content-center">
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
                     </div>
-                </form>
-            </header>
-            <section>
-                <table className="table">
-                    <caption>List of search results</caption>
-                    <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">Game Name</th>
-                            <th scope="col">Rating</th>
-                            <th scope="col">Year Published</th>
-                        </tr>
-                    </thead>
-                    <tbody className="table-group-divider">
-                        {/* {renderRows()} */}
-                    </tbody>
-                </table>
-            </section>
+                </div>
+            ) : (
+                <section>
+                    <table className="table table-hover">
+                        <caption>List of search results</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">BGG ID</th>
+                                <th scope="col">Game Name</th>
+                                <th scope="col">Rating</th>
+                                <th scope="col">Year Published</th>
+                            </tr>
+                        </thead>
+                        <tbody className="table-group-divider">
+                            {renderRows()}
+                        </tbody>
+                    </table>
+                </section>
+            )}
+            
         </main>
     )
 }
