@@ -10,6 +10,8 @@ public interface ReviewRepository {
 
     List<Review> findAllReviews();
 
+    List<Review> findReviewsByGameId(int gameId);
+
     Review findReviewById(int reviewId);
 
     Review addReview(Review review, User user, Game game);

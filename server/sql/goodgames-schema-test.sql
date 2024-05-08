@@ -184,9 +184,15 @@ select u.`name`, g.`name`, r.`text`
 --     where game_id = 1;
 
 -- Test to get location for each reservation
-select r.reservation_id, r.`date`, r.`time`, r.location_id, r.host_id, l.`name`, l.address, l.city, l.state, l.postal_code, u.`name` as host_name
-                from reservation r
-                inner join location l on l.location_id = r.location_id
-                inner join `user` u on u.user_id = r.host_id
-                where r.`date` >= curdate()
-                order by r.`date`;
+-- select r.reservation_id, r.`date`, r.`time`, r.location_id, r.host_id, l.`name`, l.address, l.city, l.state, l.postal_code, u.`name` as host_name
+--                 from reservation r
+--                 inner join location l on l.location_id = r.location_id
+--                 inner join `user` u on u.user_id = r.host_id
+--                 where r.`date` >= curdate()
+--                 order by r.`date`;
+
+-- Test to get reviews by game_id
+select r.review_id, r.`text`, r.rating, r.user_id, r.game_id, g.game_id, g.bgg_id, g.`name`
+	from review r
+    inner join game g on g.game_id = r.game_id
+    where r.game_id = 1;

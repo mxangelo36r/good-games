@@ -1,0 +1,22 @@
+@url = http://localhost:8080/api/reviews
+
+### GET - successful get all reviews - 200 
+GET {{url}} HTTP/1.1
+
+### GET - successful get all reviews by game id - 200
+GET {{url}}/game/1 HTTP/1.1
+
+### GET - successful get - bad id, nothing in list - 200
+GET {{url}}/game/0 HTTP/1.1
+
+### GET - failed get - bad path - 404
+GET {{url}}/game HTTP/1.1
+
+### GET - successful get review by review id
+GET {{url}}/review/1 HTTP/1.1
+
+### GET - failed get - bad id - 400
+GET {{url}}/review/1000 HTTP/1.1
+
+### GET - failed get - no id - 404
+GET {{url}}/review/ HTTP/1.1
