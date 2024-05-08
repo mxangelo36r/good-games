@@ -81,12 +81,31 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
         return review;
     }
 
-    // Need edit for User & Admin
-    // User: can only edit their own reviews
-    // Admin: can edit all reviews
 
     @Override
-    public boolean updateReview(Review review, User user, Game game) {
+    public boolean updateReview(Review review) {
+        // Can only edit their own reviews for a specific game
+        final String sql = "UPDATE review SET " +
+                "`text` = ?, " +
+                "rating = ? " +
+                "WHERE review_id = ?;";
+
+        return jdbcTemplate.update(sql,
+                review.getText(),
+                review.getRating(),
+                review.getReviewId()) > 0;
+    }
+
+    // Delete:
+    @Override
+    public boolean deleteReviewUser(Review review, User user) {
+        // If they're a user - they can only edit their own review
+        return false;
+    }
+
+    @Override
+    public boolean deleteReviewAdmin(Review review, User user) {
+        // If they're an admin - they can delete selected review
         return false;
     }
 

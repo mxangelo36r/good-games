@@ -64,6 +64,16 @@ class ReviewJdbcTemplateRepositoryTest {
         assertEquals(2, review.getGame().getGameId());
     }
 
+    @Test
+    void shouldUpdate() {
+        Review review = makeReview();
+        review.setReviewId(5);
+        assertTrue(repository.updateReview(review));
+        Review actual = repository.findReviewById(5);
+        assertEquals("Testing Text", actual.getText());
+        assertEquals(5, actual.getRating());
+
+    }
 
     // Helper Methods
 

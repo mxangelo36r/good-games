@@ -14,5 +14,10 @@ public interface ReviewRepository {
 
     Review addReview(Review review, User user, Game game);
 
-    boolean updateReview(Review review, User user, Game game);
+    boolean updateReview(Review review);
+
+    boolean deleteReviewUser(Review review, User user);
+
+    boolean deleteReviewAdmin(Review review, User user);
+
 }
