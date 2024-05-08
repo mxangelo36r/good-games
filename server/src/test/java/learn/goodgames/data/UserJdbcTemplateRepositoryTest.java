@@ -27,26 +27,26 @@ class UserJdbcTemplateRepositoryTest {
 
     @Test
     void shouldFindAll() {
-        List<User> users = repository.findAll();
+        List<User> users = repository.findAllUsers();
         assertNotNull(users);
         assertTrue(users.size() >= 6);
     }
 
     @Test
     void shouldFindEachId() {
-        User kevin = repository.findById(1);
+        User kevin = repository.findUserById(1);
         assertEquals("Kevin", kevin.getUsername());
         assertEquals("kevin", kevin.getPassword());
         assertEquals("kevin@kevin.com", kevin.getEmail());
         assertEquals(Role.ADMIN, kevin.getRole());
 
-        User miguel = repository.findById(2);
+        User miguel = repository.findUserById(2);
         assertEquals("Miguel", miguel.getUsername());
         assertEquals("miguel", miguel.getPassword());
         assertEquals("miguel@miguel.com", miguel.getEmail());
         assertEquals(Role.ADMIN, miguel.getRole());
 
-        User headley = repository.findById(3);
+        User headley = repository.findUserById(3);
         assertEquals("Headly", headley.getUsername());
         assertEquals("headley", headley.getPassword());
         assertEquals("headley@headley.com", headley.getEmail());
@@ -56,7 +56,7 @@ class UserJdbcTemplateRepositoryTest {
     @Test
     void shouldAddNewUser() {
         User user = makeUser();
-        User actual = repository.add(user);
+        User actual = repository.addUser(user);
         assertNotNull(actual);
         assertEquals(7, actual.getUserId());
     }
@@ -65,7 +65,7 @@ class UserJdbcTemplateRepositoryTest {
     void shouldUpdateExistingUser() {
         User user = makeUser();
         user.setUserId(1);
-        assertTrue(repository.update(user));
+        assertTrue(repository.updateUser(user));
     }
 
     // Helper Methods

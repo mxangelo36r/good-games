@@ -21,7 +21,7 @@ public class LocationJdbcTemplateRepository implements LocationRepository {
     }
 
     @Override
-    public List<Location> findAll() {
+    public List<Location> findAllLocations() {
         final String sql = "select location_id, `name`, address, city, state, postal_code " + "from location limit 1000;";
         return jdbcTemplate.query(sql, new LocationMapper());
     }
