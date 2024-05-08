@@ -20,6 +20,4 @@ public class ReviewService {
 
     public Review findReviewById(int reviewId) { return repository.findReviewById(reviewId); }
 
-
-
 }

@@ -61,6 +61,7 @@ function Game() {
     const [isLoading, setIsLoading] = useState(true);
 
     const url = 'http://localhost:8080/api/game/bggId';
+    const review_url = ''
     const bgg_url = 'https://api.geekdo.com/xmlapi2/thing';
     const { id } = useParams();
 
@@ -126,6 +127,8 @@ function Game() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+
+
         console.log(event)
     }
 
@@ -257,7 +260,7 @@ function Game() {
                                                         </div>
                                                         <div className="modal-footer">
                                                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" className="btn btn-primary">Save Review</button>
+                                                            <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Save Review</button>
                                                         </div>
                                                     </form>
                                                 </div>
