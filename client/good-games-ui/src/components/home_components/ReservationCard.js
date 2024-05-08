@@ -5,14 +5,14 @@ function ReservationCard({ reservation, index }) {
 	console.log(reservation);
 
 	let location = reservation.location;
-	let time = reservation.time;
 
-    const formatTime = (string) => {
-        return string.slice(0, -3)
+    const formatTime = (time) => {
+        let str = "";
+        str += parseInt(time) % 12 === 0 ? 12 : parseInt(time) % 12;
+        str += time.slice(0, -3).slice(2)
+        str += time >= 12 ? "pm" : "am"
+        return str 
     }
-
-    time = formatTime(time)
-    console.log(time)
 
 	return (
 		<div className="card mb-3 bg-light" key={reservation.reservationId}>
@@ -26,13 +26,11 @@ function ReservationCard({ reservation, index }) {
                 <div className="d-sm-flex justify-content-evenly mx-auto text-center">
                     <p className="card-text d-flex flex-row justify-content-between">Date: {reservation.date}</p>
                     <p className="card-text d-flex flex-row justify-content-between">
-                        Time: {parseInt(reservation.time) % 12 === 0 ? 12 : parseInt(reservation.time) % 12}
-                        {reservation.time.slice(0, -3).slice(2)}
-                        {parseInt(reservation.time) >= 12 ? "pm" : "am"}
+                        Time: {formatTime(reservation.time)}
                     </p>
                     <p className="card-text d-flex flex-row justify-content-between">Hosted By: {reservation.hostName}</p>
                 </div>
-				<Link className="btn btn-primary mt-3" to={`/reservation/${reservation.id}`}>
+				<Link className="btn btn-primary" to={`/reservation/${reservation.id}`}>
 					See Reservations
 				</Link>
 			</div>
