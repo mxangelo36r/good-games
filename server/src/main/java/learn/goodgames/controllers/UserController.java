@@ -3,9 +3,7 @@ package learn.goodgames.controllers;
 
 import learn.goodgames.domain.Result;
 import learn.goodgames.domain.UserService;
-import learn.goodgames.models.Location;
 import learn.goodgames.models.User;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +25,7 @@ public class UserController {
 
     @GetMapping
     public List<User> findAll() {
-        return service.findAll();
+        return service.findAllUsers();
     }
 
     @GetMapping("/{userId}")

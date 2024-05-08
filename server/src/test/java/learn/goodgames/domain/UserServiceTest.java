@@ -149,7 +149,7 @@ class UserServiceTest {
         user1.setRole(Role.USER);
         expected.add(user1);
 
-        when(repository.findAll()).thenReturn(expected);
+        when(repository.findAllUsers()).thenReturn(expected);
 
         User actual = service.verify(user).getPayload();
         assertNotNull(actual);
@@ -174,7 +174,7 @@ class UserServiceTest {
         user1.setRole(Role.USER);
         expected.add(user1);
 
-        when(repository.findAll()).thenReturn(expected);
+        when(repository.findAllUsers()).thenReturn(expected);
 
         Result<User> actual = service.verify(user);
         assertNull(actual.getPayload());
