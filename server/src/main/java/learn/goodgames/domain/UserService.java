@@ -29,7 +29,7 @@ public class UserService {
     public Result<User> verify(User user) {
         Result<User> result = new Result<>();
 
-        List<User> all = userRepository.findAll();
+        List<User> all = userRepository.findAllUsers();
         User verfiedUser =  all.stream()
                 .filter(u -> u.getEmail().equalsIgnoreCase(user.getEmail()) && u.getPassword().equalsIgnoreCase(user.getPassword()))
                 .findFirst()
