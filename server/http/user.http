@@ -1,0 +1,220 @@
+@url = http://localhost:8080/api/user
+
+### GET: Find All
+
+GET {{url}} HTTP/1.1
+
+### GET: Find by ID - 1 (Kevin)
+
+GET {{url}}/1 HTTP/1.1
+
+### GET: Find by ID - 3 (Headley)
+
+GET {{url}}/3 HTTP/1.1
+
+### POST: Happy - Add new User
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "Test",
+    "password": "Test-Password",
+    "email": "happy@test.com",
+    "role": "USER"
+
+}
+
+### POST: Unhappy - null user
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "",
+    "password": "",
+    "email": "",
+    "role": ""
+
+}
+
+### POST: Unhappy - null fields (change to null to test desired field)
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "Test",
+    "password": "Test-Password",
+    "email": "happy@test.com",
+    "role": "USER"
+
+}
+
+### POST: Unhappy - Invalid user (w/ spaces)
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "Tes  t",
+    "password": "Test-Password",
+    "email": "happy@test.com",
+    "role": "USER"
+
+}
+
+### POST: Unhappy - Invalid email (w/ spaces)
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "Test",
+    "password": "Test-Password",
+    "email": "happy@tes  t.com",
+    "role": "USER"
+
+}
+
+### POST: Unhappy - Invalid Role (w/ spaces)
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "Test",
+    "password": "Test-Password",
+    "email": "happy@tes  t.com",
+    "role": "OTHER"
+}
+
+### POST: Unhappy - Duplicate username
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "Miguel",
+    "password": "Test-Password",
+    "email": "newhappy@test.com",
+    "role": "OTHER"
+}
+
+### POST: Unhappy - Duplicate email
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "newusername",
+    "password": "Test-Password",
+    "email": "miguel@miguel.com",
+    "role": "USER"
+}
+
+### PUT: Happy - Updating current User
+
+PUT {{url}}/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "userId": 2,
+    "username": "user",
+    "password": "user-password",
+    "email": "new@user.com",
+    "role": "ADMIN"
+}
+
+### PUT: Unhappy - Mismatching userId (url & data)
+
+PUT {{url}}/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "userId": 56,
+    "username": "user",
+    "password": "user-password",
+    "email": "new@user.com",
+    "role": "ADMIN"
+}
+
+### PUT: Unhappy - null fields (change to null to test desired field)
+
+PUT {{url}}/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "userId": 2,
+    "username": "",
+    "password": "user-password",
+    "email": "new@user.com",
+    "role": "ADMIN"
+}
+
+### PUT: Unhappy - invalid username (w/ spaces)
+
+PUT {{url}}/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "userId": 2,
+    "username": "Headl  y",
+    "password": "user-password",
+    "email": "new@user.com",
+    "role": "ADMIN"
+}
+
+### PUT: Unhappy - invalid role 
+
+PUT {{url}}/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "userId": 2,
+    "username": "newuser",
+    "password": "user-password",
+    "email": "new@us   er.com",
+    "role": "OTHER"
+}
+
+PUT {{url}}/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "userId": 2,
+    "username": "",
+    "password": "user-password",
+    "email": "new@user.com",
+    "role": "ADMIN"
+}
+
+### PUT: Unhappy - duplicate email 
+
+PUT {{url}}/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "userId": 2,
+    "username": "newuser",
+    "password": "user-password",
+    "email": "rosales@rosales.com",
+    "role": "ADMIN"
+}
+
+### PUT: Unhappy - duplicate user 
+
+PUT {{url}}/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "userId": 2,
+    "username": "Rosales",
+    "password": "user-password",
+    "email": "new@email.com",
+    "role": "ADMIN"
+}
+
+
+
+

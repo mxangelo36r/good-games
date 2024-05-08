@@ -102,12 +102,12 @@ public class UserService {
         }
 
         if (!distinctUsername(all, user)) {
-            result.addMessage("Email taken. Please choose another email", ResultType.INVALID);
+            result.addMessage("Username taken. Please choose another username", ResultType.INVALID);
             return result;
         }
 
         if (!distinctEmail(all, user)) {
-            result.addMessage("Username taken. Please choose another username", ResultType.INVALID);
+            result.addMessage("Email taken. Please choose another email", ResultType.INVALID);
             return result;
         }
 
