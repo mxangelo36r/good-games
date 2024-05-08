@@ -27,7 +27,7 @@ class LocationJdbcRepositoryTest {
 
     @Test
     void shouldFindAll() {
-        List<Location> all = repository.findAll();
+        List<Location> all = repository.findAllLocations();
         assertNotNull(all);
         assert(all.size() > 3 && all.size() < 6);
 
@@ -42,7 +42,7 @@ class LocationJdbcRepositoryTest {
 
     @Test
     void shouldFindMagicAndMayhem() {
-        Location actual = repository.findById(1);
+        Location actual = repository.findLocationById(1);
         assertNotNull(actual);
         assertEquals(1, actual.getLocationId());
         assertEquals("Magic & Mayhem", actual.getName());
@@ -55,7 +55,7 @@ class LocationJdbcRepositoryTest {
     @Test
     void shouldAddLocation() {
         Location location = makeLocation();
-        Location actual = repository.add(location);
+        Location actual = repository.addLocation(location);
         assertNotNull(actual);
         assertEquals(NEXT_LOCATION_ID, actual.getLocationId());
     }
@@ -64,8 +64,8 @@ class LocationJdbcRepositoryTest {
     void shouldUpdateLocation() {
         Location location = makeLocation();
         location.setLocationId(2);
-        assertTrue(repository.update(location));
-        Location actual = repository.findById(2);
+        assertTrue(repository.updateLocation(location));
+        Location actual = repository.findLocationById(2);
         assertEquals("Test Location", actual.getName());
         assertEquals("123 Test Ave.", actual.getAddress());
         assertEquals("Test City", actual.getCity());
@@ -73,13 +73,13 @@ class LocationJdbcRepositoryTest {
         assertEquals("02914", actual.getPostalCode());
 
         location.setLocationId(1988);
-        assertFalse(repository.update(location));
+        assertFalse(repository.updateLocation(location));
     }
 
     @Test
     void shouldDeleteById() {
-        assertTrue(repository.deleteById(1));
-        assertFalse(repository.deleteById(1));
+        assertTrue(repository.deleteLocationById(1));
+        assertFalse(repository.deleteLocationById(1));
     }
 
     @Test

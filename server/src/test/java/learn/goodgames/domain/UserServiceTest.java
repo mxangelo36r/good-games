@@ -25,7 +25,7 @@ class UserServiceTest {
     @Test
     void shouldFindMockUser() {
         User expected = makeUser();
-        when(repository.findById(1)).thenReturn(expected);
+        when(repository.findUserById(1)).thenReturn(expected);
         User actual = service.findById(1);
         assertEquals(expected, actual);
     }
@@ -73,7 +73,7 @@ class UserServiceTest {
     @Test
     void shouldNotAddDuplicateEmail() {
         List<User> all = List.of(makeUser());
-        when(repository.findAll()).thenReturn(all);
+        when(repository.findAllUsers()).thenReturn(all);
         User duplicateEmail = makeUser();
         duplicateEmail.setUsername("Kevin");
         duplicateEmail.setUserId(0);
@@ -86,7 +86,7 @@ class UserServiceTest {
     @Test
     void shouldNotAddDuplicateUsername() {
         List<User> all = List.of(makeUser());
-        when(repository.findAll()).thenReturn(all);
+        when(repository.findAllUsers()).thenReturn(all);
         User duplicateUsername = makeUser();
         duplicateUsername.setEmail("brissett@brissett@gmail.com");
         duplicateUsername.setUserId(0);

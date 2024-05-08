@@ -1,7 +1,6 @@
 package learn.goodgames.data;
 
 import learn.goodgames.data.mappers.ReviewMapper;
-import learn.goodgames.data.mappers.UserMapper;
 import learn.goodgames.models.Game;
 import learn.goodgames.models.Review;
 import learn.goodgames.models.User;
@@ -24,14 +23,14 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
     }
 
     @Override
-    public List<Review> findAll() {
+    public List<Review> findAllReviews() {
         final String sql = "SELECT review_id, `text`, rating, user_id, game_id FROM review;";
         return jdbcTemplate.query(sql, new ReviewMapper());
     }
 
     @Override
     @Transactional
-    public Review findById(int reviewId) {
+    public Review findReviewById(int reviewId) {
         final String sql = "SELECT review_id, `text`, rating, user_id, game_id FROM review " +
                 "WHERE review_id = ?;";
 
@@ -44,7 +43,7 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
     // Maybe in GlobalExceptionHandler?
     // Is adding but new review id is +1 the expected
     @Override
-    public Review add(Review review, User user, Game game) {
+    public Review addReview(Review review, User user, Game game) {
         // Adds review from an existing User and Game
         final String sql = "INSERT INTO review (`text`, rating, user_id, game_id) " +
                 "SELECT ?, ?, ?, ? " +
@@ -87,7 +86,7 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
     // Admin: can edit all reviews
 
     @Override
-    public boolean update(Review review, User user, Game game) {
+    public boolean updateReview(Review review, User user, Game game) {
         return false;
     }
 

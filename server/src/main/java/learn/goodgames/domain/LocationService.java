@@ -15,9 +15,9 @@ public class LocationService {
         this.repository = repository;
     }
 
-    public List<Location> findAll() { return repository.findAll(); }
+    public List<Location> findAll() { return repository.findAllLocations(); }
 
-    public Location findById(int locationId) { return repository.findById(locationId); }
+    public Location findById(int locationId) { return repository.findLocationById(locationId); }
 
     public Result<Location> add(Location location) {
         Result<Location> result = validate(location);
@@ -30,7 +30,7 @@ public class LocationService {
             return result;
         }
 
-        location = repository.add(location);
+        location = repository.addLocation(location);
         result.setPayload(location);
         return result;
     }
@@ -46,7 +46,7 @@ public class LocationService {
             return result;
         }
 
-        if (!repository.update(location)) {
+        if (!repository.updateLocation(location)) {
             String msg = String.format("locationId: %s, not found", location.getLocationId());
             result.addMessage(msg, ResultType.NOT_FOUND);
         }
@@ -65,7 +65,7 @@ public class LocationService {
             return result;
         }
 
-        if (!repository.deleteById(locationId)) {
+        if (!repository.deleteLocationById(locationId)) {
             String msg = String.format("locationId: %s, not found", locationId);
             result.addMessage(msg, ResultType.NOT_FOUND);
         }
@@ -75,7 +75,7 @@ public class LocationService {
 
     private Result<Location> validate(Location location) {
         Result<Location> result = new Result<>();
-        List<Location> all = repository.findAll();
+        List<Location> all = repository.findAllLocations();
 
         for(Location l : all) {
             if (l.equals(location)) {

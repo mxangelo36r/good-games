@@ -1,18 +1,17 @@
 package learn.goodgames.data;
 
 import learn.goodgames.models.User;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface UserRepository {
 
-    List<User> findAll();
+    List<User> findAllUsers();
 
-    User findById(int userId);
+    User findUserById(int userId);
 
-    User add (User user);
+    User addUser(User user);
 
-    boolean update(User user);
+    boolean updateUser(User user);
 
 }

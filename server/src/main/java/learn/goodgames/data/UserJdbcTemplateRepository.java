@@ -23,14 +23,14 @@ public class UserJdbcTemplateRepository implements UserRepository {
 
 
     @Override
-    public List<User> findAll() {
+    public List<User> findAllUsers() {
         final String sql = "SELECT user_id, `name`, `password`, email, `role` FROM user;";
         return jdbcTemplate.query(sql, new UserMapper());
     }
 
     @Override
     @Transactional
-    public User findById(int userId) {
+    public User findUserById(int userId) {
         final String sql = "SELECT user_id, `name`, `password`, email, `role` FROM user " +
                 "WHERE user_id = ?;";
 
@@ -40,7 +40,7 @@ public class UserJdbcTemplateRepository implements UserRepository {
     }
 
     @Override
-    public User add(User user) {
+    public User addUser(User user) {
         final String sql = "INSERT into user (`name`, `password`, email, `role`) " +
                 "values (?,?,?,?);";
 
@@ -63,7 +63,7 @@ public class UserJdbcTemplateRepository implements UserRepository {
     }
 
     @Override
-    public boolean update(User user) {
+    public boolean updateUser(User user) {
 
         final String sql = "UPDATE user SET " +
                 "`name` = ?, " +

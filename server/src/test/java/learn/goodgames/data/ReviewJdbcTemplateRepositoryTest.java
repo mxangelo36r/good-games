@@ -29,21 +29,21 @@ class ReviewJdbcTemplateRepositoryTest {
 
     @Test
     void shouldFindAll() {
-        List<Review> all = repository.findAll();
+        List<Review> all = repository.findAllReviews();
         assertNotNull(all);
         assertEquals(7, all.size());
     }
 
     @Test
     void shouldFindEachReview() {
-        Review review = repository.findById(1);
+        Review review = repository.findReviewById(1);
         assertNotNull(review);
         assertEquals("I loved this game!", review.getText());
         assertEquals(10, review.getRating());
         assertEquals(1, review.getUserId());
         assertEquals(1, review.getGameId());
 
-        Review reviewTwo = repository.findById(2);
+        Review reviewTwo = repository.findReviewById(2);
         assertNotNull(reviewTwo);
         assertEquals("Nope, not for me, don't play it.", reviewTwo.getText());
         assertEquals(0, reviewTwo.getRating());
@@ -57,7 +57,7 @@ class ReviewJdbcTemplateRepositoryTest {
         User user = makeUser();
         Game game = makeGame();
 
-        Review actual = repository.add(review, user, game);
+        Review actual = repository.addReview(review, user, game);
         assertNotNull(actual);
         assertEquals(8, review.getReviewId());
         assertEquals(3, review.getUser().getUserId());
