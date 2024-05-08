@@ -14,6 +14,7 @@ function Navbar() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        
         navigate(`gameSearch/${query}`)
     }
 

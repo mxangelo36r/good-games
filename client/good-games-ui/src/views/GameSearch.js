@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 
 const convert = require('xml-js');
 
-const convertObj = (data, gamesList) => {
+const convertObj = (data, serverList) => {
     const newGames = [];
     data.elements[0].elements.forEach((e) => {
         if (e.attributes.type === "boardgame") {
@@ -13,7 +13,7 @@ const convertObj = (data, gamesList) => {
                 year_published: e.elements[1] ? e.elements[1].attributes.value : 0
             }
 
-            const game = gamesList.find((e) => e.bggId === parseInt(newObj.bgg_id));
+            const game = serverList.find((e) => e.bggId === parseInt(newObj.bgg_id));
             if (game) {
                 newObj.game = game;
             }
