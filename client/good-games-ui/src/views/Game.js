@@ -60,13 +60,14 @@ function Game() {
     const [review, setReview] = useState(REVIEW_DEFAULT);
     const [isLoading, setIsLoading] = useState(true);
 
-    const url = 'http://localhost:8080/api/game/bggId';
-    const review_url = ''
+    const game_url = 'http://localhost:8080/api/game/bggId';
+    const review_url = 'http://localhost:8080/api/reviews'
     const bgg_url = 'https://api.geekdo.com/xmlapi2/thing';
     const { id } = useParams();
 
     useEffect(() => {
         if (id) {
+            // fetch request for bbg
             fetch(`${bgg_url}?id=${id}`)
             .then(response => {
                 if (response.status === 200) {
@@ -78,7 +79,8 @@ function Game() {
             .then(data => {
                 const obj = convert.xml2js(data);
 
-                fetch(`${url}/${id}`)
+                // fetch request for game
+                fetch(`${game_url}/${id}`)
                 .then(response => {
                     if (response.status === 200) {
                         return response.json();
@@ -91,9 +93,25 @@ function Game() {
                 .then(data => {
                     const gameDetails = convertObj(obj);
                     if (data) {
-                        gameDetails.game = data;   
+                        gameDetails.game = data;
+                        
+                        fetch(`${review_url}/game/${data.gameId}`)
+                        .then(response => {
+                            if (response.status === 200) {
+                                return response.json();
+                            } else {
+                                return Promise.reject(`Unexpected status code: ${response.status}`);
+                            }
+                        })
+                        .then(data => {
+                            gameDetails.game.reviews = data;
+                            setGame(gameDetails);
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                            setGame(gameDetails);
+                        })
                     }
-                    setGame(gameDetails);
                 })
                 .catch(error => {
                     console.log(error);
@@ -148,10 +166,25 @@ function Game() {
         )
     }
 
+    const renderAvgScores = () => {
+        const totalScore = game.game.reviews.reduce((prev, curr) => curr.rating + prev , 0)
+        return totalScore / game.game.reviews.length;
+    }
+
+    const renderTotalReviews = () => {
+        return game.game.reviews.length;
+    }
+
     const renderReviews = () => {
-        return (
-            ""
-        )
+        return game.game.reviews.map((review, index) => (
+            <div className="card col-12 mb-2" key={index}>
+                <div className="card-body">
+                    <h5 className="card-title">{"NOOOOO!"}</h5>
+                    <h6 className="card-subtitle mb-2 text-body-secondary">{review.rating}</h6>
+                    <p className="card-body">{review.text}</p>
+                </div>
+            </div>
+        ))
     }
 
     const renderRadios = () => {
@@ -217,7 +250,7 @@ function Game() {
                                 <div className="row">
                                     <div className="col-12">
                                         <h3 className="card-title">Ratings</h3>
-                                        <p>Total Score: </p>
+                                        <p>Total Score: {game.game.reviews ? renderAvgScores() : ""}</p>
                                         {renderScores()}
                                     </div>
                                 </div>
@@ -226,8 +259,7 @@ function Game() {
                                 <div className="row">
                                     <div className="col-10">
                                         <h3 className="card-title">Reviews</h3>
-                                        <p>Total Reviews: </p>
-                                        {renderReviews()}
+                                        <p>Total Reviews: {game.game.reviews ? renderTotalReviews() : ""}</p>
                                     </div>
                                     <div className="col-2">
                                         <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newReviewModal">
@@ -265,6 +297,12 @@ function Game() {
                                                     </form>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-12">
+                                        <div className="row">
+                                            {renderReviews()}
                                         </div>
                                     </div>
                                 </div>
