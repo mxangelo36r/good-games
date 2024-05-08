@@ -8,6 +8,7 @@ import SignUp from "./views/SignUp";
 import Login from "./views/Login";
 import { AuthProvider } from "./contexts/AuthContext";
 import GameSearch from "./views/GameSearch";
+import Game from "./views/Game";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/signup" element={<SignUp/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/gameSearch/:query" element={<GameSearch/>}/>
+          <Route path="/game/:id" element={<Game/>}/>
         </Routes>
       </AuthProvider>
     </Router>
