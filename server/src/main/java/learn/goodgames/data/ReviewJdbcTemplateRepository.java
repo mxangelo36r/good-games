@@ -23,6 +23,7 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
     @Override
     public List<Review> findAllReviews() {
         final String sql = "SELECT review_id, `text`, rating, user_id, game_id FROM review;";
@@ -41,6 +42,16 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
         return jdbcTemplate.query(sql, new ReviewMapper(), reviewId).stream()
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public List<Review>findReviewsByGameId(int gameId) {
+        final String sql = "select r.review_id, r.`text`, r.rating, r.user_id, r.game_id, g.game_id, g.bgg_id, g.`name` " +
+                "from review r " +
+                "inner join game g on g.game_id = r.game_id " +
+                "where r.game_id = ?;";
+
+        return jdbcTemplate.query(sql, new ReviewMapper(), gameId);
     }
 
     // Probably needs try/catch for DataIntegrityViolationException
