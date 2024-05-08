@@ -74,7 +74,11 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
         // - Primary key constraints
         // - Concurrent inserts happening simultaneously?
         // - Possible Triggers
-        review.setReviewId(keyHolder.getKey().intValue() - 1);
+
+        // Setting User and Game to review
+        review.setUser(user);
+        review.setGame(game);
+        review.setReviewId(keyHolder.getKey().intValue());
         return review;
     }
 

@@ -60,6 +60,8 @@ class ReviewJdbcTemplateRepositoryTest {
         Review actual = repository.add(review, user, game);
         assertNotNull(actual);
         assertEquals(8, review.getReviewId());
+        assertEquals(3, review.getUser().getUserId());
+        assertEquals(2, review.getGame().getGameId());
     }
 
 

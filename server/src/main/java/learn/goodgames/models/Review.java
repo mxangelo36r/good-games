@@ -3,9 +3,10 @@ package learn.goodgames.models;
 public class Review {
 
     // Fields
-
     int reviewId;
+    User user;
     int userId;
+    Game game;
     int gameId;
     String text;
     int rating;
@@ -52,4 +53,19 @@ public class Review {
         this.rating = rating;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }
