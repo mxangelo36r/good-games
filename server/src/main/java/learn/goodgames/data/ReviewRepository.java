@@ -7,4 +7,6 @@ import java.util.List;
 public interface ReviewRepository {
 
     List<Review> findAll();
+
+    Review findById(int reviewId);
 }
