@@ -4,15 +4,19 @@ public class Review {
 
     // Fields
     private int reviewId;
-    private User user;
     private int userId;
-    private Game game;
     private int gameId;
     private String text;
     private int rating;
+    private String userName;
+    private String gameName;
+    private User user;
+    private Game game;
+
+    public Review() {
+    }
 
     // Getters & Setters
-
     public int getReviewId() {
         return reviewId;
     }
@@ -51,6 +55,22 @@ public class Review {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getGameName() {
+        return gameName;
+    }
+
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
     }
 
     public User getUser() {

@@ -26,14 +26,18 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
 
     @Override
     public List<Review> findAllReviews() {
-        final String sql = "SELECT review_id, `text`, rating, user_id, game_id FROM review;";
+        final String sql = "" +
+                "select r.review_id, r.`text`, r.rating, r.user_id, r.game_id, u.`name` as user_name, g.`name` as game_name, g.bgg_id " +
+                    "from review r " +
+                    "inner join `user` u on u.user_id = r.user_id " +
+                    "inner join game g on g.game_id = r.user_id;";
         return jdbcTemplate.query(sql, new ReviewMapper());
     }
 
     @Override
     @Transactional
     public Review findReviewById(int reviewId) {
-        final String sql = "SELECT r.review_id, r.`text`, r.rating, r.user_id, r.game_id, u.`name`, g.`name` " +
+        final String sql = "SELECT r.review_id, r.`text`, r.rating, r.user_id, r.game_id, u.`name` as user_name, g.`name` as game_name " +
                 "FROM review r " +
                 "INNER JOIN `user` u ON u.user_id = r.review_id " +
                 "INNER JOIN game g ON g.game_id = g.game_id " +
@@ -46,9 +50,10 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
 
     @Override
     public List<Review>findReviewsByGameId(int gameId) {
-        final String sql = "select r.review_id, r.`text`, r.rating, r.user_id, r.game_id, g.game_id, g.bgg_id, g.`name` " +
+        final String sql = "select r.review_id, r.`text`, r.rating, r.user_id, r.game_id, g.game_id, g.bgg_id, g.`name` as game_name, u.`name` as user_name " +
                 "from review r " +
                 "inner join game g on g.game_id = r.game_id " +
+                "inner join user u on u.user_id = r.user_id " +
                 "where r.game_id = ?;";
 
         return jdbcTemplate.query(sql, new ReviewMapper(), gameId);
@@ -116,30 +121,4 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
     public boolean deleteReviewById(int reviewId) {
         return jdbcTemplate.update("delete from review where review_id = ?;", reviewId) > 0;
     }
-
-    @Override
-    public boolean deleteReviewUser(int reviewId, Review review, User user) {
-        // If they're a user - they can only edit their own review
-        if (user.getRole() == Role.USER && reviewId == review.getReviewId() && review.getUserId() == user.getUserId()) {
-            return jdbcTemplate.update("DELETE FROM review WHERE review_id = ?;", reviewId) > 0;
-        }
-
-        System.out.println("Sorry. Can't delete this review. Can only delete your review");
-        return false;
-    }
-
-    @Override
-    public boolean deleteReviewAdmin(int reviewId, Review review, User user) {
-        // If they're an admin - they can delete any selected reviews
-        if (user.getRole() == Role.ADMIN) {
-            return jdbcTemplate.update("DELETE FROM review WHERE review_id = ?;", reviewId) > 0;
-        }
-
-        System.out.println("Sorry. Only Admin can delete other reviews");
-        return false;
-    }
-
-    // Helper Methods
-
-
 }
