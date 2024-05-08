@@ -27,14 +27,14 @@ public class LocationJdbcTemplateRepository implements LocationRepository {
     }
 
     @Override
-    public Location findById(int locationId) {
+    public Location findLocationById(int locationId) {
         final String sql = "select location_id, `name`, address, city, state, postal_code " + "from location " + "where location_id = ?;";
 
         return jdbcTemplate.query(sql, new LocationMapper(), locationId).stream().findFirst().orElse(null);
     }
 
     @Override
-    public Location add(Location location) {
+    public Location addLocation(Location location) {
         final String sql = "insert into location (`name`, address, city, state, postal_code)" +
                 "values (?,?,?,?,?);";
 
@@ -58,7 +58,7 @@ public class LocationJdbcTemplateRepository implements LocationRepository {
     }
 
     @Override
-    public boolean update(Location location) {
+    public boolean updateLocation(Location location) {
         final String sql = "update location set "
                 + "`name` = ?, "
                 + "address = ?, "
@@ -77,7 +77,7 @@ public class LocationJdbcTemplateRepository implements LocationRepository {
     }
 
     @Override
-    public boolean deleteById(int locationId) {
+    public boolean deleteLocationById(int locationId) {
         jdbcTemplate.update("delete reservation_attendee from reservation_attendee " +
                 "inner join reservation r on r.reservation_id = reservation_attendee.reservation_id " +
                 "inner join location l on l.location_id = r.reservation_id " +
@@ -87,7 +87,7 @@ public class LocationJdbcTemplateRepository implements LocationRepository {
     }
 
     @Override
-    public int getUsageCount(int locationId) {
+    public int getLocationUsageCount(int locationId) {
         return jdbcTemplate.queryForObject(
                 "select count(*) from reservation where location_id =?;", Integer.class, locationId
         );

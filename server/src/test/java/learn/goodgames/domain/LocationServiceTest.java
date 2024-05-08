@@ -32,8 +32,8 @@ class LocationServiceTest {
     @Test
     void shouldFindById() {
         Location expected = makeLocation1();
-        when(repository.findById(1)).thenReturn(expected);
-        Location actual = repository.findById(1);
+        when(repository.findLocationById(1)).thenReturn(expected);
+        Location actual = repository.findLocationById(1);
         assertEquals(expected, actual);
     }
 
@@ -42,7 +42,7 @@ class LocationServiceTest {
         Location expected = makeLocation1();
         Location addThisLocation = makeLocation0();
 
-        when(repository.add(addThisLocation)).thenReturn(expected);
+        when(repository.addLocation(addThisLocation)).thenReturn(expected);
         Result<Location> result = service.add(addThisLocation);
         assertEquals(ResultType.SUCCESS, result.getType());
 
@@ -145,7 +145,7 @@ class LocationServiceTest {
         Location location = makeLocation1();
         location.setName("Update Test");
 
-        when(repository.update(location)).thenReturn(true);
+        when(repository.updateLocation(location)).thenReturn(true);
 
         Result<Location> result = service.update(location);
         assertEquals(ResultType.SUCCESS, result.getType());
@@ -244,22 +244,22 @@ class LocationServiceTest {
 
     @Test
     void shouldDeleteWhenNotInUse() {
-        when(repository.getUsageCount(3)).thenReturn(0);
-        when(repository.deleteById(2)).thenReturn(true);
+        when(repository.getLocationUsageCount(3)).thenReturn(0);
+        when(repository.deleteLocationById(2)).thenReturn(true);
         Result<Location> result = service.deleteById(2);
         assertEquals(ResultType.SUCCESS, result.getType());
     }
 
     @Test
     void shouldNotDeleteWhenInUse() {
-        when(repository.getUsageCount(1)).thenReturn(1);
+        when(repository.getLocationUsageCount(1)).thenReturn(1);
         Result<Location> result = service.deleteById(1);
         assertEquals(ResultType.INVALID, result.getType());
     }
 
     @Test
     void shouldNotDeleteWhenNotFound() {
-        when(repository.deleteById(3)).thenReturn(false);
+        when(repository.deleteLocationById(3)).thenReturn(false);
         Result<Location> result = service.deleteById(3);
         assertEquals(ResultType.NOT_FOUND, result.getType());
     }
