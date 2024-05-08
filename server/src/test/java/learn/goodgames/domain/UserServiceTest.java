@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -132,6 +133,53 @@ class UserServiceTest {
     //  X Username should be unique
     //  X Role has to be either ADMIN or USER
     //  X Username and Email cannot contain spaces
+
+    @Test
+    void shouldVerifyExistingUser() {
+        User user = new User();
+        user.setEmail("rosales@rosales.com");
+        user.setPassword("rosales");
+
+        List<User> expected = new ArrayList<>();
+        User user1 = new User();
+        user1.setUserId(1);
+        user1.setUsername("Rosales");
+        user1.setPassword("rosales");
+        user1.setEmail("rosales@rosales.com");
+        user1.setRole(Role.USER);
+        expected.add(user1);
+
+        when(repository.findAll()).thenReturn(expected);
+
+        User actual = service.verify(user).getPayload();
+        assertNotNull(actual);
+        assertEquals("Rosales", actual.getUsername());
+        assertEquals("rosales@rosales.com", actual.getEmail());
+        assertEquals("rosales", actual.getPassword());
+        assertEquals(Role.USER, actual.getRole());
+    }
+
+    @Test
+    void shouldNotVerifyNonExistingUser() {
+        User user = new User();
+        user.setEmail("test@tester.com");
+        user.setPassword("testing");
+
+        List<User> expected = new ArrayList<>();
+        User user1 = new User();
+        user1.setUserId(1);
+        user1.setUsername("Rosales");
+        user1.setPassword("rosales");
+        user1.setEmail("rosales@rosales.com");
+        user1.setRole(Role.USER);
+        expected.add(user1);
+
+        when(repository.findAll()).thenReturn(expected);
+
+        Result<User> actual = service.verify(user);
+        assertNull(actual.getPayload());
+        assertEquals("Username or password is incorrect", actual.getMessages().get(0));
+    }
 
     // Mock Data
 

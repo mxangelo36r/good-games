@@ -41,8 +41,17 @@ public class UserController {
         return ok(user);
     }
 
-    @PostMapping
-    public ResponseEntity<Object> add(@RequestBody User user) {
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody User user) {
+        Result<User> result = service.verify(user);
+        if (!result.isSuccess()) {
+            return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<Object> signup(@RequestBody User user) {
         Result<User> result = service.add(user);
         if (!result.isSuccess()) {
             return new ResponseEntity<>(result.getMessages(), HttpStatus.BAD_REQUEST);
@@ -63,7 +72,4 @@ public class UserController {
 
         return ErrorResponse.build(result);
     }
-
-
-
 }

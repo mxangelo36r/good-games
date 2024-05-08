@@ -17,7 +17,7 @@ const DUMMY_USER = {
 }
 
 function useProvideAuth() {
-    const [user, setUser] = useState(DUMMY_USER);
+    const [user, setUser] = useState(null);
     const [errors, setErrors] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -40,7 +40,11 @@ function useProvideAuth() {
         }
     }
 
-    const signIn = (newUser) => {
+    const removeErrors = () => {
+        setErrors([])
+    }
+
+    const signIn = (loginDetails) => {
         setErrors([]);
         setIsLoading(true);
 
@@ -49,7 +53,7 @@ function useProvideAuth() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(newUser)
+            body: JSON.stringify(loginDetails)
         };
 
         fetch(`${url}/login`, init)
@@ -63,6 +67,7 @@ function useProvideAuth() {
         })
         .then(data => {
             if (data.userId) {
+                setUser(data);
                 navigate('/');
             } else {
                 setErrors(data);
@@ -86,6 +91,7 @@ function useProvideAuth() {
         fetch(`${url}/signup`, init)
         .then(response => {
             setIsLoading(false);
+            console.log()
             if (response.status === 201 || response.status === 400) {
                 return response.json();
             } else {
@@ -94,6 +100,7 @@ function useProvideAuth() {
         })
         .then(data => {
             if (data.userId) {
+                setUser(data);
                 navigate('/');
             } else {
                 setErrors(data);
@@ -112,6 +119,7 @@ function useProvideAuth() {
         isLoading,
         isLoggedIn,
         isAdmin,
+        removeErrors,
         signIn,
         signUp,
         signOut

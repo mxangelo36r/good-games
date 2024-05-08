@@ -26,6 +26,24 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
+    public Result<User> verify(User user) {
+        Result<User> result = new Result<>();
+
+        List<User> all = userRepository.findAll();
+        User verfiedUser =  all.stream()
+                .filter(u -> u.getEmail().equalsIgnoreCase(user.getEmail()) && u.getPassword().equalsIgnoreCase(user.getPassword()))
+                .findFirst()
+                .orElse(null);
+
+        if (verfiedUser == null) {
+            result.addMessage("Username or password is incorrect", ResultType.NOT_FOUND);
+            return result;
+        }
+
+        result.setPayload(verfiedUser);
+        return result;
+    }
+
     public Result<User> add(User user) {
         Result<User> result = validate(user);
 
