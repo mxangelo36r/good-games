@@ -5,15 +5,15 @@ import learn.goodgames.models.Location;
 import java.util.List;
 
 public interface LocationRepository {
-    List<Location> findAll();
+    List<Location> findAllLocations();
 
-    Location findById(int locationId);
+    Location findLocationById(int locationId);
 
-    Location add(Location location);
+    Location addLocation(Location location);
 
-    boolean update(Location location);
+    boolean updateLocation(Location location);
 
-    boolean deleteById(int locationId);
+    boolean deleteLocationById(int locationId);
 
-    int getUsageCount(int locationId);
+    int getLocationUsageCount(int locationId);
 }

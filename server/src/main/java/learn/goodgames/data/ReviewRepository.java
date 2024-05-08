@@ -8,11 +8,16 @@ import java.util.List;
 
 public interface ReviewRepository {
 
-    List<Review> findAll();
+    List<Review> findAllReviews();
 
-    Review findById(int reviewId);
+    Review findReviewById(int reviewId);
 
-    Review add(Review review, User user, Game game);
+    Review addReview(Review review, User user, Game game);
 
-    boolean update(Review review, User user, Game game);
+    boolean updateReview(Review review);
+
+    boolean deleteReviewUser(Review review, User user);
+
+    boolean deleteReviewAdmin(Review review, User user);
+
 }

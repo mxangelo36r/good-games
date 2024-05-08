@@ -1,0 +1,10 @@
+@url = http://localhost:8080/api/reservation
+
+### GET - successful get all reservations - 200
+GET {{url}} HTTP/1.1
+
+### GET - successful get a reservation by id - 200
+GET {{url}}/1 HTTP/1.1
+
+### GET - failed get - bad id - 404
+GET {{url}}/999 HTTP/1.1
