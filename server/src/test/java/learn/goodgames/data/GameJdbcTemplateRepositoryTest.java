@@ -45,6 +45,14 @@ class GameJdbcTemplateRepositoryTest {
     }
 
     @Test
+    void shouldFindByBggId() {
+        Game expected = makeGame();
+        Game actual = repository.findGameByBggId(2536);
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void shouldFindTwoCatansByName() {
         List<Game> twoCatans = repository.findGamesByName("catan");
         assertNotNull(twoCatans);

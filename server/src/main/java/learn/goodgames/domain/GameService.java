@@ -19,6 +19,8 @@ public class GameService {
 
     public Game findGameById(int gameId) { return repository.findGameById(gameId); }
 
+    public Game findGameByBggId(int bggId) { return repository.findGameByBggId(bggId); }
+
     public List<Game> findGamesByName(String gameName) { return repository.findGamesByName(gameName); }
 
     public Result<Game> addGame(Game game) {
@@ -39,13 +41,15 @@ public class GameService {
     }
 
     public double getGameAvgRating(int gameId) {
-        List<Game> games = findAllGames();
-        for(Game game : games) {
-            if (game.getGameId() == gameId) {
-                return repository.getGameAvgRating(gameId);
-            }
+        Game game = findAllGames().stream()
+                .filter(g -> g.getGameId() == gameId)
+                .findFirst()
+                .orElse(null);
+        if(game == null) {
+            return -1;
+        } else {
+            return repository.getGameAvgRating(game.getGameId());
         }
-        return -1;
     }
 
     private Result<Game> validate(Game game) {

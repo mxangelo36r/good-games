@@ -12,6 +12,15 @@ GET {{url}}/id/1000 HTTP/1.1
 ### GET - failed findGameById - no ID - 404
 GET {{url}}/id/ HTTP/1.1 
 
+### GET - successful findGameByBggId - 200
+GET {{url}}/bggId/2536 HTTP/1.1
+
+### GET - failed findGameById - bad ID - 404
+GET {{url}}/bggId/1000 HTTP/1.1 
+
+### GET - failed findGameById - no ID - 404
+GET {{url}}/bggId/ HTTP/1.1 
+
 ### GET - successful findGamesByname - 200
 GET {{url}}/name/catan HTTP/1.1 
 

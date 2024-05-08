@@ -177,3 +177,8 @@ select u.`name`, g.`name`, r.`text`
 -- 	inner join location l on l.location_id = r.reservation_id
 --     where l.location_id = 1;
 -- select * from location;
+
+-- Used to test reutnring avg rating for a specifc game_id
+-- select game_id, avg(rating) as avgrating
+-- 	from review r
+--     where game_id = 1;

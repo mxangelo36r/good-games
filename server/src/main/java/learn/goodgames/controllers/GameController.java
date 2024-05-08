@@ -33,6 +33,16 @@ public class GameController {
         return ResponseEntity.ok(game);
     }
 
+    @GetMapping("/bggId/{bggId}")
+    public ResponseEntity<Game> findGameByBggId(@PathVariable int bggId) {
+        Game game = service.findGameByBggId(bggId);
+
+        if (game == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(game);
+    }
+
     @GetMapping("/name/{gameName}")
     public List<Game> findGamesByName(@PathVariable String gameName) {
         return service.findGamesByName(gameName);
