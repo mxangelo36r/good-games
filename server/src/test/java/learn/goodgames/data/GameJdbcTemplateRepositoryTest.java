@@ -67,9 +67,9 @@ class GameJdbcTemplateRepositoryTest {
     }
 
     @Test
-    void shouldUpdateGameAvgRating() {
-        // Need reviews for this to work
-        // This will only trigger on a new review being added to a game
+    void shouldFindGameAverageRating() {
+        double avgRating = repository.getGameAvgRating(1);
+        assertEquals(5, avgRating);
     }
 
     Game makeGame() {

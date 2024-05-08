@@ -38,9 +38,14 @@ public class GameService {
         return result;
     }
 
-    // Need review to test this service
-    public Result<Game> updateGameAverageRating(int gameId) {
-        return null;
+    public double getGameAvgRating(int gameId) {
+        List<Game> games = findAllGames();
+        for(Game game : games) {
+            if (game.getGameId() == gameId) {
+                return repository.getGameAvgRating(gameId);
+            }
+        }
+        return -1;
     }
 
     private Result<Game> validate(Game game) {

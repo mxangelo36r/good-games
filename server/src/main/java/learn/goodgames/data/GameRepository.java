@@ -13,6 +13,8 @@ public interface GameRepository {
 
     Game addGame(Game game);
 
+    double getGameAvgRating(int gameId);
+
 //    boolean updateGameAverageRating(int gameId);
 
 //    boolean delete (int gameId);

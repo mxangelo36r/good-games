@@ -72,7 +72,18 @@ class GameServiceTest {
         assertEquals(ResultType.INVALID, result.getType());
     }
 
-    // update needs review to function properly
+    @Test
+    void shouldReturnGameAvgRating() {
+        when(repository.getGameAvgRating(1)).thenReturn(5.0);
+        double rating = service.getGameAvgRating(1);
+        assertEquals(5.0, rating);
+    }
+
+    @Test
+    void shouldNotReturnRatingWhenInvalid() {
+        double rating = service.getGameAvgRating(15);
+        assertEquals(0.0, rating);
+    }
 
     Game makeGame1() {
         Game game = new Game();

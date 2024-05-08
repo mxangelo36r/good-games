@@ -38,6 +38,8 @@ public class GameJdbcTemplateRepository implements GameRepository {
                 .orElse(null);
     }
 
+
+
     @Override
     public List<Game> findGamesByName(String gameName) {
         final String sql = "select game_id, bgg_id, name " +
@@ -67,6 +69,14 @@ public class GameJdbcTemplateRepository implements GameRepository {
 
         game.setGameId(keyHolder.getKey().intValue());
         return game;
+    }
+
+    @Override
+    public double getGameAvgRating(int gameId) {
+        final String sql = "select avg(rating) as avg_rating " +
+                "from review r " +
+                "where game_id = ?";
+        return jdbcTemplate.queryForObject(sql, Double.class, gameId);
     }
 
 //    @Override
