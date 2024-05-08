@@ -40,6 +40,12 @@ function useProvideAuth() {
         }
     }
 
+    const checkAuth = (nextState, replace) => {
+        if (!user) {
+            replace({ pathname: "/" })
+        }
+    }
+
     const removeErrors = () => {
         setErrors([])
     }
@@ -119,6 +125,7 @@ function useProvideAuth() {
         isLoading,
         isLoggedIn,
         isAdmin,
+        checkAuth,
         removeErrors,
         signIn,
         signUp,

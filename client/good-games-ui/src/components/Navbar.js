@@ -12,7 +12,8 @@ function Navbar() {
         setQuery(event.target.value);
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = (event) => {
+        event.preventDefault();
         navigate(`gameSearch/${query}`)
     }
 
