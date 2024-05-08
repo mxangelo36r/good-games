@@ -101,29 +101,27 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
     }
 
     // Delete:
-    @Override
-    public boolean deleteReviewUser(Review review, User user) {
-        // If they're a user - they can only edit their own review
-
-        if (user.getRole() == Role.USER && review.getUserId() == user.getUserId()) {
-            return jdbcTemplate.update("DELETE FROM review WHERE review_id = ?;") > 0;
-        }
-
-        System.out.println("Sorry. Can't delete this review. Deletion can only happen for your own review");
-        return false;
-    }
-
-    @Override
-    public boolean deleteReviewAdmin(Review review, User user) {
-        // If they're an admin - they can delete selected review
-
-        if (user.getRole() == Role.ADMIN) {
-            return jdbcTemplate.update("DELETE FROM review WHERE review_id = ?;") > 0;
-        }
-
-        System.out.println("Sorry. Only Admin can delete other reviews");
-        return false;
-    }
+//    @Override
+//    public boolean deleteReviewUser(int reviewId, Review review, User user) {
+//        // If they're a user - they can only edit their own review
+//        if (user.getRole() == Role.USER && reviewId == review.getReviewId() && review.getUserId() == user.getUserId()) {
+//            return jdbcTemplate.update("DELETE FROM review WHERE review_id = ?;", reviewId) > 0;
+//        }
+//
+//        System.out.println("Sorry. Can't delete this review. Can only delete your review");
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean deleteReviewAdmin(int reviewId, Review review, User user) {
+//        // If they're an admin - they can delete any selected reviews
+//        if (user.getRole() == Role.ADMIN) {
+//            return jdbcTemplate.update("DELETE FROM review WHERE review_id = ?;", reviewId) > 0;
+//        }
+//
+//        System.out.println("Sorry. Only Admin can delete other reviews");
+//        return false;
+//    }
 
     // Helper Methods
 
