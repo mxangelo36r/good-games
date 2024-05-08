@@ -41,6 +41,45 @@ class GameServiceTest {
     }
 
     @Test
+    void shouldNotFindInvalidGameId() {
+        when(repository.findGameById(25)).thenReturn(null);
+        Game actual = service.findGameById(25);
+        assertNull(actual);
+    }
+
+    @Test
+    void shouldFindByBggId() {
+        Game expected = makeGame1();
+        when(repository.findGameByBggId(2536)).thenReturn(expected);
+
+        Game actual = service.findGameByBggId(2536);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldNotFindWhenInvalidBggId() {
+        when(repository.findGameByBggId(25)).thenReturn(null);
+        Game actual = service.findGameByBggId(25);
+        assertNull(actual);
+    }
+
+    @Test
+    void shouldFindByName() {
+        List<Game> expected = List.of(makeGame1());
+        when(repository.findGamesByName("Vabanque")).thenReturn(expected);
+        List<Game> actual = service.findGamesByName("Vabanque");
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldNotFindIfInvalidName() {
+        List<Game> expected = new ArrayList<>();
+        when(repository.findGamesByName("Test")).thenReturn(expected);
+        List<Game> actual = service.findGamesByName("Test");
+        assertEquals(0, actual.size());
+    }
+
+    @Test
     void shouldNotAddWhenInvalid() {
         Game game = makeGame0();
 
@@ -72,7 +111,20 @@ class GameServiceTest {
         assertEquals(ResultType.INVALID, result.getType());
     }
 
-    // update needs review to function properly
+    @Test
+    void shouldReturnGameAvgRating() {
+        List<Game> all = List.of(makeGame1());
+        when(repository.findAllGames()).thenReturn(all);
+        when(repository.getGameAvgRating(1)).thenReturn(5.0);
+        double rating = service.getGameAvgRating(1);
+        assertEquals(5.0, rating);
+    }
+
+    @Test
+    void shouldNotReturnRatingWhenInvalid() {
+        double rating = service.getGameAvgRating(15);
+        assertEquals(-1.0, rating);
+    }
 
     Game makeGame1() {
         Game game = new Game();

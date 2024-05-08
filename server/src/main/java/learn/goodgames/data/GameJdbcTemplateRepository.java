@@ -39,6 +39,16 @@ public class GameJdbcTemplateRepository implements GameRepository {
     }
 
     @Override
+    public Game findGameByBggId(int bggId) {
+        final String sql = "select game_id, bgg_id, name " +
+                "from game " +
+                "where bgg_id = ?;";
+        return jdbcTemplate.query(sql, new GameMapper(), bggId).stream()
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
     public List<Game> findGamesByName(String gameName) {
         final String sql = "select game_id, bgg_id, name " +
                 "from game " +
@@ -67,6 +77,14 @@ public class GameJdbcTemplateRepository implements GameRepository {
 
         game.setGameId(keyHolder.getKey().intValue());
         return game;
+    }
+
+    @Override
+    public double getGameAvgRating(int gameId) {
+        final String sql = "select avg(rating) as avg_rating " +
+                "from review r " +
+                "where game_id = ?";
+        return jdbcTemplate.queryForObject(sql, Double.class, gameId);
     }
 
 //    @Override

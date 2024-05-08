@@ -19,6 +19,8 @@ public class GameService {
 
     public Game findGameById(int gameId) { return repository.findGameById(gameId); }
 
+    public Game findGameByBggId(int bggId) { return repository.findGameByBggId(bggId); }
+
     public List<Game> findGamesByName(String gameName) { return repository.findGamesByName(gameName); }
 
     public Result<Game> addGame(Game game) {
@@ -38,9 +40,16 @@ public class GameService {
         return result;
     }
 
-    // Need review to test this service
-    public Result<Game> updateGameAverageRating(int gameId) {
-        return null;
+    public double getGameAvgRating(int gameId) {
+        Game game = findAllGames().stream()
+                .filter(g -> g.getGameId() == gameId)
+                .findFirst()
+                .orElse(null);
+        if(game == null) {
+            return -1;
+        } else {
+            return repository.getGameAvgRating(game.getGameId());
+        }
     }
 
     private Result<Game> validate(Game game) {
