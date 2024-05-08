@@ -1,6 +1,9 @@
 package learn.goodgames.data;
 
+import learn.goodgames.models.Game;
 import learn.goodgames.models.Review;
+import learn.goodgames.models.Role;
+import learn.goodgames.models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +49,45 @@ class ReviewJdbcTemplateRepositoryTest {
         assertEquals(0, reviewTwo.getRating());
         assertEquals(6, reviewTwo.getUserId());
         assertEquals(1, reviewTwo.getGameId());
+    }
+
+    @Test
+    void shouldAddNewReview() {
+        Review review = makeReview();
+        User user = makeUser();
+        Game game = makeGame();
+
+        Review actual = repository.add(review, user, game);
+        assertNotNull(actual);
+        assertEquals(8, review.getReviewId());
+    }
+
+
+    // Helper Methods
+
+    private Review makeReview() {
+        Review review = new Review();
+        review.setText("Testing Text");
+        review.setRating(5);
+        return review;
+    }
+
+    private User makeUser() {
+        User user = new User();
+        user.setUserId(3);
+        user.setUsername("test-user");
+        user.setPassword("test-password");
+        user.setEmail("test@email.com");
+        user.setRole(Role.USER);
+        return user;
+    }
+
+    private Game makeGame() {
+        Game game = new Game();
+        game.setGameId(2);
+        game.setBggId(6);
+        game.setName("Test Game");
+        return game;
     }
 
 }
