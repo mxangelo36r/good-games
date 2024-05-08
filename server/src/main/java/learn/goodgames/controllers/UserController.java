@@ -64,6 +64,10 @@ public class UserController {
         return ErrorResponse.build(result);
     }
 
+    // Review
+
+    // (userid/reviewid)
+
 
 
 }
