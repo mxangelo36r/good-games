@@ -30,7 +30,7 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
                 "select r.review_id, r.`text`, r.rating, r.user_id, r.game_id, u.`name` as user_name, g.`name` as game_name, g.bgg_id " +
                     "from review r " +
                     "inner join `user` u on u.user_id = r.user_id " +
-                    "inner join game g on g.game_id = r.user_id;";
+                    "inner join game g on g.game_id = r.game_id;";
         return jdbcTemplate.query(sql, new ReviewMapper());
     }
 
