@@ -24,7 +24,8 @@ public class GameJdbcTemplateRepository implements GameRepository {
     @Override
     public List<Game> findAllGames() {
         final String sql = "select game_id, `name`, bgg_id " +
-                "from game;";
+                "from game " +
+                "order by `name`;";
         return jdbcTemplate.query(sql, new GameMapper());
     }
 
@@ -87,20 +88,25 @@ public class GameJdbcTemplateRepository implements GameRepository {
         return jdbcTemplate.queryForObject(sql, Double.class, gameId);
     }
 
-//    @Override
-//    public boolean updateGameAverageRating(int gameId) {
-//
-//        final String sql =
-//                "update game g " +
-//                    "inner join " +
-//                        "(select game_id, avg(rating) as avgrating " +
-//                            "from review r" +
-//                            "group by game_id " +
-//                        ") r " +
-//                        "on r.game_id = g.game_id " +
-//                    "set g.avg_rating = r.avgrating " +
-//                    "where g.game_id = ?;";
-//
-//        return jdbcTemplate.update(sql, gameId) > 0;
-//    }
+    @Override
+    public int getTotalGameReviews(int gameId) {
+        final String sql = "select count(*) " +
+                "from review r " +
+                "inner join game g on g.game_id = r.game_id " +
+                "where g.game_id = ? " +
+                "group by g.game_id;";
+        return jdbcTemplate.queryForObject(sql, Integer.class, gameId);
+    }
+
+    @Override
+    public List<Game> getTop4ReviewedGames() {
+        final String sql = "select g.game_id, g.`name`, g.bgg_id, avg(r.rating) as rating " +
+                "from review r " +
+                "inner join game g on g.game_id = r.game_id " +
+                "group by r.game_id " +
+                "order by rating desc " +
+                "limit 4;";
+
+        return jdbcTemplate.query(sql, new GameMapper());
+    }
 }

@@ -30,11 +30,17 @@ GET {{url}}/name/qwerty HTTP/1.1
 ### GET - failed findGamesByname - no name - 404
 GET {{url}}/name/ HTTP/1.1 
 
-### GET - successful getGameAvgRating - 200
-GET {{url}}/rating/1
+### GET - success - get top 5 games - 200
+GET {{url}}/topfive HTTP/1.1 
 
-### GET - failed getGameAvgRating - 200 - returns -1 to indicate not in the DB
-GET {{url}}/rating/1000
+### GET - failed get top 5 games - bad path - 404
+GET {{url}}/topfive/t HTTP/1.1 
+
+### GET - success - get total reviews for a game - 200
+GET {{url}}/totalreviews/1
+
+### GET - failed get total reviews - bad id - 200 (gets 0 by default)
+GET {{url}}/totalreviews/11111
 
 ### POST - successful add - 201
 POST {{url}} HTTP/1.1

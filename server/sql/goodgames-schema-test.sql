@@ -20,7 +20,7 @@ create table game (
 create table review (
 	review_id int primary key auto_increment,
     `text` varchar(1000) not null,
-    rating int not null check(rating >= 0 AND rating <= 10),
+    rating int not null check(rating >= 1 AND rating <= 10),
     user_id int not null,
     game_id int not null,
     constraint fk_review_user_id
@@ -102,7 +102,7 @@ insert into game (bgg_id, `name`)
 insert into review (`text`, rating, user_id, game_id)
 	values
 		("I loved this game!", 10, 1, 1),
-        ("Nope, not for me, don't play it.", 0, 6, 1),
+        ("Nope, not for me, don't play it.", 1, 6, 1),
         ("I tried it and I liked it, I guess", 7, 2, 2),
         ("Fun, but not for me.", 6, 5, 2),
 		("I tried it and I liked it, I guess", 5, 3, 3),
@@ -192,7 +192,20 @@ select u.`name`, g.`name`, r.`text`
 --                 order by r.`date`;
 
 -- Test to get reviews by game_id
-select r.review_id, r.`text`, r.rating, r.user_id, r.game_id, g.game_id, g.bgg_id, g.`name`
+select r.review_id, r.`text`, r.rating, r.user_id, r.game_id, g.bgg_id, g.`name` as game_name, u.`name` as user_name
 	from review r
     inner join game g on g.game_id = r.game_id
-    where r.game_id = 1;
+    inner join user u on u.user_id = r.user_id
+    where r.review_id = 1;
+    
+select r.review_id, r.`text`, r.rating, r.user_id, r.game_id, u.`name` as user_name, g.`name` as game_name, g.bgg_id
+	from review r
+    inner join `user` u on u.user_id = r.user_id
+    inner join game g on g.game_id = r.game_id;
+    
+select g.game_id, g.`name`, g.bgg_id, avg(r.rating) as rating 
+	from review r
+    inner join game g on g.game_id = r.game_id
+    group by r.game_id
+    order by rating desc
+    limit 5;

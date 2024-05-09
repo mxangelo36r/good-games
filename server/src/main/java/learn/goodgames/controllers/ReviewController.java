@@ -24,6 +24,15 @@ public class ReviewController {
     @GetMapping
     public List<Review> findAll() { return service.findAll(); }
 
+    @GetMapping("/review/{reviewId}")
+    public ResponseEntity<Object> findById(@PathVariable int reviewId) {
+        Review review = service.findReviewById(reviewId);
+        if (review == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(review);
+    }
+  
     @GetMapping("/game/{gameId}")
     public List<Review> findReviewsByGameId(@PathVariable int gameId) { return service.findReviewsByGameId(gameId); }
 
@@ -44,15 +53,6 @@ public class ReviewController {
         }
 
         return ErrorResponse.build(result);
-    }
-
-    @GetMapping("/review/{reviewId}")
-    public ResponseEntity<Object> findById(@PathVariable int reviewId) {
-        Review review = service.findReviewById(reviewId);
-        if (review == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(review);
     }
 
     @DeleteMapping("/{reviewId}/{userId}")

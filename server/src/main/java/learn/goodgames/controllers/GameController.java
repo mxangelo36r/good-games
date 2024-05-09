@@ -21,7 +21,7 @@ public class GameController {
     }
 
     @GetMapping
-    public List<Game> findAllGames() { return  service.findAllGames(); }
+    public List<Game> findAllGames() { return service.findAllGames(); }
 
     @GetMapping("/id/{gameId}")
     public ResponseEntity<Game> findGameById(@PathVariable int gameId) {
@@ -52,6 +52,14 @@ public class GameController {
     public double getGameAvgRating(@PathVariable int gameId) {
         return service.getGameAvgRating(gameId);
     }
+
+    @GetMapping("/totalreviews/{gameId}")
+    public int getTotalGameReviews(@PathVariable int gameId) {
+        return service.getTotalGameReviews(gameId);
+    }
+
+    @GetMapping("/topfive")
+    public List<Game> getTop5ReviewedGames() { return service.getTop5ReviewedGames(); }
 
     @PostMapping()
     public ResponseEntity<Object> add(@RequestBody Game game) {
