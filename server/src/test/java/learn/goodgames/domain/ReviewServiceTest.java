@@ -127,6 +127,23 @@ class ReviewServiceTest {
 
     @Test
     void shouldNotAddDuplicateReviewCombination() {
+        Game game = makeDuplicateGame();
+        User user = makeDuplicateUserDias();
+
+        Review arg = makeReview();
+        arg.setGameId(1);
+        arg.setUserId(1);
+
+        List<Review> all = List.of(arg);
+        List<Game> games = List.of(game);
+        List<User> users = List.of(user);
+//        arg.setUserId(user.getUserId());
+//        arg.setGameId(game.getGameId());
+
+        when(repository.findAllReviews()).thenReturn(all);
+        when(gameRepository.findAllGames()).thenReturn(games);
+        when(userRepository.findAllUsers()).thenReturn(users);
+
         Review review = makeReview();
         review.setText(null);
         service.addReview(review);

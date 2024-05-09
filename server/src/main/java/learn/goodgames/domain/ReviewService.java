@@ -179,7 +179,7 @@ public class ReviewService {
 
         // Checks if userId in review is the same as userId found in stream
         if (review.getUserId() != user.getUserId()) {
-            result.addMessage("You can only edit your own review. User ID: " + user.getUserId() + " Review ID: " + review.getUserId() + " Email: " + user.getEmail(), ResultType.INVALID);
+            result.addMessage("You can only edit your own review", ResultType.INVALID);
             return result;
         }
 

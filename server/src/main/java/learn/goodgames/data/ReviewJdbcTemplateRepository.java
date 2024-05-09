@@ -39,8 +39,8 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
     public Review findReviewById(int reviewId) {
         final String sql = "SELECT r.review_id, r.`text`, r.rating, r.user_id, r.game_id, u.`name` as user_name, g.`name` as game_name " +
                 "FROM review r " +
-                "INNER JOIN `user` u ON u.user_id = r.review_id " +
-                "INNER JOIN game g ON g.game_id = g.game_id " +
+                "INNER JOIN `user` u ON u.user_id = r.user_id " +
+                "INNER JOIN game g ON g.game_id = r.game_id " +
                 "WHERE r.review_id = ?;";
 
         return jdbcTemplate.query(sql, new ReviewMapper(), reviewId).stream()
