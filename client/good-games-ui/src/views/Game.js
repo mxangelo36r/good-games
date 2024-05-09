@@ -176,7 +176,7 @@ function Game() {
                         </div>
                     </section>
                     {game.game ? (
-                        <Reviews reviews={game.game.reviews} gameId={game.game.gameId}/>
+                        <Reviews reviews={game.game.reviews} gameId={game.game.gameId} bggId={game.game.bggId}/>
                         ) : (
                             <section className="card p-4 mt-3 mb-3">
                                 <div className="text-center">

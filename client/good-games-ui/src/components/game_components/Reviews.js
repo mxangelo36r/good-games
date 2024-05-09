@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import Modal from "../Modal";
+import { useNavigate } from "react-router-dom";
 
-const REVIEW_DEFAULT = {
-    userId: 0,
-    gameId: 0,
-    text: "",
-    rating: 1,
-}
+// const REVIEW_DEFAULT = {
+//     userId: 0,
+//     gameId: 0,
+//     text: "",
+//     rating: 1,
+// }
 
 function Reviews(props) {
-    const [reviews, setReviews] = useState();
+    const [reviews, setReviews] = useState([]);
+    const [errors, setErrors] = useState([])
     const [showModal, setShowModal] = useState(false);
-    const [review, setReview] = useState(REVIEW_DEFAULT);
+    const [review, setReview] = useState({});
 
     const { isLoggedIn, isAdmin, isUser, getUserId } = useAuth();
     const url = 'http://localhost:8080/api/reviews'
+    const navigate = useNavigate();
 
     useEffect(() => {
         setReviews(props.reviews)
@@ -41,18 +44,47 @@ function Reviews(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (review.reviewId === null) {
+        
+        if (review.reviewId === undefined) {
             addReview();
         } else {
             updateReview();
         }
     }
-    console.log(props.gameId);
     const addReview = () => {
         const newReview = {...review};
         newReview.userId = getUserId()
-        // newReview.gameId.ge
-        const init = {}
+        newReview.gameId = props.gameId;
+
+        const init = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newReview)
+        };
+
+        fetch(`${url}/review`, init)
+        .then(response => {
+            console.log(response);
+            if (response.status === 201 || response.status === 400) {
+                return response.json();
+            } else {
+                return Promise.reject(`Unexpected status code: ${response.status}`);
+            }
+        })
+        .then(data => {
+            if (data.reviewId) {
+                // const newReviews = [...reviews];
+                // newReviews.push(data);
+                // setReviews(newReviews);
+                console.log("test");
+                navigate(0);
+            } else {
+                setErrors(data);
+            }
+        })
+        .catch(console.log)
     }
 
     const updateReview = () => {
@@ -167,6 +199,22 @@ function Reviews(props) {
         ))
     }
 
+    const renderErrors = () => {
+        if (errors.length > 0) {
+            return (
+                <div className="alert alert-danger" role="alert">
+                    <p>The following errors were found:</p>
+                    <br/>
+                    <ul>
+                        {errors.map((error, index) => (
+                            <li key={index}>{error}</li>
+                        ))}
+                    </ul>
+                </div>
+            )
+        }
+    }
+
     if (reviews) {
         return (
             <>
@@ -203,6 +251,7 @@ function Reviews(props) {
                                             <button type="button" className="btn-close"  onClick={handleModalClose}></button>
                                         </div>
                                         <div className="modal-body">
+                                            {renderErrors()}
                                             <fieldset className="form-group">
                                                 <label htmlFor="text">Review</label>
                                                 <textarea
@@ -220,7 +269,7 @@ function Reviews(props) {
                                         </div>
                                         <div className="modal-footer">
                                             <button type="button" className="btn btn-secondary" onClick={handleModalClose}>Close</button>
-                                            <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Save Review</button>
+                                            <button type="submit" className="btn btn-primary">Save Review</button>
                                         </div>
                                     </form>
                                 </Modal>
