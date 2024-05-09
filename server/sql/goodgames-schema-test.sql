@@ -192,7 +192,19 @@ select u.`name`, g.`name`, r.`text`
 --                 order by r.`date`;
 
 -- Test to get reviews by game_id
-select r.review_id, r.`text`, r.rating, r.user_id, r.game_id, g.game_id, g.bgg_id, g.`name`
+select r.review_id, r.`text`, r.rating, r.user_id, r.game_id, g.bgg_id, g.`name` as game_name, u.`name` as user_name
 	from review r
     inner join game g on g.game_id = r.game_id
-    where r.game_id = 1;
+    inner join user u on u.user_id = r.user_id
+    where r.review_id = 1;
+    
+select r.review_id, r.`text`, r.rating, r.user_id, r.game_id, u.`name` as user_name, g.`name` as game_name, g.bgg_id
+	from review r
+    inner join `user` u on u.user_id = r.user_id
+    inner join game g on g.game_id = r.game_id;
+    
+select r.review_id, r.game_id, g.`name` as game_name, r.text, u.`name` as user_name, avg(r.rating) as avg_rating 
+	from review r
+    inner join game g on g.game_id = r.game_id
+    group by r.game_id
+    order by avg_rating;

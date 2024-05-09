@@ -23,6 +23,8 @@ public class GameService {
 
     public List<Game> findGamesByName(String gameName) { return repository.findGamesByName(gameName); }
 
+    public List<Game> getTop5ReviewedGames() { return repository.getTop5ReviewedGames(); }
+
     public Result<Game> addGame(Game game) {
         Result<Game> result = validate(game);
 
