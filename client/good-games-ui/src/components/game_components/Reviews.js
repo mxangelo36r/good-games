@@ -172,7 +172,11 @@ function Reviews(props) {
                     return Promise.reject(`Unexpected Status Code: ${response.status}`)
                 }
             })
-            .then(data => console.log(data))
+            .then(data => {
+                if (data) {
+                    console.log(data)
+                }
+            })
             .catch(console.log);
         }
     }

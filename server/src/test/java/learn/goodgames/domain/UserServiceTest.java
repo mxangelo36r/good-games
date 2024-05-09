@@ -56,6 +56,7 @@ class UserServiceTest {
         User user = makeUser();
         user.setUserId(0);
         user.setEmail(null);
+
         Result<User> result = service.add(user);
         assertEquals(ResultType.INVALID, result.getType());
         assertEquals("Email cannot be empty", result.getMessages().get(0));
