@@ -47,8 +47,25 @@ public class ReviewService {
         return result;
     }
 
-    public Result<Review> updateReview(Review review) {
-        Result<Review> result = new Result<>();
+    public Result<Review> updateReview(Review review, int userId) {
+        User user = userRepository.findUserById(userId);
+
+        Result<Review> result = validateUpdate(review, user);
+
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        if (review.getReviewId() <= 0) {
+            result.addMessage("Review ID must be set for `update` operation", ResultType.INVALID);
+            return result;
+        }
+
+        if (!repository.updateReview(review)) {
+            String msg = String.format("User ID: %s, not found", user.getUserId());
+            result.addMessage(msg, ResultType.NOT_FOUND);
+        }
+
         return result;
     }
 
@@ -136,4 +153,41 @@ public class ReviewService {
         return result;
     }
 
+    private Result<Review> validateUpdate(Review review, User user) {
+        Result<Review> result = new Result<>();
+        List<User> users = userRepository.findAllUsers();
+
+        if(review == null) {
+            result.addMessage("Review does not exist", ResultType.INVALID);
+            return result;
+        }
+
+        if (user == null) {
+            result.addMessage("User does not exist", ResultType.INVALID);
+            return result;
+        }
+
+        // Checks if userId in review is the same as userId found in stream
+        if (review.getUserId() != user.getUserId()) {
+            result.addMessage("You can only edit your own review", ResultType.INVALID);
+            return result;
+        }
+
+        if (user.getRole() != Role.ADMIN && review.getUserId() != user.getUserId()) {
+            result.addMessage("You can only edit other reviews if you're ADMIN", ResultType.INVALID);
+            return result;
+        }
+
+        if (review.getRating() < 0 || review.getRating() > 10) {
+            result.addMessage("Rating has to be between 1-10", ResultType.INVALID);
+            return result;
+        }
+
+        if (review.getText() == null || review.getText().isBlank()) {
+            result.addMessage("Text cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        return result;
+    }
 }
