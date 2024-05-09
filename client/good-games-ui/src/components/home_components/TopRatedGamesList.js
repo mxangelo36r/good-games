@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import TopRatedGameCard from "./TopRatedGameCard";
+import GameCard from "../GameCard";
 import Loading from "../Loading";
 
 function TopRatedGamesList() {
@@ -26,16 +26,15 @@ function TopRatedGamesList() {
 	} else if (!loading && topRatedGames.length === 0) {
 		return (
 			<div className="mb-3 text-center">
-				<h4>Sorry, no upcoming reservations.</h4>
+				<h4>Sorry, no reviewed games.</h4>
 			</div>
 		);
 	} else if (!loading && topRatedGames.length > 0) {
 		return (
-			<div className="mb-3 text-center">
-				<h4>Top-Rated Games</h4>
+			<div className="mb-3 text-center">				
 				<div className="row">
 					{topRatedGames.map((game, index) => {
-						return <TopRatedGameCard key={index} game={game} />;
+						return <GameCard key={index} game={game} />;
 					})}
 				</div>
 			</div>

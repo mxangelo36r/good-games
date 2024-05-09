@@ -33,6 +33,15 @@ GET {{url}}/name/ HTTP/1.1
 ### GET - success - get top 5 games - 200
 GET {{url}}/topfive HTTP/1.1 
 
+### GET - failed get top 5 games - bad path - 404
+GET {{url}}/topfive/t HTTP/1.1 
+
+### GET - success - get total reviews for a game - 200
+GET {{url}}/totalreviews/1
+
+### GET - failed get total reviews - bad id - 200 (gets 0 by default)
+GET {{url}}/totalreviews/11111
+
 ### POST - successful add - 201
 POST {{url}} HTTP/1.1
 Content-Type: application/json

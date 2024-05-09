@@ -53,6 +53,11 @@ public class GameController {
         return service.getGameAvgRating(gameId);
     }
 
+    @GetMapping("/totalreviews/{gameId}")
+    public int getTotalGameReviews(@PathVariable int gameId) {
+        return service.getTotalGameReviews(gameId);
+    }
+
     @GetMapping("/topfive")
     public List<Game> getTop5ReviewedGames() { return service.getTop5ReviewedGames(); }
 
