@@ -64,12 +64,14 @@ class ReviewJdbcTemplateRepositoryTest {
         Review review = makeReview();
         User user = makeUser();
         Game game = makeGame();
+        review.setUserId(user.getUserId());
+        review.setGameId(game.getGameId());
 
-        Review actual = repository.addReview(review, user, game);
+        Review actual = repository.addReview(review);
         assertNotNull(actual);
         assertEquals(8, review.getReviewId());
-        assertEquals(3, review.getUser().getUserId());
-        assertEquals(2, review.getGame().getGameId());
+        assertEquals(3, review.getUserId());
+        assertEquals(2, review.getGameId());
     }
 
     @Test
@@ -120,7 +122,7 @@ class ReviewJdbcTemplateRepositoryTest {
         review.setReviewId(2);
         review.setText("Nope, not for me, don't play it.");
         review.setRating(0);
-        review.setUserId(6);
+        review.setUserId(1);
         review.setGameId(1);
         return review;
     }

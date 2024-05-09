@@ -1,5 +1,7 @@
 package learn.goodgames.models;
 
+import java.util.Objects;
+
 public class Review {
 
     // Fields
@@ -68,4 +70,20 @@ public class Review {
     public void setGame(Game game) {
         this.game = game;
     }
+
+    // Cannot have the following duplicate combination: user_id, review_id, game_id - when adding
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Review review = (Review) o;
+        return Objects.equals(userId, review.userId) &&
+                Objects.equals(reviewId, review.reviewId) &&
+                Objects.equals(gameId, review.gameId);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, reviewId, gameId);
+    }
+
 }
