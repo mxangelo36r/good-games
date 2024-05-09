@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Reviews from "../components/game_components/Reviews";
+import NewGameNewReview from "../components/game_components/NewGameNewReview";
 
 const convert = require('xml-js');
 
@@ -62,8 +63,6 @@ function Game() {
 
 
     const { id } = useParams();
-
-
 
     useEffect(() => {
         if (id) {
@@ -185,6 +184,7 @@ function Game() {
                                 <div className="text-center">
                                     <h4>No Reviews</h4>
                                 </div>
+                                <NewGameNewReview name={game.name} id={id}/>
                             </section>
                         )}
                     

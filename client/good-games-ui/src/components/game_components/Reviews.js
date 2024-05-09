@@ -19,8 +19,9 @@ function Reviews(props) {
 
     const { isLoggedIn, isAdmin, isUser, getUserId, getUsername } = useAuth();
 
+    console.log(props)
     const url = 'http://localhost:8080/api/reviews'
-    const totalReviewsUrl = `http://localhost:8080/api/game/totalreviews/${props.reviews[0].gameId}`;
+    const totalReviewsUrl = `http://localhost:8080/api/game/totalreviews/${props.gameId}`;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -244,8 +245,7 @@ function Reviews(props) {
                             </div>
                             )}
                         </>
-                    )}
-                    
+                    )}                    
                 </div>
             </div>
         ))
@@ -303,6 +303,7 @@ function Reviews(props) {
                         </div>
                     </div>
                 </section>
+                
                 <section className="card p-4 mt-3 mb-3">
                     <div className="row">
                         <div className="col-10">
