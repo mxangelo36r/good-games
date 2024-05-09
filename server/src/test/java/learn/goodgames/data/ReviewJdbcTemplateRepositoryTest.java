@@ -46,7 +46,7 @@ class ReviewJdbcTemplateRepositoryTest {
         Review reviewTwo = repository.findReviewById(2);
         assertNotNull(reviewTwo);
         assertEquals("Nope, not for me, don't play it.", reviewTwo.getText());
-        assertEquals(0, reviewTwo.getRating());
+        assertEquals(1, reviewTwo.getRating());
         assertEquals(6, reviewTwo.getUserId());
         assertEquals(1, reviewTwo.getGameId());
     }
