@@ -67,7 +67,7 @@ public class ReviewService {
     private Result<Review> validateDelete(Review review, User user) {
         Result<Review> result = new Result<>();
 
-        if(review == null) {
+         if(review == null) {
             result.addMessage("review not found", ResultType.INVALID);
             return result;
         }
@@ -79,8 +79,8 @@ public class ReviewService {
 
         if(user.getRole() != Role.ADMIN && review.getUserId() != user.getUserId()) {
             result.addMessage("you can only delete reviews that you have written", ResultType.INVALID);
+            return result;
         }
-
         return result;
     }
 

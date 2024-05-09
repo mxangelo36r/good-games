@@ -13,7 +13,7 @@ public class Reservation {
     private int hostId;
     private Location location;
     private String hostName;
-//    private List<ReservationAttendee> attendees;
+    // private List<ReservationAttendee> attendees;
 
     public Reservation() {
     }
