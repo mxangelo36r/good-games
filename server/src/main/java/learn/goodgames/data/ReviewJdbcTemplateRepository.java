@@ -63,24 +63,27 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
     // Maybe in GlobalExceptionHandler?
     // Is adding but new review id is +1 the expected
     @Override
-    public Review addReview(Review review, User user, Game game) {
+    public Review addReview(Review review) {
         // Adds review from an existing User and Game
         final String sql = "INSERT INTO review (`text`, rating, user_id, game_id) " +
-                "SELECT ?, ?, ?, ? " +
-                // Dual = Dummy table to select & insert data into review (gets user and game info)
-                "FROM dual " +
-                "WHERE NOT EXISTS (SELECT 1 FROM review " +
-                "WHERE user_id = ? AND game_id = ?);";
+                "VALUES (?, ?, ?, ?);";
+
+        // Original sql statement with User and Game parameters
+
+//        final String sql = "INSERT INTO review (`text`, rating, user_id, game_id) " +
+//                "SELECT ?, ?, ?, ? " +
+//                // Dual = Dummy table to select & insert data into review (gets user and game info)
+//                "FROM dual " +
+//                "WHERE NOT EXISTS (SELECT 1 FROM review " +
+//                "WHERE user_id = ? AND game_id = ?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, review.getText());
             ps.setInt(2, review.getRating());
-            ps.setInt(3, user.getUserId());
-            ps.setInt(4, game.getGameId());
-            ps.setInt(5, user.getUserId());
-            ps.setInt(6, game.getGameId());
+            ps.setInt(3, review.getUserId());
+            ps.setInt(4, review.getGameId());
             return ps;
         }, keyHolder);
 
@@ -94,9 +97,10 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
         // - Concurrent inserts happening simultaneously?
         // - Possible Triggers
 
-        // Setting User and Game to review
-        review.setUser(user);
-        review.setGame(game);
+        // Setting User and Game to review:
+        // Might have to get rid of User and Game parameter if it breaks
+//        review.setUser(user);
+//        review.setGame(game);
         review.setReviewId(keyHolder.getKey().intValue());
         return review;
     }
