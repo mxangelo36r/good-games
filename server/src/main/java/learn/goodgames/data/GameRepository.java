@@ -16,4 +16,6 @@ public interface GameRepository {
     List<Game> getTop5ReviewedGames();
 
     Game addGame(Game game);
+
+    double getGameAvgRating(int gameId);
 }

@@ -42,6 +42,18 @@ public class GameService {
         return result;
     }
 
+    public double getGameAvgRating(int gameId) {
+        Game game = findAllGames().stream()
+                .filter(g -> g.getGameId() == gameId)
+                .findFirst()
+                .orElse(null);
+        if(game == null) {
+            return -1;
+        } else {
+            return repository.getGameAvgRating(game.getGameId());
+        }
+    }
+
     private Result<Game> validate(Game game) {
         Result<Game> result = new Result<>();
         List<Game> games = findAllGames();

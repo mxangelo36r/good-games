@@ -25,7 +25,6 @@ public class ReviewController {
     @GetMapping("/game/{gameId}")
     public List<Review> findReviewsByGameId(@PathVariable int gameId) { return service.findReviewsByGameId(gameId); }
 
-
     @GetMapping("/review/{reviewId}")
     public ResponseEntity<Object> findById(@PathVariable int reviewId) {
         Review review = service.findReviewById(reviewId);

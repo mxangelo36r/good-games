@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ReservationList from "../components/home_components/ReservationList";
-import ReviewList from "../components/home_components/ReviewList";
+import TopRatedGamesList from "../components/home_components/TopRatedGamesList";
 
 function Home() {
     const [bestGames, setBestGames] = useState([]);
@@ -70,7 +70,7 @@ function Home() {
                 </div>
             </header>
             <section className="row">
-                <ReviewList />
+                <TopRatedGamesList />
             </section>
             <section className="p-3 pd-md-4 mx-auto text-center">
                 <ReservationList />
