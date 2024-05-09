@@ -20,12 +20,6 @@ function Reviews(props) {
         setReviews(props.reviews)
     }, [props.reviews])
 
-    const renderScores = () => {
-        return (
-            ""
-        )
-    }
-
     const handleChange = (event) => {
         const newReview = {...review};
 
@@ -64,6 +58,31 @@ function Reviews(props) {
         return totalScore / reviews.length;
     }
 
+    const renderScores = () => {
+        const tracker = [0,0,0,0,0,0,0,0,0,0];
+        const percentage = [0,0,0,0,0,0,0,0,0,0];
+
+        reviews.forEach(review => {
+            tracker[review.rating - 1] += 1;
+        });
+
+        const sum = tracker.reduce((partialSum, a) => partialSum + a, 0);
+        tracker.forEach((num, index) => {
+            percentage[index] = (num/sum) * 100;
+        })
+        // console.log(tracker);
+        return tracker.map((value, index) => (
+            <tr key={index}>
+                <td className="rating-label">{index + 1}</td>
+                <td className="rating-bar">
+                    <div className="bar-container">
+                        <div className="bar" style={{ width: `${percentage[index]}%`}}></div>
+                    </div>
+                </td>
+            </tr>
+        ))
+    }
+
     const renderTotalReviews = () => {
         return reviews.length;
     }
@@ -72,9 +91,9 @@ function Reviews(props) {
         return reviews.map((review, index) => (
             <div className="card col-12 mb-2" key={index}>
                 <div className="card-body">
-                    <h5 className="card-title">{"NOOOOO!"}</h5>
+                    <h5 className="card-title">{review.userName}</h5>
                     <h6 className="card-subtitle mb-2 text-body-secondary">Rating ({review.rating}/10)</h6>
-                    <p className="card-body">{review.text}</p>
+                    <p className="card-text">"{review.text}"</p>
                 </div>
             </div>
         ))
@@ -103,8 +122,13 @@ function Reviews(props) {
                     <div className="row">
                         <div className="col-12">
                             <h3 className="card-title">Ratings</h3>
-                            <p>Total Score: {reviews ? renderAvgScores() : ""}</p>
-                            {renderScores()}
+                            <p>Average Score: {reviews ? renderAvgScores() : ""}</p>
+                            <table className="rating-table">
+                                <tbody>
+                                    {renderScores()}
+                                </tbody>
+                               
+                            </table>
                         </div>
                     </div>
                 </section>
