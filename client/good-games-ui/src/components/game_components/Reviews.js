@@ -75,9 +75,6 @@ function Reviews(props) {
         })
         .then(data => {
             if (data.reviewId) {
-                // const newReviews = [...reviews];
-                // newReviews.push(data);
-                // setReviews(newReviews);
                 console.log("test");
                 navigate(0);
             } else {
@@ -88,11 +85,50 @@ function Reviews(props) {
     }
 
     const updateReview = () => {
+        const updater = {
+            text: review.text,
+            rating: review.rating
+        };
+        const id = review.reviewId;
+        const userId = getUserId();
         
+        const init = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updater)
+        }
+
+        console.log(updater);
+        fetch(`${url}/${id}/${userId}`, init)
+        .then(response => {
+            if (response.status === 204) {
+                return null;
+            } else if (response.status === 400) {
+                return response.json();
+            } else {
+                return Promise.reject(`Unexpected status code: ${response.status}`);
+            }
+        })
+        .then(data => {
+            if(!data) {
+                navigate(0);
+            } else {
+                setErrors(data);
+            }
+        })
+        .catch(console.log);
     }
 
-    const handleEdit = () => {
+    const handleEdit = (id, text, rating) => {
+        const newReview = {...review};
+        newReview.reviewId = id;
+        newReview.text = text;
+        newReview.rating = rating;
 
+        setReview(newReview);
+        setShowModal(true);
     }
 
     const handleDelete = (id) => {
@@ -171,7 +207,7 @@ function Reviews(props) {
                         <>
                             {(isAdmin() || isUser(review.userId)) && (
                                 <div className="mt-2">
-                                <button className="btn btn-primary btn-sm me-2" onClick={handleEdit}>Edit</button>
+                                <button className="btn btn-primary btn-sm me-2" onClick={() => handleEdit(review.reviewId, review.text, review.rating)}>Edit</button>
                                 <button className="btn btn-danger btn-sm" onClick={() => handleDelete(review.reviewId)}>Delete</button>
                             </div>
                             )}
