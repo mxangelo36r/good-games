@@ -1,7 +1,9 @@
 package learn.goodgames.domain;
 
+import learn.goodgames.data.GameRepository;
 import learn.goodgames.data.ReviewRepository;
 import learn.goodgames.data.UserRepository;
+import learn.goodgames.models.Game;
 import learn.goodgames.models.Review;
 import learn.goodgames.models.Role;
 import learn.goodgames.models.User;
@@ -13,10 +15,12 @@ import java.util.List;
 public class ReviewService {
     private final ReviewRepository repository;
     private final UserRepository userRepository;
+    private final GameRepository gameRepository;
 
-    public ReviewService(ReviewRepository repository, UserRepository userRepository) {
+    public ReviewService(ReviewRepository repository, UserRepository userRepository, GameRepository gameRepository) {
         this.repository = repository;
         this.userRepository = userRepository;
+        this.gameRepository = gameRepository;
     }
 
     public List<Review> findAll() { return repository.findAllReviews(); }
@@ -26,7 +30,20 @@ public class ReviewService {
     public Review findReviewById(int reviewId) { return repository.findReviewById(reviewId); }
 
     public Result<Review> addReview(Review review) {
-        Result<Review> result = new Result<>();
+        Result<Review> result = validateAdd(review);
+
+        if (!result.isSuccess()) {
+            return result;
+        }
+
+        if (review.getReviewId() != 0) {
+            result.addMessage("Review ID cannot be set for `add` operation", ResultType.INVALID);
+            return result;
+        }
+
+        // Might have to change this parameter if it breaks (jdbc as well)
+        review = repository.addReview(review);
+        result.setPayload(review);
         return result;
     }
 
@@ -66,4 +83,55 @@ public class ReviewService {
         }
         return result;
     }
+
+    private Result<Review> validateAdd(Review review) {
+        Result<Review> result = new Result<>();
+        List<Game> games = gameRepository.findAllGames();
+        List<Review> reviews = findAll();
+
+        if (review == null) {
+            result.addMessage("Review cannot be found", ResultType.INVALID);
+            return result;
+        }
+
+        if (review.getText() == null || review.getText().isBlank()) {
+            result.addMessage("Text cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        if (String.valueOf(review.getGameId()).isBlank()) {
+            result.addMessage("Game ID cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        if (String.valueOf(review.getUserId()).isBlank()) {
+            result.addMessage("User ID cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        if (review.getRating() < 0 || review.getRating() > 10) {
+            result.addMessage("Rating has to be between 1-10", ResultType.INVALID);
+            return result;
+        }
+
+
+        for (Game g : games) {
+            if (review.getGameId() != g.getGameId()) {
+                result.addMessage("Unable to find valid game", ResultType.INVALID);
+                return result;
+            }
+        }
+
+        // Checks for duplicate reviews: reviewId, userId, gameId
+        for (Review r : reviews) {
+            if (r.equals(review)) {
+                result.addMessage("Cannot add a review with the following combination: " +
+                        "reviewId, gameId and userId", ResultType.INVALID);
+                return result;
+            }
+        }
+
+        return result;
+    }
+
 }

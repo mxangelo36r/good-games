@@ -8,14 +8,6 @@ export function AuthProvider({ children }) {
     return (<authContext.Provider value={auth}>{children}</authContext.Provider>);
 }
 
-const DUMMY_USER = {
-    id: 1,
-    name: "Paul1",
-    email: "pman@email.com",
-    password: "password",
-    role: "ADMIN"
-}
-
 function useProvideAuth() {
     const [user, setUser] = useState(null);
     const [errors, setErrors] = useState([]);
@@ -46,7 +38,11 @@ function useProvideAuth() {
         } else {
 
         }
-    } 
+    }
+
+    const getUserId = () => {
+        return user.id;
+    }
 
     const checkAuth = (nextState, replace) => {
         if (!user) {
@@ -134,6 +130,7 @@ function useProvideAuth() {
         isLoggedIn,
         isAdmin,
         isUser,
+        getUserId,
         checkAuth,
         removeErrors,
         signIn,

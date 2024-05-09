@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import Modal from "../Modal";
 
 const REVIEW_DEFAULT = {
     userId: 0,
@@ -10,6 +11,7 @@ const REVIEW_DEFAULT = {
 
 function Reviews(props) {
     const [reviews, setReviews] = useState();
+    const [showModal, setShowModal] = useState(false);
     const [review, setReview] = useState(REVIEW_DEFAULT);
 
     const { isLoggedIn } = useAuth();
@@ -49,6 +51,14 @@ function Reviews(props) {
         console.log(review)
     }
 
+    const handleModalOpen = () => {
+        setShowModal(true);
+    }
+
+    const handleModalClose = () => {
+        setShowModal(false);
+    }
+
     const renderAvgScores = () => {
         const totalScore = reviews.reduce((prev, curr) => curr.rating + prev , 0)
         return totalScore / reviews.length;
@@ -63,7 +73,7 @@ function Reviews(props) {
             <div className="card col-12 mb-2" key={index}>
                 <div className="card-body">
                     <h5 className="card-title">{"NOOOOO!"}</h5>
-                    <h6 className="card-subtitle mb-2 text-body-secondary">{review.rating}</h6>
+                    <h6 className="card-subtitle mb-2 text-body-secondary">Rating ({review.rating}/10)</h6>
                     <p className="card-body">{review.text}</p>
                 </div>
             </div>
@@ -107,42 +117,37 @@ function Reviews(props) {
                         <div className="col-2">
                             {isLoggedIn() && (
                                 <>
-                                <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newReviewModal">
+                                <button className="btn btn-primary" type="button" onClick={handleModalOpen}>
                                     Create Review
                                 </button>
-        
-                                <div className="modal fade" id="newReviewModal" tabIndex={-1} aria-labelledby="newReviewModalLabel" aria-hidden="true">
-                                    <div className="modal-dialog">
-                                        <div className="modal-content">
-                                            <form onSubmit={handleSubmit}>
-                                                <div className="modal-header">
-                                                    <h1 className="modal-title fs-5" id="newReviewModalLabel">New Review</h1>
-                                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div className="modal-body">
-                                                    <fieldset className="form-group">
-                                                        <label htmlFor="text">Review</label>
-                                                        <textarea
-                                                        id="text"
-                                                        name="text"
-                                                        className="form form-control"
-                                                        value={review.text}
-                                                        onChange={handleChange}
-                                                        />
-                                                    </fieldset>
-                                                    <div className="mt-3">
-                                                        {renderRadios()}
-                                                    </div>
-                                                    
-                                                </div>
-                                                <div className="modal-footer">
-                                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Save Review</button>
-                                                </div>
-                                            </form>
+                                <Modal isOpen={showModal} onClose={handleModalClose}>
+                                    <form onSubmit={handleSubmit}>
+                                        <div className="modal-header">
+                                            <h1 className="modal-title fs-5" id="newReviewModalLabel">New Review</h1>
+                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                    </div>
-                                </div>
+                                        <div className="modal-body">
+                                            <fieldset className="form-group">
+                                                <label htmlFor="text">Review</label>
+                                                <textarea
+                                                id="text"
+                                                name="text"
+                                                className="form form-control"
+                                                value={review.text}
+                                                onChange={handleChange}
+                                                />
+                                            </fieldset>
+                                            <div className="mt-3">
+                                                {renderRadios()}
+                                            </div>
+                                            
+                                        </div>
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Save Review</button>
+                                        </div>
+                                    </form>
+                                </Modal>
                                 </>
                             )}
                         </div>

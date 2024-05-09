@@ -14,7 +14,7 @@ public interface ReviewRepository {
 
     Review findReviewById(int reviewId);
 
-    Review addReview(Review review, User user, Game game);
+    Review addReview(Review review);
 
     boolean updateReview(Review review);
 
