@@ -9,6 +9,8 @@ import Login from "./views/Login";
 import { AuthProvider } from "./contexts/AuthContext";
 import GameSearch from "./views/GameSearch";
 import Game from "./views/Game";
+import ReviewedGames from "./views/ReviewedGames";
+import NotFound from "./views/NotFound";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/gameSearch/:query" element={<GameSearch/>}/>
           <Route path="/game/:id" element={<Game/>}/>
+          <Route path="/games/reviewed" element={<ReviewedGames />}/>
+          <Route path="*" element={<NotFound />}/>
         </Routes>
       </AuthProvider>
     </Router>

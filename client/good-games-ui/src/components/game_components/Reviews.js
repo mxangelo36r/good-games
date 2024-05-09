@@ -15,13 +15,17 @@ function Reviews(props) {
     const [errors, setErrors] = useState([])
     const [showModal, setShowModal] = useState(false);
     const [review, setReview] = useState({});
+    const [totalReviews, setTotalReviews] = useState(0);
 
-    const { isLoggedIn, isAdmin, isUser, getUserId } = useAuth();
+    const { isLoggedIn, isAdmin, isUser, getUserId, getUsername } = useAuth();
+
     const url = 'http://localhost:8080/api/reviews'
+    const totalReviewsUrl = `http://localhost:8080/api/game/totalreviews/${props.reviews[0].gameId}`;
     const navigate = useNavigate();
 
     useEffect(() => {
         setReviews(props.reviews)
+        fetchTotalReviews();
     }, [props.reviews])
 
     const handleChange = (event) => {
@@ -35,6 +39,19 @@ function Reviews(props) {
 
         setReview(newReview);
     }
+
+    const fetchTotalReviews = () => {
+        fetch(totalReviewsUrl)
+            .then((response) => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    return Promise.reject(`Unexpected Status Code: ${response.status}`);
+                }
+            })
+            .then((data) => setTotalReviews(data))
+            .catch(console.log);
+    };
 
     const handleValueChange = (event) => {
         const newReview = {...review};
@@ -66,7 +83,6 @@ function Reviews(props) {
 
         fetch(`${url}/review`, init)
         .then(response => {
-            console.log(response);
             if (response.status === 201 || response.status === 400) {
                 return response.json();
             } else {
@@ -75,8 +91,14 @@ function Reviews(props) {
         })
         .then(data => {
             if (data.reviewId) {
-                console.log("test");
-                navigate(0);
+                // add data to existing array (no reload)
+                data.userName = getUsername();
+                data.gameName = props.gameName;
+
+                const newReviews = [...reviews];
+                newReviews.push(data);
+                setReviews(newReviews);
+                handleModalClose();
             } else {
                 setErrors(data);
             }
@@ -85,10 +107,6 @@ function Reviews(props) {
     }
 
     const updateReview = () => {
-        const updater = {
-            text: review.text,
-            rating: review.rating
-        };
         const id = review.reviewId;
         const userId = getUserId();
         
@@ -97,10 +115,9 @@ function Reviews(props) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(updater)
+            body: JSON.stringify(review)
         }
 
-        console.log(updater);
         fetch(`${url}/${id}/${userId}`, init)
         .then(response => {
             if (response.status === 204) {
@@ -113,7 +130,15 @@ function Reviews(props) {
         })
         .then(data => {
             if(!data) {
-                navigate(0);
+                // add data to existing array (no reload)
+                const newReviews = [...reviews];
+                const index = newReviews.findIndex(e => e.reviewId === id);
+                newReviews[index] = review;
+                setReviews(newReviews);
+                setReview({
+                    text: ""
+                });
+                handleModalClose();
             } else {
                 setErrors(data);
             }
@@ -121,11 +146,8 @@ function Reviews(props) {
         .catch(console.log);
     }
 
-    const handleEdit = (id, text, rating) => {
-        const newReview = {...review};
-        newReview.reviewId = id;
-        newReview.text = text;
-        newReview.rating = rating;
+    const handleEdit = (r) => {
+        const newReview = {...r};
 
         setReview(newReview);
         setShowModal(true);
@@ -141,7 +163,6 @@ function Reviews(props) {
             
             fetch(`${url}/${id}/${userId}`, init)
             .then(response => {
-                // console.log(response);
                 if (response.status === 204) {
                     const newReviews = reviews.filter(review => review.reviewId !== id);
                     setReviews(newReviews);
@@ -159,6 +180,10 @@ function Reviews(props) {
 
     const handleModalClose = () => {
         setShowModal(false);
+        setErrors([]);
+        setReview({
+            text: ""
+        });
     }
 
     const renderAvgScores = () => {
@@ -207,7 +232,7 @@ function Reviews(props) {
                         <>
                             {(isAdmin() || isUser(review.userId)) && (
                                 <div className="mt-2">
-                                <button className="btn btn-primary btn-sm me-2" onClick={() => handleEdit(review.reviewId, review.text, review.rating)}>Edit</button>
+                                <button className="btn btn-primary btn-sm me-2" onClick={() => handleEdit(review)}>Edit</button>
                                 <button className="btn btn-danger btn-sm" onClick={() => handleDelete(review.reviewId)}>Delete</button>
                             </div>
                             )}
@@ -258,7 +283,10 @@ function Reviews(props) {
                     <div className="row">
                         <div className="col-12">
                             <h3 className="card-title">Ratings</h3>
-                            <p>Average Score: {reviews ? renderAvgScores() : ""}</p>
+                            <div className="d-flex gap-5" >
+                                <p>Average Score: {reviews ? renderAvgScores() : ""}</p>
+                                <p>Total Reviews: {totalReviews}</p>
+                            </div>
                             <table className="rating-table">
                                 <tbody>
                                     {renderScores()}

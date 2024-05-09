@@ -34,7 +34,6 @@ function ReservationList() {
 	} else if (!loading && reservations.length > 0) {
 		return (
 			<div className="mb-3 text-center">
-				<h4>Upcoming Reservations</h4>
                 {reservations.map((reservation, index) => {return <ReservationCard key={index} reservation={reservation} />})}
 			</div>
 		);

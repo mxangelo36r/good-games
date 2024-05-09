@@ -13,7 +13,9 @@ public interface GameRepository {
 
     List<Game> findGamesByName(String gameName);
 
-    List<Game> getTop5ReviewedGames();
+    int getTotalGameReviews(int gameId);
+
+    List<Game> getTop4ReviewedGames();
 
     Game addGame(Game game);
 

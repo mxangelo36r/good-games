@@ -37,16 +37,12 @@ Content-Type: application/json
 
 {   
     "userId": 1,
-    "gameId": 2,
+    "gameId": 3,
     "text": "Testing text",
-    "rating": 8,
-    "userName": "Kevin",
-    "gameNmae": "Outlaw Trail: The Western Game",
-    "user": null,
-    "game": null
+    "rating": 8
 }
 
-### POST - Unhappy path: null values (make field null to test desired field)
+### POST - Unhappy path: null text
 
 POST {{url}}/review HTTP/1.1
 Content-Type: application/json
@@ -54,12 +50,8 @@ Content-Type: application/json
 {   
     "userId": 1,
     "gameId": 2,
-    "text": "Testing text",
-    "rating": 8,
-    "userName": "",
-    "gameNmae": "Outlaw Trail: The Western Game",
-    "user": null,
-    "game": null
+    "text": "",
+    "rating": 8
 }
 
 ### POST - Unhappy path: Duplicate values
@@ -71,11 +63,7 @@ Content-Type: application/json
     "userId": 1,
     "gameId": 1,
     "text": "I loved this game!",
-    "rating": 10,
-    "userName": "Kevin",
-    "gameName": "Vabanque",
-    "user": null,
-    "game": null
+    "rating": 10
 }
 
 ### POST - Unhappy path: Non existent game
@@ -87,11 +75,7 @@ Content-Type: application/json
     "userId": 1,
     "gameId": 9,
     "text": "I loved this game!",
-    "rating": 10,
-    "userName": "Kevin",
-    "gameName": "Vabanque",
-    "user": null,
-    "game": null
+    "rating": 10
 }
 
 ### POST - Unhappy path: Rating is negative
@@ -103,11 +87,7 @@ Content-Type: application/json
     "userId": 1,
     "gameId": 2,
     "text": "Testing text",
-    "rating": -12,
-    "userName": "",
-    "gameNmae": "Outlaw Trail: The Western Game",
-    "user": null,
-    "game": null
+    "rating": -12
 }
 
 ### POST - Unhappy path: Rating > 10
@@ -119,9 +99,54 @@ Content-Type: application/json
     "userId": 1,
     "gameId": 2,
     "text": "Testing text",
-    "rating": 14,
-    "userName": "",
-    "gameNmae": "Outlaw Trail: The Western Game",
-    "user": null,
-    "game": null
+    "rating": 14
+}
+
+### PUT - Happy path
+
+PUT {{url}}/1/1 HTTP/1.1
+Content-Type: application/json
+
+{   
+    "reviewId": 1,
+    "userId": 1,
+    "gameId": 1,
+    "text": "Updated test",
+    "rating": 5
+}
+
+### PUT - Unhappy Path (User can only update their own review)
+
+PUT {{url}}/3/1 HTTP/1.1
+Content-Type: application/json
+
+{   
+    "text": "Updated test",
+    "rating": 5
+}
+
+### PUT - Unhappy Path: Empty String
+
+PUT {{url}}/5/3 HTTP/1.1
+Content-Type: application/json
+
+{   
+    "reviewId": 5,
+    "userId": 3,
+    "gameId": 1,
+    "text": "",
+    "rating": 5
+}
+
+### PUT - Unhappy Path: Out of Bound rating
+
+PUT {{url}}/5/3 HTTP/1.1
+Content-Type: application/json
+
+{   
+    "reviewId": 5,
+    "userId": 3,
+    "gameId": 1,
+    "text": "Updated test",
+    "rating": 11
 }
