@@ -163,13 +163,18 @@ function Reviews(props) {
             
             fetch(`${url}/${id}/${userId}`, init)
             .then(response => {
+                // console.log(response.json);
+                console.log(response);
                 if (response.status === 204) {
                     const newReviews = reviews.filter(review => review.reviewId !== id);
                     setReviews(newReviews);
-                } else {
+                } else if (response.status === 400) {
+                    return response.json();
+                }else {
                     return Promise.reject(`Unexpected Status Code: ${response.status}`)
                 }
             })
+            .then(data => console.log(data))
             .catch(console.log);
         }
     }
