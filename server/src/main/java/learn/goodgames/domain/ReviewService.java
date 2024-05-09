@@ -116,6 +116,16 @@ public class ReviewService {
             return result;
         }
 
+        if (review.getRating() == 0) {
+            result.addMessage("Rating cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        if (review.getText() == null && review.getRating() == 0 || review.getText().isBlank() && review.getRating() == 0) {
+            result.addMessage("Text and Rating cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
         if (String.valueOf(review.getGameId()).isBlank()) {
             result.addMessage("Game ID cannot be empty", ResultType.INVALID);
             return result;
@@ -178,15 +188,26 @@ public class ReviewService {
             return result;
         }
 
+        if (review.getText() == null || review.getText().isBlank()) {
+            result.addMessage("Text cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        if (review.getRating() == 0) {
+            result.addMessage("Rating cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        if (review.getText() == null && review.getRating() == 0 || review.getText().isBlank() && review.getRating() == 0) {
+            result.addMessage("Text and Rating cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
         if (review.getRating() < 0 || review.getRating() > 10) {
             result.addMessage("Rating has to be between 1-10", ResultType.INVALID);
             return result;
         }
 
-        if (review.getText() == null || review.getText().isBlank()) {
-            result.addMessage("Text cannot be empty", ResultType.INVALID);
-            return result;
-        }
 
         return result;
     }
