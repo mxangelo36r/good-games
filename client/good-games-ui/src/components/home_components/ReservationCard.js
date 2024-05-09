@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function ReservationCard({ reservation, index }) {
-	console.log(reservation);
-
 	let location = reservation.location;
 
     const formatTime = (time) => {

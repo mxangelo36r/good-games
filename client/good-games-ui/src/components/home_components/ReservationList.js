@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ReservationCard from "./ReservationCard";
+import Loading from "../Loading";
 
-function ReservationHome() {
+function ReservationList() {
 	const [reservations, setReservations] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const url = `http://localhost:8080/api/reservation`;
@@ -22,10 +23,7 @@ function ReservationHome() {
 
 	if (loading) {
 		return (
-			<>
-				<h4 className="sr-only">Loading Reservations</h4>
-				<div className="spinner-border mb-3 text-center" role="status"></div>
-			</>
+			<Loading name="Reservations" />
 		);
 	} else if (!loading && reservations.length === 0) {
 		return (
@@ -43,4 +41,4 @@ function ReservationHome() {
 	}
 }
 
-export default ReservationHome;
+export default ReservationList;
