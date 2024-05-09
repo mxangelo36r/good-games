@@ -163,8 +163,6 @@ function Reviews(props) {
             
             fetch(`${url}/${id}/${userId}`, init)
             .then(response => {
-                // console.log(response.json);
-                console.log(response);
                 if (response.status === 204) {
                     const newReviews = reviews.filter(review => review.reviewId !== id);
                     setReviews(newReviews);
