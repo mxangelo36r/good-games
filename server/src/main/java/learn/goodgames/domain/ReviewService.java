@@ -116,6 +116,11 @@ public class ReviewService {
             return result;
         }
 
+        if (review.getRating() == 0) {
+            result.addMessage("Rating cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
         if (String.valueOf(review.getGameId()).isBlank()) {
             result.addMessage("Game ID cannot be empty", ResultType.INVALID);
             return result;
