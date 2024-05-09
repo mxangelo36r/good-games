@@ -209,3 +209,9 @@ select g.game_id, g.`name`, g.bgg_id, avg(r.rating) as rating
     group by r.game_id
     order by rating desc
     limit 5;
+    
+select count(*) 
+	from review r
+    inner join game g on g.game_id = r.game_id
+	where g.game_id = 1
+    group by g.game_id;
