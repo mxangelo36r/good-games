@@ -85,7 +85,7 @@ function Login() {
                         />
                     </fieldset>
                     <div className="hstack gap-3 mt-4">
-                        <button className="btn btn-success mr-2" type="submit">Sign Up</button>
+                        <button className="btn btn-success mr-2" type="submit">Login</button>
                         <Link className="btn btn-warning" type="button" to={"/"}>Cancel</Link>
                     </div>
                 </form>
