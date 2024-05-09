@@ -132,6 +132,9 @@ class ReviewServiceTest {
         User user = makeDuplicateUserDias();
 
         Review arg = makeReview();
+        arg.setGameId(1);
+        arg.setUserId(1);
+
         List<Review> all = List.of(arg);
         List<Game> games = List.of(game);
         List<User> users = List.of(user);
