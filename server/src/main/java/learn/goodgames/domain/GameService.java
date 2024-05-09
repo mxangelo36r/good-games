@@ -23,6 +23,8 @@ public class GameService {
 
     public List<Game> findGamesByName(String gameName) { return repository.findGamesByName(gameName); }
 
+    public List<Game> getTop5ReviewedGames() { return repository.getTop5ReviewedGames(); }
+
     public Result<Game> addGame(Game game) {
         Result<Game> result = validate(game);
 
@@ -38,18 +40,6 @@ public class GameService {
         game = repository.addGame(game);
         result.setPayload(game);
         return result;
-    }
-
-    public double getGameAvgRating(int gameId) {
-        Game game = findAllGames().stream()
-                .filter(g -> g.getGameId() == gameId)
-                .findFirst()
-                .orElse(null);
-        if(game == null) {
-            return -1;
-        } else {
-            return repository.getGameAvgRating(game.getGameId());
-        }
     }
 
     private Result<Game> validate(Game game) {

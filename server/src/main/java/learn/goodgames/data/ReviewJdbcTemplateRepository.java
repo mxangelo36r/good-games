@@ -59,6 +59,8 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository {
         return jdbcTemplate.query(sql, new ReviewMapper(), gameId);
     }
 
+
+
     // Probably needs try/catch for DataIntegrityViolationException
     // Maybe in GlobalExceptionHandler?
     // Is adding but new review id is +1 the expected

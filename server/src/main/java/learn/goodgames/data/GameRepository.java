@@ -13,11 +13,7 @@ public interface GameRepository {
 
     List<Game> findGamesByName(String gameName);
 
+    List<Game> getTop5ReviewedGames();
+
     Game addGame(Game game);
-
-    double getGameAvgRating(int gameId);
-
-//    boolean updateGameAverageRating(int gameId);
-
-//    boolean delete (int gameId);
 }
