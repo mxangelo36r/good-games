@@ -97,7 +97,7 @@ class ReviewJdbcTemplateRepositoryTest {
 //        assertTrue(repository.deleteReviewUser(2, review, user));
 //    }
 
-    // This test uses data with dependencies
+    // This test is passing but uses data with dependencies
     // Same as above refresh the code from the steps above
 
 //    @Test

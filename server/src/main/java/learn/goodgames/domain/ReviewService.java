@@ -114,19 +114,21 @@ public class ReviewService {
             return result;
         }
 
+        Game g = games.stream()
+                .filter(game -> game.getGameId() == review.getGameId())
+                .findFirst()
+                .orElse(null);
 
-        for (Game g : games) {
-            if (review.getGameId() != g.getGameId()) {
-                result.addMessage("Unable to find valid game", ResultType.INVALID);
-                return result;
-            }
+        if (g == null) {
+            result.addMessage("Unable to find valid game", ResultType.INVALID);
+            return result;
         }
 
         // Checks for duplicate reviews: reviewId, userId, gameId
         for (Review r : reviews) {
             if (r.equals(review)) {
                 result.addMessage("Cannot add a review with the following combination: " +
-                        "reviewId, gameId and userId", ResultType.INVALID);
+                        "gameId and userId", ResultType.INVALID);
                 return result;
             }
         }

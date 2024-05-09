@@ -29,3 +29,99 @@ DELETE {{url}}/2/1 HTTP/1.1
 
 ### DELETE - failed delete - user cannot delete other user reviews
 DELETE {{url}}/2/4 HTTP/1.1
+
+### POST - Happy path 
+
+POST {{url}}/review HTTP/1.1
+Content-Type: application/json
+
+{   
+    "userId": 1,
+    "gameId": 2,
+    "text": "Testing text",
+    "rating": 8,
+    "userName": "Kevin",
+    "gameNmae": "Outlaw Trail: The Western Game",
+    "user": null,
+    "game": null
+}
+
+### POST - Unhappy path: null values (make field null to test desired field)
+
+POST {{url}}/review HTTP/1.1
+Content-Type: application/json
+
+{   
+    "userId": 1,
+    "gameId": 2,
+    "text": "Testing text",
+    "rating": 8,
+    "userName": "",
+    "gameNmae": "Outlaw Trail: The Western Game",
+    "user": null,
+    "game": null
+}
+
+### POST - Unhappy path: Duplicate values
+
+POST {{url}}/review HTTP/1.1
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "gameId": 1,
+    "text": "I loved this game!",
+    "rating": 10,
+    "userName": "Kevin",
+    "gameName": "Vabanque",
+    "user": null,
+    "game": null
+}
+
+### POST - Unhappy path: Non existent game
+
+POST {{url}}/review HTTP/1.1
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "gameId": 9,
+    "text": "I loved this game!",
+    "rating": 10,
+    "userName": "Kevin",
+    "gameName": "Vabanque",
+    "user": null,
+    "game": null
+}
+
+### POST - Unhappy path: Rating is negative
+
+POST {{url}}/review HTTP/1.1
+Content-Type: application/json
+
+{   
+    "userId": 1,
+    "gameId": 2,
+    "text": "Testing text",
+    "rating": -12,
+    "userName": "",
+    "gameNmae": "Outlaw Trail: The Western Game",
+    "user": null,
+    "game": null
+}
+
+### POST - Unhappy path: Rating > 10
+
+POST {{url}}/review HTTP/1.1
+Content-Type: application/json
+
+{   
+    "userId": 1,
+    "gameId": 2,
+    "text": "Testing text",
+    "rating": 14,
+    "userName": "",
+    "gameNmae": "Outlaw Trail: The Western Game",
+    "user": null,
+    "game": null
+}
