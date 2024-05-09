@@ -87,20 +87,15 @@ public class GameJdbcTemplateRepository implements GameRepository {
         return jdbcTemplate.queryForObject(sql, Double.class, gameId);
     }
 
-//    @Override
-//    public boolean updateGameAverageRating(int gameId) {
-//
-//        final String sql =
-//                "update game g " +
-//                    "inner join " +
-//                        "(select game_id, avg(rating) as avgrating " +
-//                            "from review r" +
-//                            "group by game_id " +
-//                        ") r " +
-//                        "on r.game_id = g.game_id " +
-//                    "set g.avg_rating = r.avgrating " +
-//                    "where g.game_id = ?;";
-//
-//        return jdbcTemplate.update(sql, gameId) > 0;
-//    }
+    @Override
+    public List<Game> getTop5ReviewedGames() {
+        final String sql = "select g.game_id, g.`name`, g.bgg_id, avg(r.rating) as rating " +
+                "from review r " +
+                "inner join game g on g.game_id = r.game_id " +
+                "group by r.game_id " +
+                "order by rating desc " +
+                "limit 5;";
+
+        return jdbcTemplate.query(sql, new GameMapper());
+    }
 }

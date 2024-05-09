@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import ReservationCard from "./ReservationCard";
+import TopRatedGameCard from "./TopRatedGameCard";
 import Loading from "../Loading";
 
-function ReservationList() {
-	const [reservations, setReservations] = useState([]);
+function TopRatedGamesList() {
+	const [topRatedGames, setTopRatedGames] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const url = `http://localhost:8080/api/reservation`;
+	const url = `http://localhost:8080/api/game/topfive`;
 
 	useEffect(() => {
 		fetch(url)
@@ -16,29 +16,31 @@ function ReservationList() {
 					return Promise.reject(`Unexpected Status Code: ${response.status}`);
 				}
 			})
-			.then((data) => setReservations(data))
+			.then((data) => setTopRatedGames(data))
 			.then(setLoading(false))
 			.catch(console.log);
 	}, [url]);
 
 	if (loading) {
-		return (
-			<Loading name="Reservations" />
-		);
-	} else if (!loading && reservations.length === 0) {
+		return <Loading name="Top-Rated Games" />;
+	} else if (!loading && topRatedGames.length === 0) {
 		return (
 			<div className="mb-3 text-center">
 				<h4>Sorry, no upcoming reservations.</h4>
 			</div>
 		);
-	} else if (!loading && reservations.length > 0) {
+	} else if (!loading && topRatedGames.length > 0) {
 		return (
 			<div className="mb-3 text-center">
-				<h4>Upcoming Reservations</h4>
-                {reservations.map((reservation, index) => {return <ReservationCard key={index} reservation={reservation} />})}
+				<h4>Top-Rated Games</h4>
+				<div className="row">
+					{topRatedGames.map((game, index) => {
+						return <TopRatedGameCard key={index} game={game} />;
+					})}
+				</div>
 			</div>
 		);
 	}
 }
 
-export default ReservationList;
+export default TopRatedGamesList;

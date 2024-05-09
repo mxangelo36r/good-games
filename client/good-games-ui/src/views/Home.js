@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import ReservationHome from "../components/home_components/ReservationList";
+import ReservationList from "../components/home_components/ReservationList";
+import TopRatedGamesList from "../components/home_components/TopRatedGamesList";
 
 function Home() {
     const [bestGames, setBestGames] = useState([]);
@@ -36,7 +37,7 @@ function Home() {
                 </div>
             )
         }
-        
+
         return bestReservation.map((reservation) => (
             <div className="card">
                 <div className="card-body">
@@ -69,10 +70,10 @@ function Home() {
                 </div>
             </header>
             <section className="row">
-                {renderHighestReviewedGames()}
+                <TopRatedGamesList />
             </section>
             <section className="p-3 pd-md-4 mx-auto text-center">
-                <ReservationHome />
+                <ReservationList />
             </section>
         </main>
     )
