@@ -36,6 +36,7 @@ function GameSearch() {
         if (query) {
             setIsLoading(true);
 
+            // fetch search result from bgg
             fetch(`${bgg_url}?query=${query}`)
             .then(response => {
                 if (response.status === 200) {
@@ -48,6 +49,7 @@ function GameSearch() {
                 const obj = convert.xml2js(data);
                 let serverGames = [];
 
+                // fetch game info from server
                 fetch(url)
                 .then(response => {
                     if (response.status === 200) {
@@ -77,10 +79,8 @@ function GameSearch() {
     const renderRows = () => {
         return games.map((game, index) => (
             <tr key={index} className={game.game ? "table-success" : ""}>
-                <td></td>
                 <td>{game.bgg_id}</td>
                 <td><Link to={`/game/${game.bgg_id}`} className="text-underline-hover">{game.name}</Link></td>
-                <td></td>
                 <td>{game.year_published}</td>
             </tr>
         ))
@@ -97,15 +97,13 @@ function GameSearch() {
                     </div>
                 </div>
             ) : (
-                <section>
+                <section className="border p-2">
                     <table className="table table-hover">
                         <caption>List of search results</caption>
                         <thead>
                             <tr>
-                                <th scope="col"></th>
                                 <th scope="col">BGG ID</th>
                                 <th scope="col">Game Name</th>
-                                <th scope="col">Rating</th>
                                 <th scope="col">Year Published</th>
                             </tr>
                         </thead>

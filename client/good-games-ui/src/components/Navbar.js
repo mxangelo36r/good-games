@@ -39,11 +39,9 @@ function Navbar() {
         } else {
             return (
                 <>
-                    <div className="dropdown text-end">
-                        <li className="nav-item">
-                            <a className="nav-link text-nowrap" href="#" onClick={handleSignOut}>Sign Out</a>
-                        </li>
-                    </div>
+                    <li className="nav-item">
+                        <a className="nav-link text-nowrap" href="#" onClick={handleSignOut}>Sign Out</a>
+                    </li>
                 </>
             ) 
         }
@@ -53,17 +51,17 @@ function Navbar() {
         <>
             <nav className="navbar navbar-expand-lg bg-body-secondary">
                 <div className="container-fluid">
-                    <Link to={'/'} className="navbar-brand">Good Games</Link>
+                    <Link to={'/'} className="navbar-brand me-5">Good Games</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarContent">
-                        <ul className="navbar-nav mb-2 mb-lg-0 me-5">
+                        {/* <ul className="navbar-nav mb-2 mb-lg-0 me-5">
                             <li className="nav-item">
                                 <Link to={'/games/reviewed'} className="nav-link text-nowrap">See Reviewed Games</Link>
                             </li>
-                        </ul>
-                        <form className="d-flex w-100 ms-auto" role="search" onSubmit={handleSubmit}>
+                        </ul> */}
+                        <form className="d-flex w-100 ms-auto me-4" role="search" onSubmit={handleSubmit}>
                             <div className="input-group">
                                 <input
                                 id="query"
