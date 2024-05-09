@@ -252,6 +252,7 @@ class ReviewServiceTest {
         review.setText("Testing Text");
         review.setRating(5);
         return review;
+    }
 
     User makeAdmin() {
         User user = new User();
