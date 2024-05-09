@@ -48,4 +48,15 @@ public class ReviewController {
 
         return ErrorResponse.build(result);
     }
+
+    @DeleteMapping("/{reviewId}/{userId}")
+    public ResponseEntity<Object> deleteById(@PathVariable int reviewId, @PathVariable int userId) {
+        Result<Review> result = service.deleteReviewById(reviewId, userId);
+
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return ErrorResponse.build(result);
+    }
 }

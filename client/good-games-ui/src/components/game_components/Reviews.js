@@ -41,9 +41,22 @@ function Reviews(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (review.reviewId === null) {
+            addReview();
+        } else {
+            updateReview();
+        }
+    }
+    console.log(props.gameId);
+    const addReview = () => {
+        const newReview = {...review};
+        newReview.userId = getUserId()
+        // newReview.gameId.ge
+        const init = {}
+    }
 
-
-        console.log(review)
+    const updateReview = () => {
+        
     }
 
     const handleEdit = () => {
@@ -51,7 +64,6 @@ function Reviews(props) {
     }
 
     const handleDelete = (id) => {
-        const review = reviews.find(review => review.reviewId === id);
         const userId = getUserId();
 
         if (window.confirm("Delete this review?")) {
@@ -188,7 +200,7 @@ function Reviews(props) {
                                     <form onSubmit={handleSubmit}>
                                         <div className="modal-header">
                                             <h1 className="modal-title fs-5" id="newReviewModalLabel">New Review</h1>
-                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <button type="button" className="btn-close"  onClick={handleModalClose}></button>
                                         </div>
                                         <div className="modal-body">
                                             <fieldset className="form-group">
@@ -207,7 +219,7 @@ function Reviews(props) {
                                             
                                         </div>
                                         <div className="modal-footer">
-                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" className="btn btn-secondary" onClick={handleModalClose}>Close</button>
                                             <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Save Review</button>
                                         </div>
                                     </form>
