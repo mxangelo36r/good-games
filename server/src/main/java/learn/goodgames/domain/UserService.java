@@ -99,8 +99,33 @@ public class UserService {
             return result;
         }
 
+        if (user.getEmail().isBlank() && user.getUsername().isBlank() && user.getPassword().isBlank()) {
+            result.addMessage("Username, Email and Password cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        if (user.getEmail().isBlank() && user.getUsername().isBlank()) {
+            result.addMessage("Username and Email cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        if (user.getEmail().isBlank() && user.getPassword().isBlank()) {
+            result.addMessage("Username and Email cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        if (user.getUsername().isBlank() && user.getPassword().isBlank()) {
+            result.addMessage("Username and Password cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
         if (user.getUsername() == null || user.getUsername().isBlank()) {
             result.addMessage("Username cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            result.addMessage("Email cannot be empty", ResultType.INVALID);
             return result;
         }
 
@@ -114,10 +139,6 @@ public class UserService {
             return result;
         }
 
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
-            result.addMessage("Email cannot be empty", ResultType.INVALID);
-            return result;
-        }
 
         if (!distinctUsername(all, user)) {
             result.addMessage("Username taken. Please choose another username", ResultType.INVALID);
