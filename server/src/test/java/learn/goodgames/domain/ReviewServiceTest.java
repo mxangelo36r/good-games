@@ -204,7 +204,7 @@ class ReviewServiceTest {
         when(userRepository.findUserById(1)).thenReturn(user);
         Result<Review> result = service.updateReview(review, user.getUserId());
         assertEquals(ResultType.INVALID, result.getType());
-        assertEquals("You can only edit your own review. User ID: 1 Review ID: 3 Email: test@user.com", result.getMessages().get(0));
+        assertEquals("You can only edit your own review", result.getMessages().get(0));
     }
 
 
