@@ -33,7 +33,7 @@ function useProvideAuth() {
     }
 
     const isUser = (id) => {
-        if (user.id === id) {
+        if (user.userId === id) {
             return true;
         } else {
 
@@ -41,7 +41,7 @@ function useProvideAuth() {
     }
 
     const getUserId = () => {
-        return user.id;
+        return user.userId;
     }
 
     const checkAuth = (nextState, replace) => {

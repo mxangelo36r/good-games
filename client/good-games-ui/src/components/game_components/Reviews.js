@@ -14,7 +14,8 @@ function Reviews(props) {
     const [showModal, setShowModal] = useState(false);
     const [review, setReview] = useState(REVIEW_DEFAULT);
 
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, isAdmin, isUser, getUserId } = useAuth();
+    const url = 'http://localhost:8080/api/reviews'
 
     useEffect(() => {
         setReviews(props.reviews)
@@ -45,6 +46,33 @@ function Reviews(props) {
         console.log(review)
     }
 
+    const handleEdit = () => {
+
+    }
+
+    const handleDelete = (id) => {
+        const review = reviews.find(review => review.reviewId === id);
+        const userId = getUserId();
+
+        if (window.confirm("Delete this review?")) {
+            const init = {
+                method: 'DELETE'
+            };
+            
+            fetch(`${url}/${id}/${userId}`, init)
+            .then(response => {
+                // console.log(response);
+                if (response.status === 204) {
+                    const newReviews = reviews.filter(review => review.reviewId !== id);
+                    setReviews(newReviews);
+                } else {
+                    return Promise.reject(`Unexpected Status Code: ${response.status}`)
+                }
+            })
+            .catch(console.log);
+        }
+    }
+
     const handleModalOpen = () => {
         setShowModal(true);
     }
@@ -70,7 +98,7 @@ function Reviews(props) {
         tracker.forEach((num, index) => {
             percentage[index] = (num/sum) * 100;
         })
-        // console.log(tracker);
+
         return tracker.map((value, index) => (
             <tr key={index}>
                 <td className="rating-label">{index + 1}</td>
@@ -88,12 +116,24 @@ function Reviews(props) {
     }
 
     const renderReviews = () => {
+        
         return reviews.map((review, index) => (
             <div className="card col-12 mb-2" key={index}>
                 <div className="card-body">
                     <h5 className="card-title">{review.userName}</h5>
                     <h6 className="card-subtitle mb-2 text-body-secondary">Rating ({review.rating}/10)</h6>
                     <p className="card-text">"{review.text}"</p>
+                    {isLoggedIn() && (
+                        <>
+                            {(isAdmin() || isUser(review.userId)) && (
+                                <div className="mt-2">
+                                <button className="btn btn-primary btn-sm me-2" onClick={handleEdit}>Edit</button>
+                                <button className="btn btn-danger btn-sm" onClick={() => handleDelete(review.reviewId)}>Delete</button>
+                            </div>
+                            )}
+                        </>
+                    )}
+                    
                 </div>
             </div>
         ))
