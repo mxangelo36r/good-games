@@ -37,10 +37,13 @@ GET {{url}}/topfive HTTP/1.1
 GET {{url}}/topfive/t HTTP/1.1 
 
 ### GET - success - get total reviews for a game - 200
-GET {{url}}/totalreviews/1
+GET {{url}}/totalreviews/1 HTTP/1.1
 
 ### GET - failed get total reviews - bad id - 200 (gets 0 by default)
-GET {{url}}/totalreviews/11111
+GET {{url}}/totalreviews/11111 HTTP/1.1
+
+### GET - success get next game id - value will change over time
+GET {{url}}/gameid HTTP/1.1
 
 ### POST - successful add - 201
 POST {{url}} HTTP/1.1

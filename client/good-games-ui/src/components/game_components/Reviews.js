@@ -292,7 +292,6 @@ function Reviews(props) {
                             <h3 className="card-title">Ratings</h3>
                             <div className="d-flex gap-5" >
                                 <p>Average Score: {reviews ? renderAvgScores() : ""}</p>
-                                <p>Total Reviews: {totalReviews}</p>
                             </div>
                             <table className="rating-table">
                                 <tbody>

@@ -15,6 +15,8 @@ public interface GameRepository {
 
     int getTotalGameReviews(int gameId);
 
+    int getNextGameId();
+
     List<Game> getTop4ReviewedGames();
 
     Game addGame(Game game);
