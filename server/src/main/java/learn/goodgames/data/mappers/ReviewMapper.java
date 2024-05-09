@@ -21,4 +21,5 @@ public class ReviewMapper implements RowMapper<Review> {
         review.setUserName(resultSet.getString("user_name"));
         return review;
     }
+    // make another mapRow: text, rating,
 }

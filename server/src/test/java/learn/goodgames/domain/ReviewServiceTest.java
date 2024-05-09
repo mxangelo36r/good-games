@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -124,17 +125,22 @@ class ReviewServiceTest {
         assertEquals("Unable to find valid game", result.getMessages().get(0));
     }
 
+    // Is working in the controller side: need to fix here
     @Test
     void shouldNotAddDuplicateReviewCombination() {
         Game game = makeDuplicateGame();
-        User user = makeDuplicateUser();
+        User user = makeDuplicateUserDias();
 
         Review arg = makeReview();
         List<Review> all = List.of(arg);
-        arg.setUserId(user.getUserId());
-        arg.setGameId(game.getGameId());
+        List<Game> games = List.of(game);
+        List<User> users = List.of(user);
+//        arg.setUserId(user.getUserId());
+//        arg.setGameId(game.getGameId());
 
         when(repository.findAllReviews()).thenReturn(all);
+        when(gameRepository.findAllGames()).thenReturn(games);
+        when(userRepository.findAllUsers()).thenReturn(users);
         Review review = makeReview();
         review.setUserId(arg.getUserId());
         review.setGameId(arg.getGameId());
@@ -174,6 +180,34 @@ class ReviewServiceTest {
         assertEquals("Rating has to be between 1-10", resultTwo.getMessages().get(0));
     }
 
+    // Update Test
+    @Test
+    void shouldNotUpdateWhenUserDoesNotExistInDB() {
+        User user = makeUser();
+        Review review = makeReview1();
+
+        Result<Review> result = service.updateReview(review, user.getUserId());
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("User does not exist", result.getMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateOtherReviewsForUser() {
+        User user = makeUser(); // userId = 1
+        Review review = makeDuplicateReviewFour();
+        List<User> users = new ArrayList<>();
+        users.add(user);
+
+        when(userRepository.findAllUsers()).thenReturn(users);
+        when(userRepository.findUserById(1)).thenReturn(user);
+        Result<Review> result = service.updateReview(review, user.getUserId());
+        assertEquals(ResultType.INVALID, result.getType());
+        assertEquals("You can only edit your own review", result.getMessages().get(0));
+    }
+
+
+
+
     // Makes identical DB review for review id = 2
     private Review makeDuplicateReview() {
         Review review = new Review();
@@ -191,7 +225,6 @@ class ReviewServiceTest {
 //        Result<Review> result = service.deleteReviewById(1, 1);
 //
 //        assertEquals(ResultType.SUCCESS, result.getType());
-
     }
 
     @Test
@@ -204,7 +237,7 @@ class ReviewServiceTest {
 
     }
 
-    Review makeReview1() {
+    private Review makeReview1() {
 
         Review review = new Review();
         review.setReviewId(2);
@@ -215,9 +248,31 @@ class ReviewServiceTest {
         return review;
     }
 
+    private Review makeReview2() {
+
+        Review review = new Review();
+        review.setReviewId(2);
+        review.setText("Nope, not for me, don't play it.");
+        review.setRating(0);
+        review.setUserId(2);
+        review.setGameId(2);
+        return review;
+    }
+
+    // Duplicate review in DB (reviewId = 4)
+    private Review makeDuplicateReviewFour() {
+        Review review = new Review();
+        review.setReviewId(4);
+        review.setText("I tried it and I liked it, I guess");
+        review.setRating(5);
+        review.setUserId(3);
+        review.setGameId(3);
+        return review;
+    }
+
 
     // Makes identical DB review for user id = 6
-    private User makeDuplicateUser() {
+    private User makeDuplicateUserDias() {
         User user = new User();
         user.setUserId(6);
         user.setUsername("Dias");
@@ -227,7 +282,7 @@ class ReviewServiceTest {
         return user;
     }
 
-    User makeUser() {
+    private User makeUser() {
         User user = new User();
         user.setUserId(1);
         user.setUsername("userTest");
@@ -254,7 +309,7 @@ class ReviewServiceTest {
         return review;
     }
 
-    User makeAdmin() {
+    private User makeAdmin() {
         User user = new User();
         user.setUserId(2);
         user.setUsername("adminTest");
