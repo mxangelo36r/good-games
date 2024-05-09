@@ -77,7 +77,7 @@ class GameJdbcTemplateRepositoryTest {
     @Test
     void shouldFindGameAverageRating() {
         double avgRating = repository.getGameAvgRating(1);
-        assertEquals(5, avgRating);
+        assertEquals(5.5, avgRating);
     }
 
     Game makeGame() {
