@@ -74,7 +74,7 @@ function Navbar() {
                                 value={query}
                                 onChange={handleChange}
                                 />
-                                <button className="btn btn-outline-success" type="button" id="btn-search">Search</button>
+                                <button className="btn btn-outline-success" type="submit" id="btn-search">Search</button>
                             </div>
                         </form>
                         <ul className="navbar-nav mb-2 mb-lg-0">
