@@ -55,7 +55,7 @@ class ReviewServiceTest {
     @Test
     void shouldReturnEmptyArrayIfInvalidGameId() {
         List<Review> actual = service.findReviewsByGameId(19999);
-        assert(actual.isEmpty());
+        assert (actual.isEmpty());
     }
 
     @Test
@@ -79,9 +79,9 @@ class ReviewServiceTest {
 //    X Rating has to be between 1-10
 //    X Game has to have an existing game_id via board game geek api (Can’t be null)
 //    X Cannot have the following duplicate combination: user_id, review_id, game_id - when adding
-    
+
     @Test
-    void shouldNotAddWhenGameDoesNotExistIs() {
+    void shouldNotAddWhenGameDoesNotExist() {
         Game game = makeDuplicateGame();
 
         Review arg = makeReview();
@@ -103,7 +103,7 @@ class ReviewServiceTest {
     }
 
     @Test
-    void shouldNotAddWhenUserDoesNotExistIs() {
+    void shouldNotAddWhenUserDoesNotExist() {
         Game game = makeDuplicateGame();
 
         Review arg = makeReview();
@@ -125,7 +125,7 @@ class ReviewServiceTest {
     }
 
     @Test
-    void shouldAddDuplicateReviewCombination() {
+    void shouldNotAddDuplicateReviewCombination() {
         Game game = makeDuplicateGame();
         User user = makeDuplicateUser();
 
@@ -136,11 +136,11 @@ class ReviewServiceTest {
 
         when(repository.findAllReviews()).thenReturn(all);
         Review review = makeReview();
-        review.setUserId(user.getUserId());
-        review.setGameId(game.getGameId());
+        review.setUserId(arg.getUserId());
+        review.setGameId(arg.getGameId());
         Result<Review> result = service.addReview(arg);
         assertEquals(ResultType.INVALID, result.getType());
-        assertEquals("Cannot add a review with the following combination: reviewId, gameId and userId", result.getMessages().get(0));
+        assertEquals("Cannot add a review with the following combination: gameId and userId", result.getMessages().get(0));
     }
 
 
@@ -173,10 +173,10 @@ class ReviewServiceTest {
         assertEquals(ResultType.INVALID, resultTwo.getType());
         assertEquals("Rating has to be between 1-10", resultTwo.getMessages().get(0));
     }
-    
+
     // Makes identical DB review for review id = 2
     private Review makeDuplicateReview() {
-              Review review = new Review();
+        Review review = new Review();
         review.setReviewId(2);
         review.setText("Nope, not for me, don't play it.");
         review.setRating(0);
@@ -252,6 +252,7 @@ class ReviewServiceTest {
         review.setText("Testing Text");
         review.setRating(5);
         return review;
+    }
 
     User makeAdmin() {
         User user = new User();

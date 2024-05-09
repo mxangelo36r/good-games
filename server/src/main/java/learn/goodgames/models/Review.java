@@ -98,12 +98,11 @@ public class Review {
         if (o == null || getClass() != o.getClass()) return false;
         Review review = (Review) o;
         return Objects.equals(userId, review.userId) &&
-                Objects.equals(reviewId, review.reviewId) &&
                 Objects.equals(gameId, review.gameId);
     }
     @Override
     public int hashCode() {
-        return Objects.hash(userId, reviewId, gameId);
+        return Objects.hash(userId, gameId);
     }
 
 }
