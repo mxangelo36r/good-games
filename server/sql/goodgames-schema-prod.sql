@@ -20,7 +20,7 @@ create table game (
 create table review (
 	review_id int primary key auto_increment,
     `text` varchar(1000) not null,
-    rating int not null check(rating >= 0 AND rating <= 10),
+    rating int not null check(rating >= 1 AND rating <= 10),
     user_id int not null,
     game_id int not null,
     constraint fk_review_user_id
@@ -85,7 +85,7 @@ insert into game (bgg_id, `name`)
 insert into review (`text`, rating, user_id, game_id)
 	values
 		("I loved this game!", 10, 1, 1),
-        ("Nope, not for me, don't play it.", 0, 6, 1),
+        ("Nope, not for me, don't play it.", 1, 6, 1),
         ("I tried it and I liked it, I guess", 7, 2, 2),
         ("Fun, but not for me.", 6, 5, 2),
 		("I tried it and I liked it, I guess", 5, 3, 3),

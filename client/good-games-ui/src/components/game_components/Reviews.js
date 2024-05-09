@@ -13,12 +13,20 @@ function Reviews(props) {
     const [reviews, setReviews] = useState();
     const [showModal, setShowModal] = useState(false);
     const [review, setReview] = useState(REVIEW_DEFAULT);
+    const [totalReviews, setTotalReviews] = useState(0);
+    const url = 'http://localhost:8080/api/reviews'
+
+    const totalReviewsUrl = `http://localhost:8080/api/game/totalreviews/${props.reviews[0].gameId}`;
+
+
+
 
     const { isLoggedIn, isAdmin, isUser, getUserId } = useAuth();
-    const url = 'http://localhost:8080/api/reviews'
+
 
     useEffect(() => {
         setReviews(props.reviews)
+        fetchTotalReviews();
     }, [props.reviews])
 
     const handleChange = (event) => {
@@ -32,6 +40,19 @@ function Reviews(props) {
 
         setReview(newReview);
     }
+
+    const fetchTotalReviews = () => {
+        fetch(totalReviewsUrl)
+            .then((response) => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    return Promise.reject(`Unexpected Status Code: ${response.status}`);
+                }
+            })
+            .then((data) => setTotalReviews(data))
+            .catch(console.log);
+    };
 
     const handleValueChange = (event) => {
         const newReview = {...review};
@@ -162,7 +183,10 @@ function Reviews(props) {
                     <div className="row">
                         <div className="col-12">
                             <h3 className="card-title">Ratings</h3>
-                            <p>Average Score: {reviews ? renderAvgScores() : ""}</p>
+                            <div className="d-flex gap-5" >
+                                <p>Average Score: {reviews ? renderAvgScores() : ""}</p>
+                                <p>Total Reviews: {totalReviews}</p>
+                            </div>
                             <table className="rating-table">
                                 <tbody>
                                     {renderScores()}

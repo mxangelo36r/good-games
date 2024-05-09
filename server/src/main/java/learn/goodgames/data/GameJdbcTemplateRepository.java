@@ -24,7 +24,8 @@ public class GameJdbcTemplateRepository implements GameRepository {
     @Override
     public List<Game> findAllGames() {
         final String sql = "select game_id, `name`, bgg_id " +
-                "from game;";
+                "from game " +
+                "order by `name`;";
         return jdbcTemplate.query(sql, new GameMapper());
     }
 
@@ -88,13 +89,23 @@ public class GameJdbcTemplateRepository implements GameRepository {
     }
 
     @Override
-    public List<Game> getTop5ReviewedGames() {
+    public int getTotalGameReviews(int gameId) {
+        final String sql = "select count(*) " +
+                "from review r " +
+                "inner join game g on g.game_id = r.game_id " +
+                "where g.game_id = ? " +
+                "group by g.game_id;";
+        return jdbcTemplate.queryForObject(sql, Integer.class, gameId);
+    }
+
+    @Override
+    public List<Game> getTop4ReviewedGames() {
         final String sql = "select g.game_id, g.`name`, g.bgg_id, avg(r.rating) as rating " +
                 "from review r " +
                 "inner join game g on g.game_id = r.game_id " +
                 "group by r.game_id " +
                 "order by rating desc " +
-                "limit 5;";
+                "limit 4;";
 
         return jdbcTemplate.query(sql, new GameMapper());
     }

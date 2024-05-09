@@ -56,11 +56,11 @@ function Navbar() {
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarContent">
-                        {/* <ul className="navbar-nav mb-2 mb-lg-0 me-5">
+                        <ul className="navbar-nav mb-2 mb-lg-0 me-5">
                             <li className="nav-item">
                                 <Link to={'/games/reviewed'} className="nav-link text-nowrap">See Reviewed Games</Link>
                             </li>
-                        </ul> */}
+                        </ul>
                         <form className="d-flex w-100 ms-auto me-4" role="search" onSubmit={handleSubmit}>
                             <div className="input-group">
                                 <input

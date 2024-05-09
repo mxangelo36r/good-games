@@ -51,13 +51,19 @@ const convertObj = (data) => {
 
 function Game() {
     const [game, setGame] = useState({});
+
     
     const [isLoading, setIsLoading] = useState(true);
+
 
     const game_url = 'http://localhost:8080/api/game/bggId';
     const review_url = 'http://localhost:8080/api/reviews'
     const bgg_url = 'https://api.geekdo.com/xmlapi2/thing';
+
+
     const { id } = useParams();
+
+
 
     useEffect(() => {
         if (id) {
@@ -132,8 +138,6 @@ function Game() {
         }
     }
 
-    
-
     return (
         <main className="container mt-4">
             {isLoading ? (
@@ -157,7 +161,6 @@ function Game() {
                                         <h3 className="card-title">{game.name ? game.name : "Name Not Found"}</h3>
                                         {game.altName ? (<h5 className="card-subtitle mb-2 text-body-secondary">{game.altName}</h5>) : ""}
                                         {game.description ? (<p dangerouslySetInnerHTML={{ __html: game.description}}></p>) : "Description Not Found"}
-                                        <p>Number of Reviews: </p>
                                     </div>
                                     <div className="col-4">
                                         <p className="card-text fw-bold">{game.minPlayers ? game.minPlayers : "0"} to {game.maxPlayers ? game.maxPlayers : "0"} Players</p>
