@@ -15,22 +15,21 @@ function TopRatedGameCard({ game }) {
 				}
 			})
 			.then((data) => setAverageRating(data))
-            .then(console.log(averageRating))
-			// .then(setLoading(false))
 			.catch(console.log);
 	}, [url]);
 
 
 	return (
-		<div className="card mb-3 bg-light" key={game.gameId}>
+		<div className="col-xs-11 col-md-5 m-1 card mb-3 bg-light mx-auto d-flex justify-content-evenly" key={game.gameId}>
 			<div className="card-body">
 				<h5 className="card-title">{game.name}</h5>
 				<h6 className="card-subtitle mb-6 text-body-secondary">
-					Rating: {}
+					Rating: {averageRating} / 10
 				</h6>
-
-				<Link className="btn btn-primary" to={`/game/${game.gameId}`}>
-					See Reservations
+			</div>
+			<div className="mb-3">
+				<Link className="btn btn-info p-2" to={`/game/${game.bggId}`}>
+					More Info
 				</Link>
 			</div>
 		</div>

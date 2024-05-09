@@ -33,9 +33,11 @@ function TopRatedGamesList() {
 		return (
 			<div className="mb-3 text-center">
 				<h4>Top-Rated Games</h4>
-				{topRatedGames.map((game, index) => {
-					return <TopRatedGameCard key={index} game={game} />;
-				})}
+				<div className="row">
+					{topRatedGames.map((game, index) => {
+						return <TopRatedGameCard key={index} game={game} />;
+					})}
+				</div>
 			</div>
 		);
 	}
