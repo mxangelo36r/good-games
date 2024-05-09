@@ -116,6 +116,16 @@ public class ReviewService {
             return result;
         }
 
+        if (review.getRating() == 0) {
+            result.addMessage("Rating cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        if (review.getText() == null && review.getRating() == 0 || review.getText().isBlank() && review.getRating() == 0) {
+            result.addMessage("Text and Rating cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
         if (String.valueOf(review.getGameId()).isBlank()) {
             result.addMessage("Game ID cannot be empty", ResultType.INVALID);
             return result;
@@ -169,7 +179,7 @@ public class ReviewService {
 
         // Checks if userId in review is the same as userId found in stream
         if (review.getUserId() != user.getUserId()) {
-            result.addMessage("You can only edit your own review" + user.getUserId() + " " + review.getUserId() + " " + user.getEmail(), ResultType.INVALID);
+            result.addMessage("You can only edit your own review. User ID: " + user.getUserId() + " Review ID: " + review.getUserId() + " Email: " + user.getEmail(), ResultType.INVALID);
             return result;
         }
 
@@ -178,15 +188,26 @@ public class ReviewService {
             return result;
         }
 
+        if (review.getText() == null || review.getText().isBlank()) {
+            result.addMessage("Text cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        if (review.getRating() == 0) {
+            result.addMessage("Rating cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
+        if (review.getText() == null && review.getRating() == 0 || review.getText().isBlank() && review.getRating() == 0) {
+            result.addMessage("Text and Rating cannot be empty", ResultType.INVALID);
+            return result;
+        }
+
         if (review.getRating() < 0 || review.getRating() > 10) {
             result.addMessage("Rating has to be between 1-10", ResultType.INVALID);
             return result;
         }
 
-        if (review.getText() == null || review.getText().isBlank()) {
-            result.addMessage("Text cannot be empty", ResultType.INVALID);
-            return result;
-        }
 
         return result;
     }

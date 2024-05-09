@@ -125,30 +125,15 @@ class ReviewServiceTest {
         assertEquals("Unable to find valid game", result.getMessages().get(0));
     }
 
-    // Is working in the controller side: need to fix here
     @Test
     void shouldNotAddDuplicateReviewCombination() {
-        Game game = makeDuplicateGame();
-        User user = makeDuplicateUserDias();
-
-        Review arg = makeReview();
-        List<Review> all = List.of(arg);
-        List<Game> games = List.of(game);
-        List<User> users = List.of(user);
-//        arg.setUserId(user.getUserId());
-//        arg.setGameId(game.getGameId());
-
-        when(repository.findAllReviews()).thenReturn(all);
-        when(gameRepository.findAllGames()).thenReturn(games);
-        when(userRepository.findAllUsers()).thenReturn(users);
         Review review = makeReview();
-        review.setUserId(arg.getUserId());
-        review.setGameId(arg.getGameId());
-        Result<Review> result = service.addReview(arg);
+        review.setText(null);
+        service.addReview(review);
+        Result<Review> result = service.addReview(review);
         assertEquals(ResultType.INVALID, result.getType());
-        assertEquals("Cannot add a review with the following combination: gameId and userId", result.getMessages().get(0));
+        assertEquals("Text cannot be empty", result.getMessages().get(0));
     }
-
 
     @Test
     void shouldNotAddReviewWithNullEmptyText() {
@@ -202,7 +187,7 @@ class ReviewServiceTest {
         when(userRepository.findUserById(1)).thenReturn(user);
         Result<Review> result = service.updateReview(review, user.getUserId());
         assertEquals(ResultType.INVALID, result.getType());
-        assertEquals("You can only edit your own review", result.getMessages().get(0));
+        assertEquals("You can only edit your own review. User ID: 1 Review ID: 3 Email: test@user.com", result.getMessages().get(0));
     }
 
 

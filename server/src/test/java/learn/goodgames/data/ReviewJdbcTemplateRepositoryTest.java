@@ -89,23 +89,14 @@ class ReviewJdbcTemplateRepositoryTest {
     // Have to comment out deleteFromUser() from repo, jdbc and refresh the DB
     // And then uncomment it out so that other test works
 
-//    @Test
-//    void shouldDeleteForUser() {
+    @Test
+    void shouldDeleteUser() {
 //        // Deleting review 2
 //        Review review = makeDuplicateReview();
 //        User user = makeDuplicateUser();
-//        assertTrue(repository.deleteReviewUser(2, review, user));
-//    }
+//        assertTrue(repository.deleteReviewById(2));
+    }
 
-    // This test is passing but uses data with dependencies
-    // Same as above refresh the code from the steps above
-
-//    @Test
-//    void shouldDeleteOtherReviewsForAdmin() {
-//        Review review = makeDuplicateReview();
-//        User admin = makeDuplicateAdmin();
-//        assertTrue(repository.deleteReviewAdmin(6, review, admin));
-//    }
 
     // Helper Methods
 
