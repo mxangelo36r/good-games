@@ -4,7 +4,6 @@ import Modal from "../Modal";
 import { useNavigate } from "react-router-dom";
 
 function NewGameNewReview({ name, id }) {
-  const [nextId, setNextId] = useState(0);
 	const [reviews, setReviews] = useState([]);
 	const [errors, setErrors] = useState([]);
 	const [showModal, setShowModal] = useState(false);
@@ -15,10 +14,9 @@ function NewGameNewReview({ name, id }) {
 	const addGameUrl = "http://localhost:8080/api/game";
 	const navigate = useNavigate();
 
-	useEffect(() => {
-    getNextGameId()
-		setGame({  gameId: nextId.data, bggId: id, name: name });
-	}, []);
+  useEffect(() => {
+    
+  }, [review])
 
 	const handleChange = (event) => {
 		const newReview = { ...review };
@@ -37,33 +35,13 @@ function NewGameNewReview({ name, id }) {
 		setReview(newReview);
 	};
 
-  const getNextGameId = () => {
-    fetch(`${addGameUrl}/gameid`)
-    .then((response) => {
-      if (response.status === 200 || response.status === 400) {
-        return response.json();
-      } else {
-        return Promise.reject(`Unexpected status code: ${response.status}`);
-      }
-    })
-    .then((data) => {
-      if (data) {
-
-        setNextId({
-          data
-        });
-        setErrors(data);
-      }
-    })
-    .catch(console.log);
-  }
-
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		addReview();
 	};
 
 	const addGame = async () => {
+		console.log(name, id);
 		const init = {
 			method: "POST",
 			headers: {
@@ -138,11 +116,33 @@ function NewGameNewReview({ name, id }) {
 		}
 	};
 
+  const getGameId = async () => {
+    await fetch(`http://localhost:8080/api/game/bggId/${id}`)
+    .then(response => {
+      if (response.status === 200 || response.status === 400) {
+        return response.json();
+      } else {
+        return Promise.reject(`Unexpected status code: ${response.status}`);
+      }
+    })
+    .then((data) => {
+      if(data) {
+        setGame(data);
+      } else{
+        setGame({});
+      }
+      console.log(game)
+      console.log(data)
+    })
+  }
+  
 	const addReview = async () => {
+    console.log(game)
+    getGameId()
 		const newReview = { ...review };
 		newReview.userId = getUserId();
 		newReview.gameId = game.gameId;
-		console.log(newReview);
+		console.log(game);
 		const init = {
 			method: "POST",
 			headers: {
@@ -151,7 +151,7 @@ function NewGameNewReview({ name, id }) {
 			body: JSON.stringify(newReview),
 		};
 
-		fetch(`${url}/review`, init)
+		await fetch(`${url}/review`, init)
 			.then((response) => {
 				if (response.status === 201 || response.status === 400) {
 					return response.json();
@@ -169,13 +169,12 @@ function NewGameNewReview({ name, id }) {
 					newReviews.push(data);
 					setReviews(newReviews);
 					handleModalClose();
-					navigate(`/game/${game.gameId}`);
+					window.location.reload();
 				} else {
 					setErrors(data);
 				}
 			})
 			.catch(console.log);
-      navigate(`/game/${game.bggId}`)
 	};
 
 	return (
