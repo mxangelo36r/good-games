@@ -80,6 +80,12 @@ class GameJdbcTemplateRepositoryTest {
         assertEquals(5.5, avgRating);
     }
 
+    @Test
+    void shouldGetNextGameId() {
+        int actual = repository.getNextGameId();
+        assertEquals(5, actual);
+    }
+
     Game makeGame() {
         Game game = new Game();
         game.setGameId(1);

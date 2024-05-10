@@ -25,6 +25,8 @@ public class GameService {
 
     public List<Game> getTop5ReviewedGames() { return repository.getTop4ReviewedGames(); }
 
+    public int getNextGameId() { return repository.getNextGameId(); }
+
     public Result<Game> addGame(Game game) {
         Result<Game> result = validate(game);
 

@@ -177,7 +177,7 @@ function Game() {
                             </div>
                         </div>
                     </section>
-                    {game.game ? (
+                    {game.game && game.game.reviews.length > 0 ? (
                         <Reviews reviews={game.game.reviews} gameId={game.game.gameId} gameName={game.game.name} bggId={game.game.bggId}/>
                         ) : (
                             <section className="card p-4 mt-3 mb-3">
