@@ -86,7 +86,7 @@ function NewGameNewReview({ name, id, resetGame }) {
 					// 	data
 					// });
 					data.reviews = [];
-					console.log(data);
+					// console.log(data);
 					resetGame(data);
 				} else {
 					setErrors(data);
