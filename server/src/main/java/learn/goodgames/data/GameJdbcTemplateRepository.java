@@ -59,6 +59,12 @@ public class GameJdbcTemplateRepository implements GameRepository {
                 .collect(Collectors.toList());
     }
 
+    public int getNextGameId() {
+        final String sql = "select count(*) from game;";
+
+        return jdbcTemplate.queryForObject(sql, Integer.class) + 1;
+    }
+
     @Override
     public Game addGame(Game game) {
         final String sql = "insert into game (bgg_id, `name`) " +

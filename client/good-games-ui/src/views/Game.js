@@ -51,9 +51,8 @@ const convertObj = (data) => {
 }
 
 function Game() {
+    const [bggGame, setBggGame] = useState({});
     const [game, setGame] = useState({});
-
-    
     const [isLoading, setIsLoading] = useState(true);
 
 
@@ -66,71 +65,82 @@ function Game() {
 
     useEffect(() => {
         if (id) {
-            // fetch request for bbg
-            fetch(`${bgg_url}?id=${id}`)
-            .then(response => {
-                if (response.status === 200) {
-                    return response.text();
-                } else {
-                    return Promise.reject(`Unexpected status code: ${response.status}`);
-                }
-            })
-            .then(data => {
-                const obj = convert.xml2js(data);
-
-                // fetch request for game
-                fetch(`${game_url}/${id}`)
+            if (Object.keys(bggGame).length === 0) {
+                // fetch request for bbg
+                fetch(`${bgg_url}?id=${id}`)
                 .then(response => {
                     if (response.status === 200) {
-                        return response.json();
-                    } else if (response.status === 404) {
-                        return null;
+                        return response.text();
                     } else {
                         return Promise.reject(`Unexpected status code: ${response.status}`);
                     }
                 })
                 .then(data => {
-                    const gameDetails = convertObj(obj);
-                    if (data) {
-                        gameDetails.game = data;
-                        
-                        // fetch request for reviews
-                        fetch(`${review_url}/game/${data.gameId}`)
-                        .then(response => {
-                            if (response.status === 200) {
-                                return response.json();
-                            } else {
-                                return Promise.reject(`Unexpected status code: ${response.status}`);
-                            }
-                        })
-                        .then(data => {
-                            gameDetails.game.reviews = data;
-                            setGame(gameDetails);
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                            setGame(gameDetails);
-                        })
-                    } else {
-                        setGame(gameDetails);
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                    const gameDetails = convertObj(obj);
-                    setGame(gameDetails);
-                })
+                    const obj = convert.xml2js(data);
 
-                setIsLoading(false);
-            })
-            .catch(console.log);
+                    // fetch request for game
+                    fetch(`${game_url}/${id}`)
+                    .then(response => {
+                        if (response.status === 200) {
+                            return response.json();
+                        } else if (response.status === 404) {
+                            return null;
+                        } else {
+                            return Promise.reject(`Unexpected status code: ${response.status}`);
+                        }
+                    })
+                    .then(data => {
+                        const bggGameDetails = convertObj(obj);
+                        if (data) {
+                            // gameDetails.game = data;
+                            const gameDetails = data;
+                            
+                            // fetch request for reviews
+                            fetch(`${review_url}/game/${gameDetails.gameId}`)
+                            .then(response => {
+                                if (response.status === 200) {
+                                    return response.json();
+                                } else {
+                                    return Promise.reject(`Unexpected status code: ${response.status}`);
+                                }
+                            })
+                            .then(data2 => {
+                                gameDetails.reviews = data2;
+                                setGame(gameDetails);
+                                setBggGame(bggGameDetails);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                                setGame(data);
+                            })
+                        } else {
+                            setBggGame(bggGameDetails);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        const gameBggDetails = convertObj(obj);
+                        setBggGame(gameBggDetails);
+                    })
+
+                    setIsLoading(false);
+                })
+                .catch(console.log);
+            }
         }
-    }, [id])
+            
+    }, [id, game])
+
+    const resetGame = (g) => {
+        let newGame = {...game};
+        newGame = g;
+        setGame(newGame);
+    }
 
     const renderPublishers = () => {
-        if (game.publishers.length > 0) {
-            const maxGet = game.publishers.length > 5 ? 5 : game.publishers.length;
-            const list = game.publishers.slice(0, maxGet);
+        if (bggGame.publishers.length > 0) {
+            const maxGet = bggGame.publishers.length > 5 ? 5 : bggGame.publishers.length;
+            const list = bggGame.publishers.slice(0, maxGet);
             return list.map((p, index) => {
                 return p + "; ";
             })
@@ -152,42 +162,41 @@ function Game() {
                     <section className="card p-2">
                         <div className="row g-0">
                             <div className="col-4">
-                                <img src={game.image ? game.image : ""} className="rounded img-fluid" alt="Selected Game"/>
+                                <img src={bggGame.image ? bggGame.image : ""} className="rounded img-fluid" alt="Selected Game"/>
                             </div>
                             <div className="col-8">
                                 <div className="row card-body">
                                     <div className="col-12">
-                                        <h3 className="card-title">{game.name ? game.name : "Name Not Found"}</h3>
-                                        {game.altName ? (<h5 className="card-subtitle mb-2 text-body-secondary">{game.altName}</h5>) : ""}
-                                        {game.description ? (<p dangerouslySetInnerHTML={{ __html: game.description}}></p>) : "Description Not Found"}
+                                        <h3 className="card-title">{bggGame.name ? bggGame.name : "Name Not Found"}</h3>
+                                        {bggGame.altName ? (<h5 className="card-subtitle mb-2 text-body-secondary">{bggGame.altName}</h5>) : ""}
+                                        {bggGame.description ? (<p dangerouslySetInnerHTML={{ __html: bggGame.description}}></p>) : "Description Not Found"}
                                     </div>
                                     <div className="col-4">
-                                        <p className="card-text fw-bold">{game.minPlayers ? game.minPlayers : "0"} to {game.maxPlayers ? game.maxPlayers : "0"} Players</p>
+                                        <p className="card-text fw-bold">{bggGame.minPlayers ? bggGame.minPlayers : "0"} to {bggGame.maxPlayers ? bggGame.maxPlayers : "0"} Players</p>
                                     </div>
                                     <div className="col-4">
-                                        <p className="card-text fw-bold">{game.minPlayTime ? game.minPlayTime : "0"} to {game.maxPlayTime ? game.maxPlayTime : "0"} Min</p>
+                                        <p className="card-text fw-bold">{bggGame.minPlayTime ? bggGame.minPlayTime : "0"} to {bggGame.maxPlayTime ? bggGame.maxPlayTime : "0"} Min</p>
                                     </div>
                                     <div className="col-4">
-                                        <p className="card-text fw-bold">Minimum age of {game.minAge ? game.minAge : "None"}</p>
+                                        <p className="card-text fw-bold">Minimum age of {bggGame.minAge ? bggGame.minAge : "None"}</p>
                                     </div>
                                     <div className="col-12 mt-4">
-                                        <p className="card-text text-body-secondary">Publishers: {game.publishers ? renderPublishers(): ""}</p>
+                                        <p className="card-text text-body-secondary">Publishers: {bggGame.publishers ? renderPublishers(): ""}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </section>
-                    {game.game ? (
-                        <Reviews reviews={game.game.reviews} gameId={game.game.gameId} gameName={game.game.name} bggId={game.game.bggId}/>
+                    {Object.keys(game).length !== 0 ? (
+                        <Reviews reviews={game.reviews} gameId={game.gameId} gameName={game.name} bggId={game.bggId}/>
                         ) : (
                             <section className="card p-4 mt-3 mb-3">
                                 <div className="text-center">
                                     <h4>No Reviews</h4>
                                 </div>
-                                <NewGameNewReview name={game.name} id={id}/>
+                                <NewGameNewReview name={bggGame.name} id={id} resetGame={resetGame}/>
                             </section>
                         )}
-                    
                 </>
             )}
         </main>

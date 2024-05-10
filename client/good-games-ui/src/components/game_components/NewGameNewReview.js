@@ -3,7 +3,8 @@ import useAuth from "../../hooks/useAuth";
 import Modal from "../Modal";
 import { useNavigate } from "react-router-dom";
 
-function NewGameNewReview({ name, id }) {
+function NewGameNewReview({ name, id, resetGame }) {
+  const [nextId, setNextId] = useState(0);
 	const [reviews, setReviews] = useState([]);
 	const [errors, setErrors] = useState([]);
 	const [showModal, setShowModal] = useState(false);
@@ -14,6 +15,11 @@ function NewGameNewReview({ name, id }) {
 	const addGameUrl = "http://localhost:8080/api/game";
 	const navigate = useNavigate();
 
+	useEffect(() => {
+    getNextGameId()
+		setGame({  gameId: nextId.data, bggId: id, name: name });
+	}, []);
+
 	const handleChange = (event) => {
 		const newReview = { ...review };
 
@@ -22,7 +28,6 @@ function NewGameNewReview({ name, id }) {
 		} else {
 			newReview[event.target.name] = event.target.value;
 		}
-
 		setReview(newReview);
 	};
 
@@ -32,20 +37,39 @@ function NewGameNewReview({ name, id }) {
 		setReview(newReview);
 	};
 
-	const handleSubmit = (event) => {
+  const getNextGameId = () => {
+    fetch(`${addGameUrl}/gameid`)
+    .then((response) => {
+      if (response.status === 200 || response.status === 400) {
+        return response.json();
+      } else {
+        return Promise.reject(`Unexpected status code: ${response.status}`);
+      }
+    })
+    .then((data) => {
+      if (data) {
+
+        setNextId({
+          data
+        });
+        setErrors(data);
+      }
+    })
+    .catch(console.log);
+  }
+
+	const handleSubmit = async (event) => {
 		event.preventDefault();
-		addGame().then(addReview);
+		addReview();
 	};
 
 	const addGame = async () => {
-		setGame({ bggId: id, name: name });
-
 		const init = {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(game),
+			body: JSON.stringify({ name: name, bggId: id }),
 		};
 
 		await fetch(addGameUrl, init)
@@ -58,11 +82,13 @@ function NewGameNewReview({ name, id }) {
 			})
 			.then((data) => {
 				if (data.gameId) {
-					setGame({
-						gameId: data.gameId,
-						bggId: id,
-						name: name,
-					});
+					// setGame({
+					// 	data
+					// });
+					data.reviews = [];
+					console.log(data);
+					resetGame(data);
+				} else {
 					setErrors(data);
 				}
 			})
@@ -70,7 +96,8 @@ function NewGameNewReview({ name, id }) {
 	};
 
 	const handleModalOpen = () => {
-		setShowModal(true);
+		// setShowModal(true);
+    	addGame();
 	};
 
 	const handleModalClose = () => {
@@ -117,8 +144,8 @@ function NewGameNewReview({ name, id }) {
 	const addReview = async () => {
 		const newReview = { ...review };
 		newReview.userId = getUserId();
-		newReview.gameId = id;
-
+		newReview.gameId = game.gameId;
+		console.log(newReview);
 		const init = {
 			method: "POST",
 			headers: {
@@ -127,32 +154,31 @@ function NewGameNewReview({ name, id }) {
 			body: JSON.stringify(newReview),
 		};
 
-				fetch(`${url}/review`, init)
-					.then((response) => {
-						if (response.status === 201 || response.status === 400) {
-							return response.json();
-						} else {
-							return Promise.reject(
-								`Unexpected status code: ${response.status}`
-							);
-						}
-					})
-					.then((data) => {
-						if (data.reviewId) {
-							// add data to existing array (no reload)
-							data.userName = getUsername();
-							data.gameName = name;
+		fetch(`${url}/review`, init)
+			.then((response) => {
+				if (response.status === 201 || response.status === 400) {
+					return response.json();
+				} else {
+					return Promise.reject(`Unexpected status code: ${response.status}`);
+				}
+			})
+			.then((data) => {
+				if (data.reviewId) {
+					// add data to existing array (no reload)
+					data.userName = getUsername();
+					data.gameName = name;
 
-							const newReviews = [...reviews];
-							newReviews.push(data);
-							setReviews(newReviews);
-							handleModalClose();
-							navigate(`/game/${game.gameId}`);
-						} else {
-							setErrors(data);
-						}
-					})
+					const newReviews = [...reviews];
+					newReviews.push(data);
+					setReviews(newReviews);
+					handleModalClose();
+					navigate(`/game/${game.gameId}`);
+				} else {
+					setErrors(data);
+				}
+			})
 			.catch(console.log);
+      navigate(`/game/${game.bggId}`)
 	};
 
 	return (
