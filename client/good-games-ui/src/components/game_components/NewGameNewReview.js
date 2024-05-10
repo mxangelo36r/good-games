@@ -3,7 +3,7 @@ import useAuth from "../../hooks/useAuth";
 import Modal from "../Modal";
 import { useNavigate } from "react-router-dom";
 
-function NewGameNewReview({ name, id }) {
+function NewGameNewReview({ name, id, resetGame }) {
   const [nextId, setNextId] = useState(0);
 	const [reviews, setReviews] = useState([]);
 	const [errors, setErrors] = useState([]);
@@ -82,10 +82,13 @@ function NewGameNewReview({ name, id }) {
 			})
 			.then((data) => {
 				if (data.gameId) {
-					console.log(data);
-					setGame({
-						data
-					});
+					// setGame({
+					// 	data
+					// });
+					data.reviews = [];
+					// console.log(data);
+					resetGame(data);
+				} else {
 					setErrors(data);
 				}
 			})
@@ -93,8 +96,8 @@ function NewGameNewReview({ name, id }) {
 	};
 
 	const handleModalOpen = () => {
-		setShowModal(true);
-    addGame();
+		// setShowModal(true);
+    	addGame();
 	};
 
 	const handleModalClose = () => {

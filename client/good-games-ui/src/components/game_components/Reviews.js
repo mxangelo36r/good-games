@@ -196,6 +196,9 @@ function Reviews(props) {
 
     const renderAvgScores = () => {
         const totalScore = reviews.reduce((prev, curr) => curr.rating + prev , 0)
+        if (totalScore === 0) {
+            return 0;
+        }
         return totalScore / reviews.length;
     }
 
@@ -209,7 +212,11 @@ function Reviews(props) {
 
         const sum = tracker.reduce((partialSum, a) => partialSum + a, 0);
         tracker.forEach((num, index) => {
-            percentage[index] = (num/sum) * 100;
+            if (sum === 0) {
+                percentage[index] = 0;
+            } else {
+                percentage[index] = (num/sum) * 100;
+            }
         })
 
         return tracker.map((value, index) => (
@@ -225,7 +232,7 @@ function Reviews(props) {
     }
 
     const renderTotalReviews = () => {
-        return reviews.length;
+        return reviews.length ;
     }
 
     const renderReviews = () => {
