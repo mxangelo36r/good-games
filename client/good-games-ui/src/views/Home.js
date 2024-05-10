@@ -52,40 +52,31 @@ function Home() {
 	return (
 		<main className="container">
 			<header>
-				<div className="p-3 pd-md-4 mx-auto text-center">
-					<h1 className="display-4 fw-normal text-body-emphasis">Good Games</h1>
+				<div className="p- pd-md-4 mx-auto text-center">
+					<h1 className="">Good Games</h1>
+					<h2>Bringing People Together One Game at a Time</h2>
 					<p className="fs-5 text-body-secondary">
 						Welcome to <b>Good Games</b>, where the thrill of rolling dice and
 						strategizing moves comes alive! Whether you’re a seasoned board game
 						enthusiast or a curious newcomer, our platform is your gateway to an
-						exciting world of dice based adventures. 🎲
+						exciting world of dice-based adventures. 🎲
+						<hr />
+						<b>Discover and Review:</b> Find the perfect game for your next
+						gathering or help others find their ideal game.
 						<br />
-						<br />
-						<b>Discover and Review:</b> Dive into our extensive collection of
-						board games, from classic favorites to hidden gems. Read reviews,
-						share your thoughts, and find the perfect game for your next
-						gathering.
-						<br />
-						<br />
-						<b>Connect and Play:</b> Looking for fellow players? Search local
-						game rooms, reserve a spot, and challenge opponents face-to-face.
-						Whether it’s a casual match or an epic showdown, the camaraderie is
-						real, and the fun is guaranteed.
-						<br />
+						<b>Connect and Play:</b> Looking for fellow players? Search locally for a casual match or an epic showdown!
 						<br />
 						<b>Join the Community:</b> Become part of our vibrant community of
-						board game aficionados. Share opinions, play with others, and
-						celebrate victories together. Let’s roll the dice and create
-						memories that last a lifetime! 🎉
+						board game aficionados.
 					</p>
 				</div>
 			</header>
 			<section className="row">
-				<h4 className="text-center">Top-Rated Games</h4>
+				<h2 className="text-center mb-3">Top-Rated Games</h2>
 				<TopRatedGamesList />
 			</section>
 			<section className="p-3 pd-md-4 mx-auto text-center">
-                <h4>Upcoming Events</h4>
+                <h2 className="mb-3">Upcoming Events</h2>
 				<ReservationList />
 			</section>
 		</main>

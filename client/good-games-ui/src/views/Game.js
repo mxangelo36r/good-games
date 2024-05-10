@@ -186,8 +186,7 @@ function Game() {
                                 </div>
                                 <NewGameNewReview name={game.name} id={id}/>
                             </section>
-                        )}
-                    
+                        )}                    
                 </>
             )}
         </main>

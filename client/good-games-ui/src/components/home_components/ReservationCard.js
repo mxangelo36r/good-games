@@ -13,7 +13,7 @@ function ReservationCard({ reservation, index }) {
     }
 
 	return (
-		<div className="card mb-3 bg-light" key={reservation.reservationId}>
+		<div className="card border-light mb-3 bg-light shadow p-2" key={reservation.reservationId}>
 			<div className="card-body">
 				<h5 className="card-title">{location.name}</h5>
 				<h6 className="card-subtitle mb-6 text-body-secondary">
@@ -28,7 +28,7 @@ function ReservationCard({ reservation, index }) {
                     </p>
                     <p className="card-text d-flex flex-row justify-content-between">Hosted By: {reservation.hostName}</p>
                 </div>
-				<Link className="btn btn-primary" to={`/reservation/${reservation.id}`}>
+				<Link className="btnn" to={`/reservation/${reservation.id}`}>
 					See Reservations
 				</Link>
 			</div>
