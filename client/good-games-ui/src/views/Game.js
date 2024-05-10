@@ -196,7 +196,9 @@ function Game() {
                                 </div>
                                 <NewGameNewReview name={bggGame.name} id={id} resetGame={resetGame}/>
                             </section>
-                        )}
+
+                        )}                    
+
                 </>
             )}
         </main>

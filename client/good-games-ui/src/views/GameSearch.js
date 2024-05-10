@@ -78,7 +78,7 @@ function GameSearch() {
 
     const renderRows = () => {
         return games.map((game, index) => (
-            <tr key={index} className={game.game ? "table-success" : ""}>
+            <tr key={index} className={game.game ? "table-success shadow" : "shadow"}>
                 <td>{game.bgg_id}</td>
                 <td><Link to={`/game/${game.bgg_id}`} className="text-underline-hover">{game.name}</Link></td>
                 <td>{game.year_published}</td>
@@ -87,9 +87,9 @@ function GameSearch() {
     }
 
     return (
-        <main className="container mt-4">
+        <main className="container mt-4 sh">
             {isLoading ? (
-                <div className="overlay">
+                <div className="overlay sh">
                     <div className="d-flex justify-content-center">
                         <div className="spinner-border" role="status">
                             <span className="visually-hidden">Loading...</span>
@@ -97,7 +97,7 @@ function GameSearch() {
                     </div>
                 </div>
             ) : (
-                <section className="border p-2">
+                <section className="border p-2 shadow">
                     <table className="table table-hover">
                         <caption>List of search results</caption>
                         <thead>

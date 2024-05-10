@@ -55,7 +55,7 @@ function Login() {
                 <div className="p-3 pd-md-4 mx-auto text-center">
                     <h1>Login to Good Games</h1>
                     <p className="fs-5 text-body-secondary">
-                        Login to your account or If you’re new <Link to={"/signUp"}>Sign Up</Link>
+                        Login to your account or if you’re new <Link to={"/signUp"}>Sign Up</Link>
                     </p>
                 </div>
                 {renderErrors()}
@@ -85,8 +85,8 @@ function Login() {
                         />
                     </fieldset>
                     <div className="hstack gap-3 mt-4">
-                        <button className="btn btn-success mr-2" type="submit">Login</button>
-                        <Link className="btn btn-warning" type="button" to={"/"}>Cancel</Link>
+                        <button className="btnn mr-2" type="submit">Login</button>
+                        <Link className="btnn" type="button" to={"/"}>Cancel</Link>
                     </div>
                 </form>
             </section>

@@ -40,10 +40,10 @@ function GameCard({ game }) {
 
 	return (
 		<div
-			className="col-xs-11 col-md-5 m-1 card mb-3 bg-light mx-auto d-flex justify-content-evenly"
+			className="col-xs-11 col-md-5 m-1 card mb-3 bg-light mx-auto d-flex justify-content-evenly shadow border-light"
 			key={game.gameId}
 		>
-			<div className="card-body">
+			<div className="card-body ">
 				<h5 className="card-title">{game.name}</h5>
 				<h6 className="card-subtitle mb-6 text-body-secondary mb-1">
 					Total Reviews: {totalReviews}
@@ -53,7 +53,7 @@ function GameCard({ game }) {
 				</h6>
 			</div>
 			<div className="mb-3">
-				<Link className="btn btn-info p-2" to={`/game/${game.bggId}`}>
+				<Link className="btnn p-2" to={`/game/${game.bggId}`}>
 					More Info
 				</Link>
 			</div>
