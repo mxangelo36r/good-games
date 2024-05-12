@@ -5,6 +5,8 @@ DB comes with existing USER and ADMIN (moderator) accounts but if user wishes, t
 In the future users would be able to create events, allowing them to set how many people can attend, their location and date/times.
 This application uses MySQL to run the DB, Java for the server side and React to run the application. 
 
+<img width="1440" alt="Screenshot 2024-05-12 at 15 54 47" src="https://github.com/mxangelo36r/good-games/assets/138813288/820bbc1c-f25d-4cb1-8d4c-b8bddc16e767">
+
 ## Getting Started
 
 To get a local copy up and running follow these simple example steps.
