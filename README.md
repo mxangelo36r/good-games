@@ -15,12 +15,16 @@ To get a local copy up and running follow these simple example steps.
    ```sh
    git clone https://github.com/mxangelo36r/good-games.git
    ```
+   
 2. Run Docker and run the following SQL file: `server/sql/goodgames-schema-prod.sql`
+   
 3. Configure `server/src/main/java/learn/goodgames/App.java` in your IDE to your specific MySQL username and password using the following properties: `GOOD_GAMES_DB_USERNAME` & `GOOD_GAMES_DB_PASSWORD`
+   
 4. Cd into `client/good-games-ui` and install install NPM packages
    ```sh
    npm install
    ```
+   
 5. Run the project in `client/good-games-ui`
    ```sh
    npm start
