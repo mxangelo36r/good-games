@@ -13,7 +13,7 @@ To get a local copy up and running follow these simple example steps.
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/mxangelo36r/good-games.git
    ```
 2. Run Docker and run the following SQL file: `server/sql/goodgames-schema-prod.sql`
 3. Configure `server/src/main/java/learn/goodgames/App.java` in your IDE to your specific MySQL username and password using the following properties: `GOOD_GAMES_DB_USERNAME` & `GOOD_GAMES_DB_PASSWORD`
