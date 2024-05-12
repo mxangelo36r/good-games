@@ -20,7 +20,7 @@ To get a local copy up and running follow these simple example steps.
    
 3. Configure `server/src/main/java/learn/goodgames/App.java` in your IDE to your specific MySQL username and password using the following properties: `GOOD_GAMES_DB_USERNAME` & `GOOD_GAMES_DB_PASSWORD`
    
-4. Cd into `client/good-games-ui` and install install NPM packages
+4. Cd into `client/good-games-ui` and install NPM packages
    ```sh
    npm install
    ```
